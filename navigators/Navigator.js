@@ -9,6 +9,7 @@ import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
 import {Icon, Image} from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ModifyUser from '../views/ModifyUser';
 // import Upload from '../views/Upload';
 import Chat from '../views/Chat';
@@ -38,9 +39,9 @@ const TabScreen = () => {
             case 'Profile':
               iconName = focused ? 'person' : 'person-outline';
               break;
-            case 'Search':
-              iconName = focused ? 'search' : 'search-outline';
-              break;
+            // case 'Search':
+            //   iconName = focused ? 'search' : 'search-outline';
+            //   break;
             case 'Chat':
               iconName = focused
                 ? 'chatbox-ellipses'
@@ -62,9 +63,16 @@ const TabScreen = () => {
             );
           }
 
+          if (route.name === 'Search') {
+            iconName = focused ? 'account-search' : 'account-search-outline';
+            return (
+              <MaterialCommunityIcons name={iconName} size={42} color={color} />
+            );
+          }
+
           return <Ionicons name={iconName} size={42} color={color} />;
         },
-        tabBarActiveTintColor: '#EB6833',
+        tabBarActiveTintColor: '#FB6326',
         tabBarInactiveTintColor: '#2F2F2F',
         tabBarShowLabel: false,
       })}
@@ -72,7 +80,11 @@ const TabScreen = () => {
       <Tab.Screen name="Home" component={Home}></Tab.Screen>
       <Tab.Screen name="Like" component={Like}></Tab.Screen>
       <Tab.Screen name="Search" component={Search}></Tab.Screen>
-      <Tab.Screen name="Chat" component={Chat}></Tab.Screen>
+      <Tab.Screen
+        name="Chat"
+        component={Chat}
+        options={{headerShown: false}}
+      ></Tab.Screen>
       <Tab.Screen name="Profile" component={Profile}></Tab.Screen>
     </Tab.Navigator>
   );
