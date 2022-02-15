@@ -7,9 +7,10 @@ import Profile from '../views/Profile';
 import Single from '../views/Single';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
-import {Icon} from 'react-native-elements';
+import {Icon, Image} from 'react-native-elements';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import ModifyUser from '../views/ModifyUser';
-import Upload from '../views/Upload';
+// import Upload from '../views/Upload';
 import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';
@@ -21,27 +22,51 @@ const TabScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
+        tabBarStyle: {
+          justifyContent: 'center',
+          height: 90,
+          border: 0,
+          margin: 0,
+          padding: 0,
+        },
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
           switch (route.name) {
-            case 'Home':
-              iconName = 'home';
-              break;
             case 'Like':
-              iconName = 'favorite';
+              iconName = focused ? 'heart' : 'heart-outline';
               break;
             case 'Profile':
-              iconName = 'account-box';
+              iconName = focused ? 'person' : 'person-outline';
               break;
             case 'Search':
-              iconName = 'search';
+              iconName = focused ? 'search' : 'search-outline';
               break;
             case 'Chat':
-              iconName = 'chat';
+              iconName = focused
+                ? 'chatbox-ellipses'
+                : 'chatbox-ellipses-outline';
               break;
           }
-          return <Icon name={iconName} size={size} color={color} />;
+
+          if (route.name === 'Home') {
+            return focused ? (
+              <Image
+                source={require('../assets/hookiconActive.png')}
+                style={{height: 32, width: 32}}
+              />
+            ) : (
+              <Image
+                source={require('../assets/hookiconNotActive.png')}
+                style={{height: 32, width: 32}}
+              />
+            );
+          }
+
+          return <Ionicons name={iconName} size={42} color={color} />;
         },
+        tabBarActiveTintColor: '#EB6833',
+        tabBarInactiveTintColor: '#2F2F2F',
+        tabBarShowLabel: false,
       })}
     >
       <Tab.Screen name="Home" component={Home}></Tab.Screen>
