@@ -73,7 +73,7 @@ const TabScreen = () => {
 
           return <Ionicons name={iconName} size={42} color={color} />;
         },
-        tabBarActiveTintColor: '#EB6833',
+        tabBarActiveTintColor: '#FB6326',
         tabBarInactiveTintColor: '#2F2F2F',
         tabBarShowLabel: false,
       })}
