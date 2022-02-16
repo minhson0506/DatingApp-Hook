@@ -24,7 +24,6 @@ const Chat = ({navigation}) => {
       const userData = await getUserById(527, token);
       setUsername(userData);
     } catch (error) {
-      // TODO: how should user be notified?
       console.error('fetch owner error', error);
       setUsername({username: '[not available]'});
     }
