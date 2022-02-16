@@ -6,6 +6,9 @@ import {useForm, Controller} from 'react-hook-form';
 import {useUser} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
 import {LinearGradient} from 'expo-linear-gradient';
+import FullnameIcon from '../assets/fullname.svg';
+import UserIcon from '../assets/userIcon.svg';
+import PasswordIcon from '../assets/password.svg';
 
 const RegisterForm = ({setFormToggle}) => {
   const {postUser, checkUsername} = useUser();
@@ -94,6 +97,8 @@ const RegisterForm = ({setFormToggle}) => {
             autoCapitalize="none"
             placeholder="username"
             errorMessage={errors.username && errors.username.message}
+            leftIcon={<UserIcon />}
+            leftIconContainerStyle={styles.userIcon}
           />
         )}
         name="username"
@@ -114,6 +119,8 @@ const RegisterForm = ({setFormToggle}) => {
             autoCapitalize="words"
             placeholder="fullname"
             errorMessage={errors.full_name && errors.full_name.message}
+            leftIcon={<FullnameIcon />}
+            leftIconContainerStyle={styles.userIcon}
           />
         )}
         name="full_name"
@@ -140,6 +147,8 @@ const RegisterForm = ({setFormToggle}) => {
             secureTextEntry={true}
             placeholder="password"
             errorMessage={errors.password && errors.password.message}
+            leftIcon={<PasswordIcon />}
+            leftIconContainerStyle={styles.userIcon}
           />
         )}
         name="password"
@@ -169,6 +178,8 @@ const RegisterForm = ({setFormToggle}) => {
             errorMessage={
               errors.password_again && errors.password_again.message
             }
+            leftIcon={<PasswordIcon />}
+            leftIconContainerStyle={styles.userIcon}
           />
         )}
         name="password_again"
@@ -203,6 +214,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     elevation: 4,
+  },
+  userIcon: {
+    paddingRight: 10,
   },
 });
 
