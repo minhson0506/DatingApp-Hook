@@ -13,6 +13,7 @@ import Upload from '../views/Upload';
 import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';
+import FirstLand from '../views/FirstLand';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -71,11 +72,18 @@ const StackScreen = () => {
           ></Stack.Screen>
         </>
       ) : (
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{headerShown: false}}
-        ></Stack.Screen>
+        <>
+          <Stack.Screen
+            name="FirstLand"
+            component={FirstLand}
+            options={{headerShown: false}}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{headerShown: false}}
+          ></Stack.Screen>
+        </>
       )}
     </Stack.Navigator>
   );
