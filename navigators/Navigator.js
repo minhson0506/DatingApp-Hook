@@ -26,55 +26,82 @@ const TabScreen = () => {
       screenOptions={({route}) => ({
         tabBarStyle: {
           justifyContent: 'center',
-          height: 90,
+          height: 80,
           border: 0,
           margin: 0,
           padding: 0,
         },
-        tabBarIcon: ({focused, color, size}) => {
-          let iconName;
-          switch (route.name) {
-            case 'Like':
-              iconName = focused ? 'heart' : 'heart-outline';
-              break;
-            case 'Profile':
-              iconName = focused ? 'person' : 'person-outline';
-              break;
-            // case 'Search':
-            //   iconName = focused ? 'search' : 'search-outline';
-            //   break;
-            case 'Chat':
-              iconName = focused
-                ? 'chatbox-ellipses'
-                : 'chatbox-ellipses-outline';
-              break;
-          }
-
+        tabBarIcon: ({focused}) => {
           if (route.name === 'Home') {
             return focused ? (
               <Image
                 source={require('../assets/hookiconActive.png')}
-                style={{height: 32, width: 32}}
+                style={{height: 30, width: 30}}
               />
             ) : (
               <Image
                 source={require('../assets/hookiconNotActive.png')}
-                style={{height: 32, width: 32}}
+                style={{height: 30, width: 30}}
+              />
+            );
+          }
+
+          if (route.name === 'Like') {
+            return focused ? (
+              <Image
+                source={require('../assets/heartActive.png')}
+                style={{height: 30, width: 30}}
+              />
+            ) : (
+              <Image
+                source={require('../assets/heartNotActive.png')}
+                style={{height: 30, width: 30}}
               />
             );
           }
 
           if (route.name === 'Search') {
-            iconName = focused ? 'account-search' : 'account-search-outline';
-            return (
-              <MaterialCommunityIcons name={iconName} size={42} color={color} />
+            return focused ? (
+              <Image
+                source={require('../assets/searchActive.png')}
+                style={{height: 30, width: 30}}
+              />
+            ) : (
+              <Image
+                source={require('../assets/searchNotActive.png')}
+                style={{height: 30, width: 30}}
+              />
             );
           }
 
-          return <Ionicons name={iconName} size={42} color={color} />;
+          if (route.name === 'Chat') {
+            return focused ? (
+              <Image
+                source={require('../assets/chatActive.png')}
+                style={{height: 30, width: 30}}
+              />
+            ) : (
+              <Image
+                source={require('../assets/chatNotActive.png')}
+                style={{height: 30, width: 30}}
+              />
+            );
+          }
+
+          if (route.name === 'Profile') {
+            return focused ? (
+              <Image
+                source={require('../assets/userActive.png')}
+                style={{height: 30, width: 30}}
+              />
+            ) : (
+              <Image
+                source={require('../assets/userNotActive.png')}
+                style={{height: 30, width: 30}}
+              />
+            );
+          }
         },
-        tabBarActiveTintColor: '#FB6326',
-        tabBarInactiveTintColor: '#2F2F2F',
         tabBarShowLabel: false,
       })}
     >
