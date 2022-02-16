@@ -1,8 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {useContext} from 'react';
 =======
 import React, {useContext} from 'react';
 >>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+=======
+import {useContext} from 'react';
+>>>>>>> c898839 (more completed version of login-signup page)
 import {Button, Input, Text} from 'react-native-elements';
 import {View, StyleSheet} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
@@ -17,10 +21,15 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import UserIcon from '../assets/userIcon.svg';
 import PasswordIcon from '../assets/password.svg';
 =======
 >>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+=======
+import UserIcon from '../assets/userIcon.svg';
+import PasswordIcon from '../assets/password.svg';
+>>>>>>> c898839 (more completed version of login-signup page)
 
 const LoginForm = () => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -71,10 +80,15 @@ const LoginForm = () => {
               autoCapitalize="none"
               placeholder="username"
 <<<<<<< HEAD
+<<<<<<< HEAD
               leftIcon={<UserIcon />}
               leftIconContainerStyle={styles.userIcon}
 =======
 >>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+=======
+              leftIcon={<UserIcon />}
+              leftIconContainerStyle={styles.userIcon}
+>>>>>>> c898839 (more completed version of login-signup page)
             />
           )}
           name="username"
@@ -95,10 +109,15 @@ const LoginForm = () => {
               secureTextEntry={true}
               placeholder="password"
 <<<<<<< HEAD
+<<<<<<< HEAD
               leftIcon={<PasswordIcon />}
               leftIconContainerStyle={styles.userIcon}
 =======
 >>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+=======
+              leftIcon={<PasswordIcon />}
+              leftIconContainerStyle={styles.userIcon}
+>>>>>>> c898839 (more completed version of login-signup page)
             />
           )}
           name="password"
@@ -137,11 +156,17 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
 <<<<<<< HEAD
+<<<<<<< HEAD
   userIcon: {
     paddingRight: 10,
   },
 =======
 >>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+=======
+  userIcon: {
+    paddingRight: 10,
+  },
+>>>>>>> c898839 (more completed version of login-signup page)
 });
 
 export default LoginForm;

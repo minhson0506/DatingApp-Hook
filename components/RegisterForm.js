@@ -7,11 +7,17 @@ import {useUser} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
 import {LinearGradient} from 'expo-linear-gradient';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import FullnameIcon from '../assets/fullname.svg';
 import UserIcon from '../assets/userIcon.svg';
 import PasswordIcon from '../assets/password.svg';
 =======
 >>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+=======
+import FullnameIcon from '../assets/fullname.svg';
+import UserIcon from '../assets/userIcon.svg';
+import PasswordIcon from '../assets/password.svg';
+>>>>>>> c898839 (more completed version of login-signup page)
 
 const RegisterForm = ({setFormToggle}) => {
   const {postUser, checkUsername} = useUser();
@@ -123,10 +129,15 @@ const RegisterForm = ({setFormToggle}) => {
             placeholder="fullname"
             errorMessage={errors.full_name && errors.full_name.message}
 <<<<<<< HEAD
+<<<<<<< HEAD
             leftIcon={<FullnameIcon />}
             leftIconContainerStyle={styles.userIcon}
 =======
 >>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+=======
+            leftIcon={<FullnameIcon />}
+            leftIconContainerStyle={styles.userIcon}
+>>>>>>> c898839 (more completed version of login-signup page)
           />
         )}
         name="full_name"
@@ -154,10 +165,15 @@ const RegisterForm = ({setFormToggle}) => {
             placeholder="password"
             errorMessage={errors.password && errors.password.message}
 <<<<<<< HEAD
+<<<<<<< HEAD
             leftIcon={<PasswordIcon />}
             leftIconContainerStyle={styles.userIcon}
 =======
 >>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+=======
+            leftIcon={<PasswordIcon />}
+            leftIconContainerStyle={styles.userIcon}
+>>>>>>> c898839 (more completed version of login-signup page)
           />
         )}
         name="password"
@@ -188,10 +204,15 @@ const RegisterForm = ({setFormToggle}) => {
               errors.password_again && errors.password_again.message
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             leftIcon={<PasswordIcon />}
             leftIconContainerStyle={styles.userIcon}
 =======
 >>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+=======
+            leftIcon={<PasswordIcon />}
+            leftIconContainerStyle={styles.userIcon}
+>>>>>>> c898839 (more completed version of login-signup page)
           />
         )}
         name="password_again"
@@ -228,11 +249,17 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
 <<<<<<< HEAD
+<<<<<<< HEAD
   userIcon: {
     paddingRight: 10,
   },
 =======
 >>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+=======
+  userIcon: {
+    paddingRight: 10,
+  },
+>>>>>>> c898839 (more completed version of login-signup page)
 });
 
 RegisterForm.propTypes = {
