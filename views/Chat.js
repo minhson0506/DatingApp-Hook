@@ -48,10 +48,10 @@ const Chat = ({navigation}) => {
       const token = await AsyncStorage.getItem('userToken');
       const userMessage = await getCommentByFileId(95, token);
       setMessage(userMessage[userMessage.length - 1]);
+      // messages
       for (const m of userMessage) {
         console.log(m.comment);
       }
-      // hi
       // console.log(userMessage[userMessage.length - 1].comment);
     } catch (error) {
       console.error(error.message);
