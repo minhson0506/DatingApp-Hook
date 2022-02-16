@@ -51,6 +51,7 @@ const Chat = ({navigation}) => {
       for (const m of userMessage) {
         console.log(m.comment);
       }
+      // hi
       // console.log(userMessage[userMessage.length - 1].comment);
     } catch (error) {
       console.error(error.message);
