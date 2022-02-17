@@ -78,7 +78,7 @@ const Login = ({navigation}) => {
                 <ButtonGroup
                   onPress={() => setFormToggle(!formToggle)}
                   selectedIndex={formToggle ? 0 : 1}
-                  buttons={['Sign in', 'Register']}
+                  buttons={['Register', 'Sign in']}
                   containerStyle={styles.buttons}
                   buttonContainerStyle={styles.button}
                   buttonStyle={{borderRadius: 50}}
@@ -88,11 +88,11 @@ const Login = ({navigation}) => {
                 />
                 {formToggle ? (
                   <Card containerStyle={{borderRadius: 5, marginTop: 25}}>
-                    <LoginForm />
+                    <RegisterForm />
                   </Card>
                 ) : (
                   <Card style={{borderRadius: 5, marginTop: 25}}>
-                    <RegisterForm setFormToggle={setFormToggle} />
+                    <LoginForm setFormToggle={setFormToggle} />
                   </Card>
                 )}
               </View>
