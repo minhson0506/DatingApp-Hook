@@ -4,13 +4,13 @@ import {Button, Input} from 'react-native-elements';
 import {Alert, View, StyleSheet} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useUser} from '../hooks/ApiHooks';
-import PropTypes from 'prop-types';
 import {LinearGradient} from 'expo-linear-gradient';
 import FullnameIcon from '../assets/fullname.svg';
 import UserIcon from '../assets/userIcon.svg';
 import PasswordIcon from '../assets/password.svg';
+import PropTypes from 'prop-types';
 
-const RegisterForm = ({setFormToggle}) => {
+const RegisterForm = ({setFormToggle, navigation}) => {
   const {postUser, checkUsername} = useUser();
   const {
     getValues,
@@ -31,7 +31,7 @@ const RegisterForm = ({setFormToggle}) => {
     console.log(data);
     try {
       delete data.password_again;
-      //TODO: randomize email to post user
+      // TODO: randomize email to post user
       const userData = await postUser(data);
       console.log('register onSubmit', userData);
       if (userData) {
@@ -196,6 +196,13 @@ const RegisterForm = ({setFormToggle}) => {
           end: {x: 1, y: 0},
         }}
       />
+
+      {/* <Button
+        title="Info"
+        onPress={() => {
+          navigation.navigate('Instructions');
+        }}
+      ></Button> */}
     </View>
   );
 };
@@ -222,6 +229,7 @@ const styles = StyleSheet.create({
 
 RegisterForm.propTypes = {
   setFormToggle: PropTypes.func,
+  navigation: PropTypes.object,
 };
 
 export default RegisterForm;

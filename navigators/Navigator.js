@@ -7,15 +7,16 @@ import Profile from '../views/Profile';
 import Single from '../views/Single';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
-import {Icon, Image} from 'react-native-elements';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Image} from 'react-native-elements';
+// import Ionicons from 'react-native-vector-icons/Ionicons';
+// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ModifyUser from '../views/ModifyUser';
 // import Upload from '../views/Upload';
 import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';
 import FirstLand from '../views/FirstLand';
+import Instructions from '../views/Instructions';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -134,6 +135,11 @@ const StackScreen = () => {
             name="Modify user"
             component={ModifyUser}
           ></Stack.Screen>
+          <Stack.Screen
+            name="Instructions"
+            component={Instructions}
+            // options={{headerShown: false}}
+          ></Stack.Screen>
         </>
       ) : (
         <>
@@ -146,6 +152,11 @@ const StackScreen = () => {
             name="Login"
             component={Login}
             options={{headerShown: false}}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Instructions"
+            component={Instructions}
+            // options={{headerShown: false}}
           ></Stack.Screen>
         </>
       )}
