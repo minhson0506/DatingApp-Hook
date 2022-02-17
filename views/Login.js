@@ -33,9 +33,9 @@ const Login = ({navigation}) => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (!userToken) return;
-      console.log('token', userToken);
+      // console.log('token', userToken);
       const userData = await getUserByToken(userToken);
-      console.log('checkToken', userData);
+      // console.log('checkToken', userData);
       setUser(userData);
       setIsLoggedIn(true);
     } catch (err) {
