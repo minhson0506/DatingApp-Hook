@@ -44,7 +44,11 @@ const TabScreen = () => {
         },
       })}
     >
-      <Tab.Screen name="Home" component={Home}></Tab.Screen>
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{headerShown: false}}
+      ></Tab.Screen>
       <Tab.Screen name="Like" component={Like}></Tab.Screen>
       <Tab.Screen name="Search" component={Search}></Tab.Screen>
       <Tab.Screen name="Chat" component={Chat}></Tab.Screen>

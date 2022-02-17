@@ -8,8 +8,8 @@ const List = ({navigation, myFilesOnly = false}) => {
   const {mediaArray} = useMedia(myFilesOnly);
 
   return (
-    // <View style={{flex: 1}}>
     <FlatList
+      style={{alignSelf: 'center'}}
       data={mediaArray}
       keyExtractor={(item) => item.file_id.toString()}
       renderItem={({item}) => (
@@ -20,7 +20,6 @@ const List = ({navigation, myFilesOnly = false}) => {
         ></ListItem>
       )}
     ></FlatList>
-    // </View>
   );
 };
 

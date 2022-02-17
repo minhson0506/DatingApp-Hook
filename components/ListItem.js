@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {
   Avatar,
-  ButtonGroup,
-  Card,
+  Divider,
   ListItem as RNEListItem,
   Text,
 } from 'react-native-elements';
-import {Alert, Image, ScrollView, StyleSheet, View} from 'react-native';
+import {Alert, ScrollView, StyleSheet, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
+import AgeIcon from '../assets/age.svg';
+import InterestIcon from '../assets/heart.svg';
+import LocationIcon from '../assets/location.svg';
+import DislikeIcon from '../assets/dislike.svg';
+import {Card} from 'react-native-paper';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {getUserById} = useUser();
@@ -41,57 +45,88 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   }, []);
 
   return (
-    <RNEListItem
-      onPress={() => {
-        navigation.navigate('Single', {file: singleMedia});
-      }}
-    >
-      {!myFilesOnly && <Text style={styles.name}>{additionData.fullname}</Text>}
-      <Image
-        style={styles.avatar}
-        source={{uri: uploadsUrl + singleMedia.thumbnails.w160}}
-      ></Image>
-      {!myFilesOnly && (
-        <View style={{flexDirection: 'row'}}>
-          <Text>Age {additionData.age}</Text>
-          <Text>Location {additionData.location}</Text>
-          <Text>Hobby {additionData.interests}</Text>
-        </View>
-      )}
-      {myFilesOnly && (
-        <ButtonGroup
-          onPress={(index) => {
-            if (index === 0) {
-              navigation.navigate('Modify', {file: singleMedia});
-            } else {
-              doDelete();
-            }
-          }}
-          buttons={['Modify', 'Delete']}
-          rounded
-        ></ButtonGroup>
-      )}
-    </RNEListItem>
+    <ScrollView>
+      <RNEListItem
+        onPress={() => {
+          navigation.navigate('Single', {file: singleMedia});
+        }}
+      >
+        <Card style={styles.card}>
+          {!myFilesOnly && (
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}
+            >
+              <Text style={styles.name}>{additionData.fullname}</Text>
+              <DislikeIcon style={styles.x}></DislikeIcon>
+            </View>
+          )}
+          <Avatar
+            containerStyle={styles.avatar}
+            source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+          ></Avatar>
+          {!myFilesOnly && (
+            <View style={{flexDirection: 'row'}}>
+              <AgeIcon style={styles.ageIcon}></AgeIcon>
+              <Text style={styles.text}>{additionData.age}</Text>
+              <Divider
+                orientation="vertical"
+                style={{marginTop: 12, marginRight: 10}}
+              />
+              <LocationIcon style={styles.icons}></LocationIcon>
+              <Text style={styles.text}>{additionData.location}</Text>
+              <Divider
+                orientation="vertical"
+                style={{marginTop: 12, marginRight: 10}}
+              />
+              <InterestIcon style={styles.icons}></InterestIcon>
+              <Text style={styles.text}>{additionData.interests}</Text>
+            </View>
+          )}
+        </Card>
+      </RNEListItem>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
   name: {
-    // backgroundColor: 'blue',
-    margin: 0,
-  },
-  avatar: {
-    margin: 0,
-    width: '100%',
-    height: '75%',
-    resizeMode: 'stretch',
+    marginTop: 12,
+    marginBottom: 12,
+    marginLeft: 15,
+    fontWeight: 'bold',
+    fontSize: 18,
   },
   card: {
-    flex: 1,
+    width: '100%',
+    height: 380,
+    margin: 0,
+    padding: 0,
+    borderColor: '#EB6833',
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  avatar: {
+    width: '100%',
+    height: '75%',
+  },
+  text: {
+    fontSize: 16,
+    marginTop: 12,
+    marginRight: 25,
+  },
+  icons: {
+    marginTop: 12,
+    marginRight: 5,
+    marginLeft: 15,
+  },
+  x: {
+    marginTop: 10,
+    marginRight: 5,
+  },
+  ageIcon: {
+    marginTop: 9,
+    marginRight: 5,
+    marginLeft: 25,
   },
 });
 
