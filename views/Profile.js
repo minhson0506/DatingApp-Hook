@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, ScrollView, StyleSheet} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useTag, useUser} from '../hooks/ApiHooks';
+import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Button, Card, ListItem, Text} from 'react-native-elements';
 import {PropTypes} from 'prop-types';
@@ -13,26 +13,18 @@ const Profile = ({navigation}) => {
   const {getFileByTag, postTag} = useTag();
   //const [user, setUser] = useState();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
-  const {getUserByToken, getFilesByUser} = useUser();
+  const {mediaArray} = useMedia(true);
+  console.log('media array', mediaArray);
+
+  const findElement = (array, firstName, secondName) => {
+    return array.find((element) => {
+      return element.title === firstName || element.title === secondName;
+    });
+  };
 
   const fetchAvatar = async () => {
-    try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const userData = await getUserByToken(userToken);
-      console.log('user data in profile', userData);
-      //setUser(userData);
-      const files = await getFilesByUser(userToken);
-      console.log('files', files);
-
-      files.forEach((file) => {
-        console.log('file', file);
-        if (file.title === 'avatar' || file.title === 'Avatar') {
-          setAvatar(uploadsUrl + file.filename);
-        }
-      });
-    } catch (err) {
-      console.error(err.message);
-    }
+    const avatar = findElement(mediaArray, 'avatar', 'Avatar');
+    if (avatar) setAvatar(uploadsUrl + avatar.filename);
   };
 
   useEffect(() => {
@@ -50,20 +42,21 @@ const Profile = ({navigation}) => {
 
   console.log('Profile', user);
 
-  const additionData = JSON.parse(user.full_name); //
+  const additionData = JSON.parse(user.full_name);
   console.log('addition data full name', additionData.fullname);
   console.log('number', additionData.age);
 
-  const interests = () => {
-    const string = '';
+  const interest = () => {
+    let string = '';
     additionData.interests.forEach((hobby) => {
-      string += hobby + ' ';
+      string += hobby;
+      string += ' ';
     });
 
     return string;
   };
+  console.log('hobby', interest());
 
-  console.log('hobby', interests);
   return (
     <ScrollView>
       <Card>
@@ -93,7 +86,7 @@ const Profile = ({navigation}) => {
         </ListItem>
         <ListItem>
           <Avatar icon={{name: 'user', type: 'font-awesome', color: 'black'}} />
-          <Text>{interests}</Text>
+          <Text>{interest()}</Text>
         </ListItem>
         <Button title={'Logout'} onPress={logOut} />
         <Button
