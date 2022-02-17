@@ -1,22 +1,28 @@
 import React from 'react';
-import {ActivityIndicator, StyleSheet, View, SafeAreaView} from 'react-native';
+import {TouchableHighlight, StyleSheet, View, SafeAreaView} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Card, ListItem, Text} from 'react-native-elements';
-import MenuIcon from '../assets/menu.svg';
-import FilterIcon from '../assets/filter.svg';
+import BackIcon from '../assets/back.svg';
 import GlobalStyles from '../utils/GlobalStyles';
 import {StatusBar} from 'expo-status-bar';
 
-const Single = ({route}) => {
+const Single = ({route, navigation}) => {
   const {file} = route.params;
   return (
     <>
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
         <View style={{flexDirection: 'row'}}>
-          <MenuIcon style={styles.menu}></MenuIcon>
+          <TouchableHighlight
+            underlayColor="white"
+            onPress={() => {
+              navigation.navigate('Home');
+            }}
+          >
+            <BackIcon style={styles.menu}></BackIcon>
+          </TouchableHighlight>
+
           <Text style={styles.appName}>hook</Text>
-          <FilterIcon style={styles.filter}></FilterIcon>
         </View>
         <View style={styles.avatar}>
           <Avatar
@@ -83,6 +89,6 @@ const styles = StyleSheet.create({
   },
 });
 
-Single.propTypes = {route: PropTypes.object};
+Single.propTypes = {route: PropTypes.object, navigation: PropTypes.object};
 
 export default Single;
