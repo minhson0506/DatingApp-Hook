@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import {useContext} from 'react';
 import {Button, Input, Text} from 'react-native-elements';
 import {View, StyleSheet} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
@@ -12,6 +12,8 @@ import {
   Poppins_600SemiBold,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
+import UserIcon from '../assets/userIcon.svg';
+import PasswordIcon from '../assets/password.svg';
 
 const LoginForm = () => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -61,6 +63,8 @@ const LoginForm = () => {
               value={value}
               autoCapitalize="none"
               placeholder="username"
+              leftIcon={<UserIcon />}
+              leftIconContainerStyle={styles.userIcon}
             />
           )}
           name="username"
@@ -80,6 +84,8 @@ const LoginForm = () => {
               autoCapitalize="none"
               secureTextEntry={true}
               placeholder="password"
+              leftIcon={<PasswordIcon />}
+              leftIconContainerStyle={styles.userIcon}
             />
           )}
           name="password"
@@ -116,6 +122,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     elevation: 4,
+  },
+  userIcon: {
+    paddingRight: 10,
   },
 });
 

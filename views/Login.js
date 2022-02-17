@@ -23,6 +23,7 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 import {LinearGradient} from 'expo-linear-gradient';
+// import UserIcon from '../assets/userIcon.svg';
 
 const Login = ({navigation}) => {
   const [formToggle, setFormToggle] = useState(true);
@@ -72,6 +73,7 @@ const Login = ({navigation}) => {
           >
             <ScrollView>
               <Text style={styles.appName}>hook</Text>
+              {/* <UserIcon style={styles.userIcon}></UserIcon> */}
               <View style={styles.form}>
                 <ButtonGroup
                   onPress={() => setFormToggle(!formToggle)}
@@ -140,13 +142,16 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 50,
-    borderWidth: 0,
     borderColor: '#DA535E',
   },
   text: {
     fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
     color: 'white',
+  },
+  userIcon: {
+    width: 20,
+    height: 20,
   },
 });
 
