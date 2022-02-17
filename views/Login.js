@@ -46,6 +46,7 @@ const Login = ({navigation}) => {
   useEffect(() => {
     checkToken();
   }, []);
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
