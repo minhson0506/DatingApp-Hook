@@ -26,7 +26,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       console.log('user data', userData);
       setOwner(userData);
       const allData = JSON.parse(userData.full_name);
-      console.log('addition data', allData);
+      console.log('addition data in listitem.js', allData);
       setAdditionData(allData);
     } catch (error) {
       Alert.alert([{text: 'Load owner failed'}]);

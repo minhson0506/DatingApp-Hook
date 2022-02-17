@@ -19,11 +19,13 @@ const Profile = ({navigation}) => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       const userData = await getUserByToken(userToken);
-      console.log('user data', userData);
+      console.log('user data in profile', userData);
       //setUser(userData);
       const files = await getFilesByUser(userToken);
+      console.log('files', files);
 
       files.forEach((file) => {
+        console.log('file', file);
         if (file.title === 'avatar' || file.title === 'Avatar') {
           setAvatar(uploadsUrl + file.filename);
         }
@@ -49,7 +51,7 @@ const Profile = ({navigation}) => {
   console.log('Profile', user);
 
   const additionData = JSON.parse(user.full_name); //
-  console.log('addition data', additionData.fullname);
+  console.log('addition data full name', additionData.fullname);
   console.log('number', additionData.age);
 
   const interests = () => {
