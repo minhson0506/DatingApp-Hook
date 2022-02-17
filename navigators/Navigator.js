@@ -13,6 +13,7 @@ import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';
 import FirstLand from '../views/FirstLand';
+import Instructions from '../views/Instructions';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -143,6 +144,11 @@ const StackScreen = () => {
             name="Modify user"
             component={ModifyUser}
           ></Stack.Screen>
+          <Stack.Screen
+            name="Instructions"
+            component={Instructions}
+            // options={{headerShown: false}}
+          ></Stack.Screen>
         </>
       ) : (
         <>
@@ -155,6 +161,11 @@ const StackScreen = () => {
             name="Login"
             component={Login}
             options={{headerShown: false}}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Instructions"
+            component={Instructions}
+            // options={{headerShown: false}}
           ></Stack.Screen>
         </>
       )}
