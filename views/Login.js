@@ -23,6 +23,13 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 import {LinearGradient} from 'expo-linear-gradient';
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+// import UserIcon from '../assets/userIcon.svg';
+=======
+>>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+>>>>>>> ff897bb (fix conflicts for nav bar branch)
 
 const Login = ({navigation}) => {
   const [formToggle, setFormToggle] = useState(true);
@@ -72,6 +79,13 @@ const Login = ({navigation}) => {
           >
             <ScrollView>
               <Text style={styles.appName}>hook</Text>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+              {/* <UserIcon style={styles.userIcon}></UserIcon> */}
+=======
+>>>>>>> cb2dd71 (draft 1 styling for login and signup page)
+>>>>>>> ff897bb (fix conflicts for nav bar branch)
               <View style={styles.form}>
                 <ButtonGroup
                   onPress={() => setFormToggle(!formToggle)}
@@ -140,16 +154,23 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 50,
+<<<<<<< HEAD
+=======
+    borderWidth: 0,
+>>>>>>> cb2dd71 (draft 1 styling for login and signup page)
     borderColor: '#DA535E',
   },
   text: {
     fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
     color: 'white',
+<<<<<<< HEAD
   },
   userIcon: {
     width: 20,
     height: 20,
+=======
+>>>>>>> cb2dd71 (draft 1 styling for login and signup page)
   },
 });
 
