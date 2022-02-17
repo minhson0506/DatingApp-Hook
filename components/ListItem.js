@@ -1,51 +1,77 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {
   Avatar,
+  ButtonGroup,
   Card,
   ListItem as RNEListItem,
   Text,
 } from 'react-native-elements';
-import {Image, ScrollView, StyleSheet, View} from 'react-native';
+import {Alert, Image, ScrollView, StyleSheet, View} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useUser} from '../hooks/ApiHooks';
 
-const ListItem = ({navigation, singleMedia}) => {
+const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
+  const {getUserById} = useUser();
+  const [owner, setOwner] = useState({username: 'fetching...'});
+  const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
+
+  const fetchOwner = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      // console.log('singlemedia', singleMedia);
+      // console.log('user_id', singleMedia.user_id);
+      const userData = await getUserById(singleMedia.user_id, token);
+      console.log('user data', userData);
+      setOwner(userData);
+      const allData = JSON.parse(userData.full_name);
+      console.log('addition data', allData);
+      setAdditionData(allData);
+    } catch (error) {
+      Alert.alert([{text: 'Load owner failed'}]);
+      console.error('fetch owner error', error);
+      setOwner({username: '[not available]'});
+      setAdditionData({fullname: '[not available]'});
+    }
+  };
+
+  useEffect(() => {
+    fetchOwner();
+  }, []);
+
   return (
-    // <RNEListItem
-    //   containerStyle={{flexDirection: 'column'}}
-    //   bottomDivider
-    //   onPress={() => {
-    //     navigation.navigate('Single', {file: singleMedia});
-    //   }}
-    // >
-    //   <Text style={styles.name}>{singleMedia.title}</Text>
-    //   {/* <View> */}
-    //   <Avatar
-    //     // style={styles.avatar}
-    //     // style={{width: '100%', resizeMode: 'contain'}}
-    //     //imageProps={{resizeMode: ''}}
-    //     size="xlarge"
-    //     source={{uri: uploadsUrl + singleMedia.thumbnails.w160}}
-    //   ></Avatar>
-    //   {/* </View> */}
-    //   <Card containerStyle={{flexDirection: 'row'}}>
-    //     <Text>Age</Text>
-    //     <Text>Location</Text>
-    //     <Text>Hobby</Text>
-    //   </Card>
-    // </RNEListItem>
-    <Card>
-      <Text style={styles.name}>{singleMedia.title}</Text>
+    <RNEListItem
+      onPress={() => {
+        navigation.navigate('Single', {file: singleMedia});
+      }}
+    >
+      {!myFilesOnly && <Text style={styles.name}>{additionData.fullname}</Text>}
       <Image
         style={styles.avatar}
         source={{uri: uploadsUrl + singleMedia.thumbnails.w160}}
       ></Image>
-      <View style={{flexDirection: 'row'}}>
-        <Text>Age</Text>
-        <Text>Location</Text>
-        <Text>Hobby</Text>
-      </View>
-    </Card>
+      {!myFilesOnly && (
+        <View style={{flexDirection: 'row'}}>
+          <Text>Age {additionData.age}</Text>
+          <Text>Location {additionData.location}</Text>
+          <Text>Hobby {additionData.interests}</Text>
+        </View>
+      )}
+      {myFilesOnly && (
+        <ButtonGroup
+          onPress={(index) => {
+            if (index === 0) {
+              navigation.navigate('Modify', {file: singleMedia});
+            } else {
+              doDelete();
+            }
+          }}
+          buttons={['Modify', 'Delete']}
+          rounded
+        ></ButtonGroup>
+      )}
+    </RNEListItem>
   );
 };
 
