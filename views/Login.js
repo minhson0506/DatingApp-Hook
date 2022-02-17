@@ -23,10 +23,6 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 import {LinearGradient} from 'expo-linear-gradient';
-<<<<<<< HEAD
-// import UserIcon from '../assets/userIcon.svg';
-=======
->>>>>>> d8a8e0c (fix conflicts in nav bar branch)
 
 const Login = ({navigation}) => {
   const [formToggle, setFormToggle] = useState(true);
@@ -76,19 +72,11 @@ const Login = ({navigation}) => {
           >
             <ScrollView>
               <Text style={styles.appName}>hook</Text>
-<<<<<<< HEAD
-              {/* <UserIcon style={styles.userIcon}></UserIcon> */}
-=======
->>>>>>> d8a8e0c (fix conflicts in nav bar branch)
               <View style={styles.form}>
                 <ButtonGroup
                   onPress={() => setFormToggle(!formToggle)}
                   selectedIndex={formToggle ? 0 : 1}
-<<<<<<< HEAD
                   buttons={['Register', 'Sign in']}
-=======
-                  buttons={['Sign in', 'Register']}
->>>>>>> d8a8e0c (fix conflicts in nav bar branch)
                   containerStyle={styles.buttons}
                   buttonContainerStyle={styles.button}
                   buttonStyle={{borderRadius: 50}}
@@ -98,19 +86,11 @@ const Login = ({navigation}) => {
                 />
                 {formToggle ? (
                   <Card containerStyle={{borderRadius: 5, marginTop: 25}}>
-<<<<<<< HEAD
                     <RegisterForm />
                   </Card>
                 ) : (
                   <Card style={{borderRadius: 5, marginTop: 25}}>
                     <LoginForm setFormToggle={setFormToggle} />
-=======
-                    <LoginForm />
-                  </Card>
-                ) : (
-                  <Card style={{borderRadius: 5, marginTop: 25}}>
-                    <RegisterForm setFormToggle={setFormToggle} />
->>>>>>> d8a8e0c (fix conflicts in nav bar branch)
                   </Card>
                 )}
               </View>
@@ -160,23 +140,16 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 50,
-<<<<<<< HEAD
-=======
-    borderWidth: 0,
->>>>>>> d8a8e0c (fix conflicts in nav bar branch)
     borderColor: '#DA535E',
   },
   text: {
     fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
     color: 'white',
-<<<<<<< HEAD
   },
   userIcon: {
     width: 20,
     height: 20,
-=======
->>>>>>> d8a8e0c (fix conflicts in nav bar branch)
   },
 });
 
