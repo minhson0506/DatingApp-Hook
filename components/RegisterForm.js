@@ -31,7 +31,7 @@ const RegisterForm = ({setFormToggle}) => {
     console.log(data);
     try {
       delete data.password_again;
-      //TODO: randomize email to post user
+      // TODO: randomize email to post user
       const userData = await postUser(data);
       console.log('register onSubmit', userData);
       if (userData) {

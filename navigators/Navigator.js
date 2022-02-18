@@ -105,15 +105,19 @@ const TabScreen = () => {
         tabBarShowLabel: false,
       })}
     >
-      <Tab.Screen name="Home" component={Home}></Tab.Screen>
-      <Tab.Screen name="Like" component={Like}></Tab.Screen>
-      <Tab.Screen name="Search" component={Search}></Tab.Screen>
       <Tab.Screen
-        name="Chat"
-        component={Chat}
+        name="Home"
+        component={Home}
         options={{headerShown: false}}
       ></Tab.Screen>
-      <Tab.Screen name="Profile" component={Profile}></Tab.Screen>
+      <Tab.Screen name="Like" component={Like}></Tab.Screen>
+      <Tab.Screen name="Search" component={Search}></Tab.Screen>
+      <Tab.Screen name="Chat" component={Chat}></Tab.Screen>
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{headerShown: false}}
+      ></Tab.Screen>
     </Tab.Navigator>
   );
 };
@@ -129,7 +133,11 @@ const StackScreen = () => {
             component={TabScreen}
             options={{headerShown: false}}
           ></Stack.Screen>
-          <Stack.Screen name="Single" component={Single}></Stack.Screen>
+          <Stack.Screen
+            name="Single"
+            component={Single}
+            options={{headerShown: false}}
+          ></Stack.Screen>
           <Stack.Screen
             name="Modify user"
             component={ModifyUser}

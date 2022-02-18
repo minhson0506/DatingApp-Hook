@@ -10,7 +10,14 @@ const MainProvider = (props) => {
 
   return (
     <MainContext.Provider
-      value={{isLoggedIn, setIsLoggedIn, user, setUser, update, setUpdate}}
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        user,
+        setUser,
+        update,
+        setUpdate,
+      }}
     >
       {props.children}
     </MainContext.Provider>

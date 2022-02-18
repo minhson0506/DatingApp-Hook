@@ -1,25 +1,38 @@
-import React from 'react';
-import {FlatList, View} from 'react-native';
+import React, {useContext} from 'react';
+import {FlatList} from 'react-native';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
+import {MainContext} from '../contexts/MainContext';
 
-const List = ({navigation}) => {
-  const {mediaArray} = useMedia();
+const List = ({navigation, myFilesOnly = false}) => {
+  let {mediaArray} = useMedia(myFilesOnly);
+  if (myFilesOnly) {
+    mediaArray = mediaArray.filter(
+      (obj) => obj.title.toLowerCase() !== 'avatar'
+    );
+  }
+  // console.log('media array in ListItem', mediaArray);
 
   return (
-    // <View style={{flex: 1}}>
     <FlatList
+      style={{alignSelf: 'center'}}
       data={mediaArray}
       keyExtractor={(item) => item.file_id.toString()}
       renderItem={({item}) => (
-        <ListItem navigation={navigation} singleMedia={item}></ListItem>
+        <ListItem
+          navigation={navigation}
+          singleMedia={item}
+          myFilesOnly={myFilesOnly}
+        ></ListItem>
       )}
     ></FlatList>
-    // </View>
   );
 };
 
-List.propTypes = {navigation: PropTypes.object.isRequired};
+List.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  myFilesOnly: PropTypes.bool,
+};
 
 export default List;

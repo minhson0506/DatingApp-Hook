@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, {useContext} from 'react';
 import {Button, Input, Text} from 'react-native-elements';
 import {View, StyleSheet} from 'react-native';

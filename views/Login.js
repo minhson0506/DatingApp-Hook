@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, {useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
@@ -33,9 +34,9 @@ const Login = ({navigation}) => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (!userToken) return;
-      console.log('token', userToken);
+      // console.log('token', userToken);
       const userData = await getUserByToken(userToken);
-      console.log('checkToken', userData);
+      // console.log('checkToken', userData);
       setUser(userData);
       setIsLoggedIn(true);
     } catch (err) {
@@ -46,6 +47,7 @@ const Login = ({navigation}) => {
   useEffect(() => {
     checkToken();
   }, []);
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
