@@ -5,12 +5,12 @@ import ListItem from './ListItem';
 import PropTypes from 'prop-types';
 
 const List = ({navigation, myFilesOnly = false}) => {
-  let {mediaArray} = useMedia(myFilesOnly);
-  if (myFilesOnly) {
-    mediaArray = mediaArray.filter(
-      (obj) => obj.title.toLowerCase() !== 'avatar'
-    );
-  }
+  const {mediaArray} = useMedia(myFilesOnly);
+  // if (myFilesOnly) {
+  //   mediaArray = mediaArray.filter(
+  //     (obj) => obj.title.toLowerCase() !== 'avatar'
+  //   );
+  // }
   // console.log('media array in ListItem', mediaArray);
 
   return (

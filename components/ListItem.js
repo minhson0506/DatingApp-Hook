@@ -20,6 +20,7 @@ import {
   useFonts,
   Poppins_600SemiBold,
   Poppins_400Regular,
+  Poppins_400Regular_Italic,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 
@@ -57,6 +58,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const [fontsLoaded] = useFonts({
     Poppins_600SemiBold,
     Poppins_400Regular,
+    Poppins_400Regular_Italic,
   });
 
   if (!fontsLoaded) {
@@ -72,30 +74,21 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
             }
           }}
         >
-          <Card style={styles.card}>
-            {!myFilesOnly && (
+          {!myFilesOnly && (
+            <Card style={styles.card}>
               <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
               >
                 <Text style={styles.name}>{additionData.fullname}</Text>
                 <DislikeIcon style={styles.x}></DislikeIcon>
               </View>
-            )}
-            {!myFilesOnly && (
               <Avatar
                 containerStyle={styles.avatar}
                 source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
               ></Avatar>
-            )}
-            {myFilesOnly && (
-              <Avatar
-                containerStyle={styles.avatarProfile}
-                avatarStyle={{borderRadius: 10}}
-                source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
-              ></Avatar>
-            )}
-
-            {!myFilesOnly && (
               <View style={{flexDirection: 'row'}}>
                 <AgeIcon style={styles.ageIcon}></AgeIcon>
                 <Text style={styles.text}>{additionData.age}</Text>
@@ -116,13 +109,22 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                     : ''}
                 </Text>
               </View>
-            )}
-            {/* {myFilesOnly && (
-            <Text style={styles.textDescription}>
-              {singleMedia.description}
-            </Text>
-          )} */}
-          </Card>
+            </Card>
+          )}
+          {myFilesOnly && (
+            <View style={styles.cardProfile}>
+              <Avatar
+                containerStyle={styles.avatarProfile}
+                avatarStyle={{borderRadius: 10}}
+                source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+              ></Avatar>
+              <Card style={styles.descriptionBox}>
+                <Text style={styles.textDescription}>
+                  {singleMedia.description}
+                </Text>
+              </Card>
+            </View>
+          )}
         </RNEListItem>
       </ScrollView>
     );
@@ -145,6 +147,10 @@ const styles = StyleSheet.create({
     borderColor: '#EB6833',
     borderRadius: 10,
     borderWidth: 1,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   avatar: {
     width: '100%',
@@ -152,7 +158,7 @@ const styles = StyleSheet.create({
   },
   avatarProfile: {
     width: '100%',
-    height: '100%',
+    height: 450,
     borderRadius: 10,
   },
   text: {
@@ -175,12 +181,27 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginLeft: 25,
   },
-  // textDescription: {
-  //   height: 50,
-  //   fontSize: 20,
-  //   color: 'black',
-  //   backgroundColor: 'orange',
-  // },
+  textDescription: {
+    fontSize: 16,
+    color: 'black',
+    padding: 20,
+    textAlign: 'center',
+    fontFamily: 'Poppins_400Regular_Italic',
+  },
+  cardProfile: {
+    width: '100%',
+    height: '100%',
+  },
+  descriptionBox: {
+    marginTop: 20,
+    borderColor: '#FCF2F2',
+    borderRadius: 10,
+    borderWidth: 1,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
 });
 
 ListItem.propTypes = {

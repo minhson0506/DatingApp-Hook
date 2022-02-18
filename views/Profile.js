@@ -2,10 +2,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  ScrollView,
   StyleSheet,
   SafeAreaView,
   View,
+  FlatList,
 } from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,7 +13,6 @@ import {useMedia} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Button, Text, Divider} from 'react-native-elements';
 import {PropTypes} from 'prop-types';
-import List from '../components/List';
 import GlobalStyles from '../utils/GlobalStyles';
 import EditIcon from '../assets/editProfile.svg';
 import MenuIcon from '../assets/menu.svg';
@@ -24,6 +23,8 @@ import SchoolIcon from '../assets/school.svg';
 import DrinkIcon from '../assets/drink.svg';
 import {Card} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
+import ListItem from '../components/ListItem';
+
 import {
   useFonts,
   Poppins_700Bold,
@@ -32,7 +33,7 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 
-const Profile = ({navigation}) => {
+const Profile = ({navigation, myFilesOnly = true}) => {
   const {setIsLoggedIn, user} = useContext(MainContext);
   // const [user, setUser] = useState();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
@@ -82,6 +83,13 @@ const Profile = ({navigation}) => {
   };
   console.log('hobby', interest());
 
+  // TODO: delete avatar from list
+  // if (myFilesOnly) {
+  //   mediaArray = mediaArray.filter(
+  //     (obj) => obj.title.toLowerCase() !== 'avatar'
+  //   );
+  // }
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
@@ -103,56 +111,64 @@ const Profile = ({navigation}) => {
             }}
           ></EditIcon>
         </View>
-        <ScrollView>
-          <View style={styles.avatar}>
-            <Avatar
-              source={{uri: avatar}}
-              containerStyle={styles.image}
-              avatarStyle={{borderRadius: 100}}
-              PlaceholderContent={<ActivityIndicator></ActivityIndicator>}
-            />
-          </View>
-          <Text style={styles.name}>{additionData.fullname}</Text>
-          <Card style={styles.card}>
-            <View style={{flexDirection: 'row'}}>
-              <AgeIcon style={styles.ageIcon}></AgeIcon>
-              <Text style={styles.text}>{additionData.age}</Text>
-              <Divider
-                orientation="vertical"
-                style={{marginTop: 12, marginRight: 10}}
-              />
-              <LocationIcon style={styles.icons}></LocationIcon>
-              <Text style={styles.text}>{additionData.location}</Text>
-              <Divider
-                orientation="vertical"
-                style={{marginTop: 12, marginRight: 10}}
-              />
-              <DrinkIcon style={styles.icons}></DrinkIcon>
-              <Text style={styles.text}>{additionData.drinking}</Text>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <SchoolIcon style={styles.icons}></SchoolIcon>
-              <Text style={styles.text}>{additionData.school}</Text>
-              <Divider
-                orientation="vertical"
-                style={{marginTop: 12, marginRight: 10}}
-              />
-              <NatIcon style={styles.icons}></NatIcon>
-              <Text style={styles.text}>{additionData.nationality}</Text>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <InterestIcon style={styles.icons}></InterestIcon>
-              <Text style={styles.text}>{interest()}</Text>
-            </View>
-          </Card>
-
-          <List
-            scrollEnabled="false"
-            navigation={navigation}
-            myFilesOnly={true}
-          ></List>
-          <Button title={'Logout'} onPress={logOut} />
-        </ScrollView>
+        <FlatList
+          ListHeaderComponent={
+            <>
+              <View style={styles.avatar}>
+                <Avatar
+                  source={{uri: avatar}}
+                  containerStyle={styles.image}
+                  avatarStyle={{borderRadius: 100}}
+                  PlaceholderContent={<ActivityIndicator></ActivityIndicator>}
+                />
+              </View>
+              <Text style={styles.name}>{additionData.fullname}</Text>
+              <Card style={styles.card}>
+                <View style={{flexDirection: 'row'}}>
+                  <AgeIcon style={styles.ageIcon}></AgeIcon>
+                  <Text style={styles.text}>{additionData.age}</Text>
+                  <Divider
+                    orientation="vertical"
+                    style={{marginTop: 12, marginRight: 10}}
+                  />
+                  <LocationIcon style={styles.icons}></LocationIcon>
+                  <Text style={styles.text}>{additionData.location}</Text>
+                  <Divider
+                    orientation="vertical"
+                    style={{marginTop: 12, marginRight: 10}}
+                  />
+                  <DrinkIcon style={styles.icons}></DrinkIcon>
+                  <Text style={styles.text}>{additionData.drinking}</Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <SchoolIcon style={styles.icons}></SchoolIcon>
+                  <Text style={styles.text}>{additionData.school}</Text>
+                  <Divider
+                    orientation="vertical"
+                    style={{marginTop: 12, marginRight: 10}}
+                  />
+                  <NatIcon style={styles.icons}></NatIcon>
+                  <Text style={styles.text}>{additionData.nationality}</Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <InterestIcon style={styles.icons}></InterestIcon>
+                  <Text style={styles.text}>{interest()}</Text>
+                </View>
+              </Card>
+            </>
+          }
+          data={mediaArray}
+          keyExtractor={(item) => item.file_id.toString()}
+          renderItem={({item}) => (
+            <ListItem
+              navigation={navigation}
+              singleMedia={item}
+              myFilesOnly={myFilesOnly}
+            ></ListItem>
+          )}
+          myFilesOnly={true}
+        ></FlatList>
+        <Button title={'Logout'} onPress={logOut} />
       </SafeAreaView>
     );
   }
@@ -216,13 +232,17 @@ const styles = StyleSheet.create({
   card: {
     width: '90%',
     height: 150,
-    margin: 0,
+    marginBottom: 20,
     padding: 0,
     borderColor: '#FCF2F2',
     borderRadius: 10,
     borderWidth: 1,
     alignSelf: 'center',
     marginTop: 20,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
 });
 
