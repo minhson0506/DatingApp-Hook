@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
@@ -8,7 +9,7 @@ import {
 } from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
+import {useMedia} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Button, Text, Divider} from 'react-native-elements';
 import {PropTypes} from 'prop-types';
@@ -23,6 +24,13 @@ import SchoolIcon from '../assets/school.svg';
 import DrinkIcon from '../assets/drink.svg';
 import {Card} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
+import {
+  useFonts,
+  Poppins_700Bold,
+  Poppins_600SemiBold,
+  Poppins_400Regular,
+} from '@expo-google-fonts/poppins';
+import AppLoading from 'expo-app-loading';
 
 const Profile = ({navigation}) => {
   const {setIsLoggedIn, user} = useContext(MainContext);
@@ -74,70 +82,80 @@ const Profile = ({navigation}) => {
   };
   console.log('hobby', interest());
 
-  return (
-    <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
-      <View style={{flexDirection: 'row'}}>
-        <MenuIcon style={styles.menu}></MenuIcon>
-        <Text style={styles.appName}>hook</Text>
-        <EditIcon
-          style={styles.edit}
-          onPress={() => {
-            navigation.navigate('Modify user');
-          }}
-        ></EditIcon>
-      </View>
-      <ScrollView>
-        <View style={styles.avatar}>
-          <Avatar
-            source={{uri: avatar}}
-            containerStyle={styles.image}
-            avatarStyle={{borderRadius: 100}}
-            PlaceholderContent={<ActivityIndicator></ActivityIndicator>}
-          />
-        </View>
-        <Text style={styles.name}>{additionData.fullname}</Text>
-        <Card style={styles.card}>
-          <View style={{flexDirection: 'row'}}>
-            <AgeIcon style={styles.ageIcon}></AgeIcon>
-            <Text style={styles.text}>{additionData.age}</Text>
-            <Divider
-              orientation="vertical"
-              style={{marginTop: 12, marginRight: 10}}
-            />
-            <LocationIcon style={styles.icons}></LocationIcon>
-            <Text style={styles.text}>{additionData.location}</Text>
-            <Divider
-              orientation="vertical"
-              style={{marginTop: 12, marginRight: 10}}
-            />
-            <DrinkIcon style={styles.icons}></DrinkIcon>
-            <Text style={styles.text}>{additionData.drinking}</Text>
-          </View>
-          <View style={{flexDirection: 'row'}}>
-            <SchoolIcon style={styles.icons}></SchoolIcon>
-            <Text style={styles.text}>{additionData.school}</Text>
-            <Divider
-              orientation="vertical"
-              style={{marginTop: 12, marginRight: 10}}
-            />
-            <NatIcon style={styles.icons}></NatIcon>
-            <Text style={styles.text}>{additionData.nationality}</Text>
-          </View>
-          <View style={{flexDirection: 'row'}}>
-            <InterestIcon style={styles.icons}></InterestIcon>
-            <Text style={styles.text}>{interest()}</Text>
-          </View>
-        </Card>
+  const [fontsLoaded] = useFonts({
+    Poppins_700Bold,
+    Poppins_600SemiBold,
+    Poppins_400Regular,
+  });
 
-        <List
-          scrollEnabled="false"
-          navigation={navigation}
-          myFilesOnly={true}
-        ></List>
-        <Button title={'Logout'} onPress={logOut} />
-      </ScrollView>
-    </SafeAreaView>
-  );
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <MenuIcon style={styles.menu}></MenuIcon>
+          <Text style={styles.appName}>hook</Text>
+          <EditIcon
+            style={styles.edit}
+            onPress={() => {
+              navigation.navigate('Modify user');
+            }}
+          ></EditIcon>
+        </View>
+        <ScrollView>
+          <View style={styles.avatar}>
+            <Avatar
+              source={{uri: avatar}}
+              containerStyle={styles.image}
+              avatarStyle={{borderRadius: 100}}
+              PlaceholderContent={<ActivityIndicator></ActivityIndicator>}
+            />
+          </View>
+          <Text style={styles.name}>{additionData.fullname}</Text>
+          <Card style={styles.card}>
+            <View style={{flexDirection: 'row'}}>
+              <AgeIcon style={styles.ageIcon}></AgeIcon>
+              <Text style={styles.text}>{additionData.age}</Text>
+              <Divider
+                orientation="vertical"
+                style={{marginTop: 12, marginRight: 10}}
+              />
+              <LocationIcon style={styles.icons}></LocationIcon>
+              <Text style={styles.text}>{additionData.location}</Text>
+              <Divider
+                orientation="vertical"
+                style={{marginTop: 12, marginRight: 10}}
+              />
+              <DrinkIcon style={styles.icons}></DrinkIcon>
+              <Text style={styles.text}>{additionData.drinking}</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <SchoolIcon style={styles.icons}></SchoolIcon>
+              <Text style={styles.text}>{additionData.school}</Text>
+              <Divider
+                orientation="vertical"
+                style={{marginTop: 12, marginRight: 10}}
+              />
+              <NatIcon style={styles.icons}></NatIcon>
+              <Text style={styles.text}>{additionData.nationality}</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <InterestIcon style={styles.icons}></InterestIcon>
+              <Text style={styles.text}>{interest()}</Text>
+            </View>
+          </Card>
+
+          <List
+            scrollEnabled="false"
+            navigation={navigation}
+            myFilesOnly={true}
+          ></List>
+          <Button title={'Logout'} onPress={logOut} />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -148,14 +166,14 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontSize: 40,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_700Bold',
     color: '#EB6833',
-    marginLeft: '25%',
+    letterSpacing: 5,
   },
   edit: {
-    marginLeft: '25%',
     marginTop: 10,
     marginBottom: 20,
+    marginRight: 15,
   },
   image: {
     width: '90%',
@@ -175,12 +193,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: 'center',
     marginTop: 10,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_600SemiBold',
   },
   text: {
     fontSize: 16,
     marginTop: 17,
     marginRight: 30,
+    fontFamily: 'Poppins_400Regular',
   },
   icons: {
     marginTop: 15,

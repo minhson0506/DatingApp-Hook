@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, {useEffect} from 'react';
 import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
@@ -9,6 +10,8 @@ import MenuIcon from '../assets/menu.svg';
 import FilterIcon from '../assets/filter.svg';
 import {FAB} from 'react-native-paper';
 import ReloadIcon from '../assets/reload.svg';
+import {useFonts, Poppins_700Bold} from '@expo-google-fonts/poppins';
+import AppLoading from 'expo-app-loading';
 
 const Home = ({navigation}) => {
   const checkToken = async () => {
@@ -24,25 +27,33 @@ const Home = ({navigation}) => {
     checkToken();
   }, []);
 
-  return (
-    <>
-      <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
-        <View style={{flexDirection: 'row'}}>
-          <MenuIcon style={styles.menu}></MenuIcon>
-          <Text style={styles.appName}>hook</Text>
-          <FilterIcon style={styles.filter}></FilterIcon>
-        </View>
-        <List navigation={navigation}></List>
-        <FAB
-          style={styles.fab}
-          small
-          icon={ReloadIcon}
-          onPress={() => console.log('Pressed')}
-        />
-      </SafeAreaView>
-      <StatusBar style="auto"></StatusBar>
-    </>
-  );
+  const [fontsLoaded] = useFonts({
+    Poppins_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <>
+        <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <MenuIcon style={styles.menu}></MenuIcon>
+            <Text style={styles.appName}>hook</Text>
+            <FilterIcon style={styles.filter}></FilterIcon>
+          </View>
+          <List navigation={navigation}></List>
+          <FAB
+            style={styles.fab}
+            small
+            icon={ReloadIcon}
+            onPress={() => console.log('Pressed')}
+          />
+        </SafeAreaView>
+        <StatusBar style="auto"></StatusBar>
+      </>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -53,12 +64,12 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontSize: 40,
-    fontWeight: 'bold',
     color: '#EB6833',
-    marginLeft: '25%',
+    fontFamily: 'Poppins_700Bold',
+    letterSpacing: 5,
   },
   filter: {
-    marginLeft: '25%',
+    marginRight: 15,
     marginTop: 15,
     marginBottom: 20,
   },

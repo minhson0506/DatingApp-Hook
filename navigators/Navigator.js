@@ -7,11 +7,8 @@ import Profile from '../views/Profile';
 import Single from '../views/Single';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
-import {Icon, Image} from 'react-native-elements';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Image} from 'react-native-elements';
 import ModifyUser from '../views/ModifyUser';
-// import Upload from '../views/Upload';
 import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';
@@ -26,7 +23,7 @@ const TabScreen = () => {
       screenOptions={({route}) => ({
         tabBarStyle: {
           justifyContent: 'center',
-          height: 80,
+          height: 70,
           border: 0,
           margin: 0,
           padding: 0,
@@ -112,7 +109,11 @@ const TabScreen = () => {
       ></Tab.Screen>
       <Tab.Screen name="Like" component={Like}></Tab.Screen>
       <Tab.Screen name="Search" component={Search}></Tab.Screen>
-      <Tab.Screen name="Chat" component={Chat}></Tab.Screen>
+      <Tab.Screen
+        name="Chat"
+        component={Chat}
+        options={{headerShown: false}}
+      ></Tab.Screen>
       <Tab.Screen
         name="Profile"
         component={Profile}
