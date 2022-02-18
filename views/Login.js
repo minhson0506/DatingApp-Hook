@@ -86,7 +86,7 @@ const Login = ({navigation}) => {
                 />
                 {formToggle ? (
                   <Card containerStyle={{borderRadius: 5, marginTop: 25}}>
-                    <RegisterForm />
+                    <RegisterForm setFormToggle={setFormToggle} />
                   </Card>
                 ) : (
                   <Card style={{borderRadius: 5, marginTop: 25}}>

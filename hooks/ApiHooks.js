@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
-import {baseUrl} from '../utils/variables';
+import {appId, baseUrl} from '../utils/variables';
 
 const doFetch = async (url, options = {}) => {
   try {
@@ -19,31 +19,29 @@ const doFetch = async (url, options = {}) => {
   }
 };
 
-const useMedia = () => {
+const useMedia = (myFilesOnly) => {
   const [mediaArray, setMediaArray] = useState([]);
-  const {update} = useContext(MainContext);
+  const {update, user} = useContext(MainContext);
   const loadMedia = async (start = 0, limit = 10) => {
     try {
-      const response = await fetch(
-        `${baseUrl}media?start=${start}&limit=${limit}`
-        // baseUrl + 'media' + '?start=' + start + '&limit=' + limit
-      );
-      if (!response.ok) {
-        throw Error(response.statusText);
+      let json = await useTag().getFileByTag(appId);
+      if (myFilesOnly) {
+        json = json.filter((file) => file.user_id === user.user_id);
       }
-      const json = await response.json();
       const media = await Promise.all(
         json.map(async (item) => {
           const response = await fetch(baseUrl + 'media/' + item.file_id);
           const mediaData = await response.json();
+          // console.log(mediaData);
           return mediaData;
         })
       );
       setMediaArray(media);
     } catch (error) {
       console.error(error);
+    } finally {
     }
-    console.log(mediaArray);
+    //console.log(mediaArray);
   };
 
   // Call loadMedia() only once when the component is loaded
@@ -96,7 +94,8 @@ const useUser = () => {
       method: 'GET',
       headers: {'x-access-token': token},
     };
-    return await doFetch(`${baseUrl}users/${userId}`, options);
+    const userData = await doFetch(baseUrl + 'users/' + userId, options);
+    return userData;
   };
 
   const postUser = async (data) => {
@@ -135,6 +134,11 @@ const useUser = () => {
     return result.available;
   };
 
+  const getFilesByUser = async (token) => {
+    const options = {headers: {'x-access-token': token}};
+    return await doFetch(baseUrl + '/media/user', options);
+  };
+
   return {
     getUserByToken,
     postUser,
@@ -142,6 +146,7 @@ const useUser = () => {
     checkUsername,
     deleteUser,
     getUserById,
+    getFilesByUser,
   };
 };
 
@@ -194,11 +199,13 @@ const userComment = () => {
     };
     return await doFetch(baseUrl + 'comments', options);
   };
+
   return {
     userComment,
     postComment,
     getComments,
     getCommentByFileId,
+    getComments,
   };
 };
 
