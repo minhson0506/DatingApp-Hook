@@ -25,8 +25,7 @@ import {Card} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
 
 const Profile = ({navigation}) => {
-  const {setIsLoggedIn, user, myFilesOnly, setMyFilesOnly} =
-    useContext(MainContext);
+  const {setIsLoggedIn, user} = useContext(MainContext);
   // const [user, setUser] = useState();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const {mediaArray} = useMedia(true);
@@ -37,7 +36,6 @@ const Profile = ({navigation}) => {
   // };
 
   const fetchAvatar = () => {
-    setMyFilesOnly(true);
     // console.log('myfileonly in profile', myFilesOnly);
     const avatar = mediaArray.find(
       (obj) => obj.title.toLowerCase() === 'avatar'
@@ -134,7 +132,7 @@ const Profile = ({navigation}) => {
         <List
           scrollEnabled="false"
           navigation={navigation}
-          myFilesOnly={myFilesOnly}
+          myFilesOnly={true}
         ></List>
         <Button title={'Logout'} onPress={logOut} />
       </ScrollView>
