@@ -11,7 +11,10 @@ import {Icon, Image} from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ModifyUser from '../views/ModifyUser';
+<<<<<<< HEAD
 // import Upload from '../views/Upload';
+=======
+>>>>>>> 76a6a4d (draft styling for profile page)
 import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';
@@ -112,12 +115,21 @@ const TabScreen = () => {
       ></Tab.Screen>
       <Tab.Screen name="Like" component={Like}></Tab.Screen>
       <Tab.Screen name="Search" component={Search}></Tab.Screen>
+<<<<<<< HEAD
       <Tab.Screen
         name="Chat"
         component={Chat}
         options={{headerShown: false}}
       ></Tab.Screen>
       <Tab.Screen name="Profile" component={Profile}></Tab.Screen>
+=======
+      <Tab.Screen name="Chat" component={Chat}></Tab.Screen>
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{headerShown: false}}
+      ></Tab.Screen>
+>>>>>>> 76a6a4d (draft styling for profile page)
     </Tab.Navigator>
   );
 };
