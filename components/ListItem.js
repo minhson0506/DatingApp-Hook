@@ -25,7 +25,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       // console.log('singlemedia', singleMedia);
-      // console.log('user_id', singleMedia.user_id);
+      // console.log('user_id', singleMedia.description);
       const userData = await getUserById(singleMedia.user_id, token);
       // console.log('user data', userData);
       // setOwner(userData);
@@ -35,14 +35,14 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     } catch (error) {
       Alert.alert([{text: 'Load owner failed'}]);
       console.error('fetch owner error', error);
-      setOwner({username: '[not available]'});
+      // setOwner({username: '[not available]'});
       setAdditionData({fullname: '[not available]'});
     }
   };
 
   // console.log('type of', typeof additionData.interests);
   // console.log('type of', additionData.interests[0]);
-  //var firstHobby = additionData.interests[0];
+  // var firstHobby = additionData.interests[0];
   useEffect(() => {
     fetchOwner();
   }, []);
@@ -51,7 +51,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     <ScrollView>
       <RNEListItem
         onPress={() => {
-          navigation.navigate('Single', {file: singleMedia});
+          {
+            !myFilesOnly && navigation.navigate('Single', {file: singleMedia});
+          }
         }}
       >
         <Card style={styles.card}>
@@ -72,6 +74,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           {myFilesOnly && (
             <Avatar
               containerStyle={styles.avatarProfile}
+              avatarStyle={{borderRadius: 10}}
               source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
             ></Avatar>
           )}
@@ -99,11 +102,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
             </View>
           )}
           {/* {myFilesOnly && (
-            <View style={{flexDirection: 'row'}}>
-              <Text style={styles.textDescription}>
-                {singleMedia.description}
-              </Text>
-            </View>
+            <Text style={styles.textDescription}>
+              {singleMedia.description}
+            </Text>
           )} */}
         </Card>
       </RNEListItem>
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '100%',
-    height: 380,
+    height: 350,
     margin: 0,
     padding: 0,
     borderColor: '#EB6833',
@@ -135,16 +136,17 @@ const styles = StyleSheet.create({
   avatarProfile: {
     width: '100%',
     height: '100%',
+    borderRadius: 10,
   },
   text: {
     fontSize: 16,
     marginTop: 12,
-    marginRight: 25,
+    marginRight: 30,
   },
   icons: {
     marginTop: 12,
     marginRight: 5,
-    marginLeft: 15,
+    marginLeft: 20,
   },
   x: {
     marginTop: 10,
@@ -155,14 +157,18 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginLeft: 25,
   },
-  textDescription: {
-    fontSize: 40,
-  },
+  // textDescription: {
+  //   height: 50,
+  //   fontSize: 20,
+  //   color: 'black',
+  //   backgroundColor: 'orange',
+  // },
 });
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object.isRequired,
   navigation: PropTypes.object.isRequired,
+  myFilesOnly: PropTypes.bool,
 };
 
 export default ListItem;
