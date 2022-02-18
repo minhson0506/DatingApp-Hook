@@ -5,16 +5,14 @@ import ListItem from './ListItem';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 
-const List = ({navigation}) => {
-  const {myFilesOnly} = useContext(MainContext);
-  console.log('bool myFilesOnly', myFilesOnly);
+const List = ({navigation, myFilesOnly = false}) => {
   let {mediaArray} = useMedia(myFilesOnly);
   if (myFilesOnly) {
     mediaArray = mediaArray.filter(
       (obj) => obj.title.toLowerCase() !== 'avatar'
     );
   }
-  console.log('media array in ListItem', mediaArray);
+  // console.log('media array in ListItem', mediaArray);
 
   return (
     <FlatList

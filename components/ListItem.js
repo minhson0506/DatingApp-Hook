@@ -17,9 +17,8 @@ import DislikeIcon from '../assets/dislike.svg';
 import {Card} from 'react-native-paper';
 import {MainContext} from '../contexts/MainContext';
 
-const ListItem = ({navigation, singleMedia}) => {
+const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {getUserById} = useUser();
-  const {myFilesOnly} = useContext(MainContext);
   // const [owner, setOwner] = useState({username: 'fetching...'});
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
 
