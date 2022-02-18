@@ -9,7 +9,6 @@ import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
 import {Icon} from 'react-native-elements';
 import ModifyUser from '../views/ModifyUser';
-import Upload from '../views/Upload';
 import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';
@@ -52,7 +51,11 @@ const TabScreen = () => {
       <Tab.Screen name="Like" component={Like}></Tab.Screen>
       <Tab.Screen name="Search" component={Search}></Tab.Screen>
       <Tab.Screen name="Chat" component={Chat}></Tab.Screen>
-      <Tab.Screen name="Profile" component={Profile}></Tab.Screen>
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{headerShown: false}}
+      ></Tab.Screen>
     </Tab.Navigator>
   );
 };

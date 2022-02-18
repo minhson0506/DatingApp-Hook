@@ -39,9 +39,8 @@ const useMedia = (myFilesOnly) => {
       setMediaArray(media);
     } catch (error) {
       console.error(error);
-    } finally {
     }
-    //console.log(mediaArray);
+    // console.log(mediaArray);
   };
 
   // Call loadMedia() only once when the component is loaded
@@ -120,7 +119,7 @@ const useUser = () => {
     return await doFetch(baseUrl + 'users', options);
   };
 
-  //require admin
+  // require admin
   const deleteUser = async (userId, token) => {
     const options = {
       method: 'DELETE',
