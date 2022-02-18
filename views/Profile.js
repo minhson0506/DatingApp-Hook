@@ -10,25 +10,35 @@ import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
-import {Avatar, Button, Card, ListItem, Text} from 'react-native-elements';
+import {Avatar, Button, Text, Divider} from 'react-native-elements';
 import {PropTypes} from 'prop-types';
 import List from '../components/List';
 import GlobalStyles from '../utils/GlobalStyles';
 import EditIcon from '../assets/editProfile.svg';
 import MenuIcon from '../assets/menu.svg';
+import AgeIcon from '../assets/age.svg';
+import InterestIcon from '../assets/heart.svg';
+import LocationIcon from '../assets/location.svg';
+import SchoolIcon from '../assets/school.svg';
+import DrinkIcon from '../assets/drink.svg';
+import {Card} from 'react-native-paper';
+import NatIcon from '../assets/nationality.svg';
 
 const Profile = ({navigation}) => {
-  const {setIsLoggedIn, user} = useContext(MainContext);
+  const {setIsLoggedIn, user, myFilesOnly, setMyFilesOnly} =
+    useContext(MainContext);
   // const [user, setUser] = useState();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const {mediaArray} = useMedia(true);
-  console.log('media array profiler', mediaArray);
+  // console.log('media array profiler', mediaArray);
 
   // const findElement = (array, name) => {
   //   return array.find((element) => element.title.toLowerCase() === name);
   // };
 
   const fetchAvatar = () => {
+    setMyFilesOnly(true);
+    // console.log('myfileonly in profile', myFilesOnly);
     const avatar = mediaArray.find(
       (obj) => obj.title.toLowerCase() === 'avatar'
     );
@@ -88,41 +98,43 @@ const Profile = ({navigation}) => {
           />
         </View>
         <Text style={styles.name}>{additionData.fullname}</Text>
-        <Card>
-          <ListItem>
-            <Avatar icon={{name: 'email', color: 'black'}} />
-            <Text>{user.email}</Text>
-          </ListItem>
-          <ListItem>
-            <Avatar
-              icon={{name: 'user', type: 'font-awesome', color: 'black'}}
+        <Card style={styles.card}>
+          <View style={{flexDirection: 'row'}}>
+            <AgeIcon style={styles.ageIcon}></AgeIcon>
+            <Text style={styles.text}>{additionData.age}</Text>
+            <Divider
+              orientation="vertical"
+              style={{marginTop: 12, marginRight: 10}}
             />
-            <Text>{additionData.fullname}</Text>
-          </ListItem>
-          <ListItem>
-            <Avatar
-              icon={{name: 'user', type: 'font-awesome', color: 'black'}}
+            <LocationIcon style={styles.icons}></LocationIcon>
+            <Text style={styles.text}>{additionData.location}</Text>
+            <Divider
+              orientation="vertical"
+              style={{marginTop: 12, marginRight: 10}}
             />
-            <Text>{additionData.location}</Text>
-          </ListItem>
-          <ListItem>
-            <Avatar
-              icon={{name: 'user', type: 'font-awesome', color: 'black'}}
+            <DrinkIcon style={styles.icons}></DrinkIcon>
+            <Text style={styles.text}>{additionData.drinking}</Text>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <SchoolIcon style={styles.icons}></SchoolIcon>
+            <Text style={styles.text}>{additionData.school}</Text>
+            <Divider
+              orientation="vertical"
+              style={{marginTop: 12, marginRight: 10}}
             />
-            <Text>{additionData.school}</Text>
-          </ListItem>
-          <ListItem>
-            <Avatar
-              icon={{name: 'user', type: 'font-awesome', color: 'black'}}
-            />
-            <Text>{interest()}</Text>
-          </ListItem>
+            <NatIcon style={styles.icons}></NatIcon>
+            <Text style={styles.text}>{additionData.nationality}</Text>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <InterestIcon style={styles.icons}></InterestIcon>
+            <Text style={styles.text}>{interest()}</Text>
+          </View>
         </Card>
 
         <List
           scrollEnabled="false"
           navigation={navigation}
-          myFilesOnly={true}
+          myFilesOnly={myFilesOnly}
         ></List>
         <Button title={'Logout'} onPress={logOut} />
       </ScrollView>
@@ -167,10 +179,39 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontWeight: 'bold',
   },
+  text: {
+    fontSize: 16,
+    marginTop: 17,
+    marginRight: 30,
+  },
+  icons: {
+    marginTop: 15,
+    marginRight: 5,
+    marginLeft: 15,
+    marginBottom: 10,
+  },
+  ageIcon: {
+    marginTop: 12,
+    marginRight: 5,
+    marginLeft: 15,
+    marginBottom: 10,
+  },
+  card: {
+    width: '90%',
+    height: 150,
+    margin: 0,
+    padding: 0,
+    borderColor: '#FCF2F2',
+    borderRadius: 10,
+    borderWidth: 1,
+    alignSelf: 'center',
+    marginTop: 20,
+  },
 });
 
 Profile.propTypes = {
   navigation: PropTypes.object,
+  myFilesOnly: PropTypes.bool,
 };
 
 export default Profile;

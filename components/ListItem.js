@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {
@@ -15,9 +15,11 @@ import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
 import DislikeIcon from '../assets/dislike.svg';
 import {Card} from 'react-native-paper';
+import {MainContext} from '../contexts/MainContext';
 
-const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
+const ListItem = ({navigation, singleMedia}) => {
   const {getUserById} = useUser();
+  const {myFilesOnly} = useContext(MainContext);
   // const [owner, setOwner] = useState({username: 'fetching...'});
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
 
@@ -141,12 +143,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginTop: 12,
-    marginRight: 30,
+    marginRight: 20,
   },
   icons: {
     marginTop: 12,
     marginRight: 5,
-    marginLeft: 20,
+    marginLeft: 10,
   },
   x: {
     marginTop: 10,
