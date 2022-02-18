@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import React, {useContext} from 'react';
-=======
 /* eslint-disable camelcase */
-import {useContext} from 'react';
->>>>>>> c78c0c9 (fixing myFilesOnly in Profile)
+import React, {useContext} from 'react';
 import {Button, Input, Text} from 'react-native-elements';
 import {View, StyleSheet} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';

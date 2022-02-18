@@ -21,7 +21,7 @@ const doFetch = async (url, options = {}) => {
 
 const useMedia = (myFilesOnly) => {
   const [mediaArray, setMediaArray] = useState([]);
-  const {user} = useContext(MainContext);
+  const {update, user} = useContext(MainContext);
   const loadMedia = async (start = 0, limit = 10) => {
     try {
       let json = await useTag().getFileByTag(appId);
@@ -32,22 +32,23 @@ const useMedia = (myFilesOnly) => {
         json.map(async (item) => {
           const response = await fetch(baseUrl + 'media/' + item.file_id);
           const mediaData = await response.json();
-          // console.log(mediaData);
+          console.log(mediaData);
           return mediaData;
         })
       );
       setMediaArray(media);
     } catch (error) {
       console.error(error);
+    } finally {
     }
-    // console.log(mediaArray);
+    //console.log(mediaArray);
   };
 
   // Call loadMedia() only once when the component is loaded
   // Or when update state is changed
   useEffect(() => {
     loadMedia(0, 10);
-  }, []);
+  }, [update]);
 
   const postMedia = async (formData, token) => {
     const options = {
@@ -93,12 +94,8 @@ const useUser = () => {
       method: 'GET',
       headers: {'x-access-token': token},
     };
-<<<<<<< HEAD
-    return await doFetch(`${baseUrl}users/${userId}`, options);
-=======
     const userData = await doFetch(baseUrl + 'users/' + userId, options);
     return userData;
->>>>>>> 7f9d8e4 (implement home and profile screen)
   };
 
   const postUser = async (data) => {
@@ -123,7 +120,7 @@ const useUser = () => {
     return await doFetch(baseUrl + 'users', options);
   };
 
-  // require admin
+  //require admin
   const deleteUser = async (userId, token) => {
     const options = {
       method: 'DELETE',
@@ -137,14 +134,11 @@ const useUser = () => {
     return result.available;
   };
 
-<<<<<<< HEAD
-=======
   const getFilesByUser = async (token) => {
     const options = {headers: {'x-access-token': token}};
     return await doFetch(baseUrl + '/media/user', options);
   };
 
->>>>>>> 7f9d8e4 (implement home and profile screen)
   return {
     getUserByToken,
     postUser,
@@ -152,10 +146,7 @@ const useUser = () => {
     checkUsername,
     deleteUser,
     getUserById,
-<<<<<<< HEAD
-=======
     getFilesByUser,
->>>>>>> 7f9d8e4 (implement home and profile screen)
   };
 };
 
