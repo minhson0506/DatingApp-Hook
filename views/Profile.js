@@ -1,5 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, ScrollView, StyleSheet} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag, useUser} from '../hooks/ApiHooks';
@@ -10,26 +15,26 @@ import List from '../components/List';
 
 const Profile = ({navigation}) => {
   const {setIsLoggedIn, user} = useContext(MainContext);
-  const {getFileByTag, postTag} = useTag();
   //const [user, setUser] = useState();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const {mediaArray} = useMedia(true);
-  console.log('media array', mediaArray);
+  console.log('media array profiler', mediaArray);
 
-  const findElement = (array, firstName, secondName) => {
-    return array.find((element) => {
-      return element.title === firstName || element.title === secondName;
-    });
-  };
+  // const findElement = (array, name) => {
+  //   return array.find((element) => element.title.toLowerCase() === name);
+  // };
 
-  const fetchAvatar = async () => {
-    const avatar = findElement(mediaArray, 'avatar', 'Avatar');
+  const fetchAvatar = () => {
+    const avatar = mediaArray.find(
+      (obj) => obj.title.toLowerCase() === 'avatar'
+    );
+    console.log('avatar', avatar);
     if (avatar) setAvatar(uploadsUrl + avatar.filename);
   };
 
   useEffect(() => {
     fetchAvatar();
-  }, []);
+  }, [mediaArray]);
 
   const logOut = async () => {
     try {
