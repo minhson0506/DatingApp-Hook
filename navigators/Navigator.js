@@ -11,7 +11,10 @@ import {Icon, Image} from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ModifyUser from '../views/ModifyUser';
+<<<<<<< HEAD
 // import Upload from '../views/Upload';
+=======
+>>>>>>> 65d308e410dc8839d41b6f68cdea46c80f4360d2
 import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';

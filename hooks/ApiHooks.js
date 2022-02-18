@@ -21,7 +21,11 @@ const doFetch = async (url, options = {}) => {
 
 const useMedia = (myFilesOnly) => {
   const [mediaArray, setMediaArray] = useState([]);
+<<<<<<< HEAD
   const {update, user} = useContext(MainContext);
+=======
+  const {user} = useContext(MainContext);
+>>>>>>> 65d308e410dc8839d41b6f68cdea46c80f4360d2
   const loadMedia = async (start = 0, limit = 10) => {
     try {
       let json = await useTag().getFileByTag(appId);
@@ -32,7 +36,11 @@ const useMedia = (myFilesOnly) => {
         json.map(async (item) => {
           const response = await fetch(baseUrl + 'media/' + item.file_id);
           const mediaData = await response.json();
+<<<<<<< HEAD
           console.log(mediaData);
+=======
+          // console.log(mediaData);
+>>>>>>> 65d308e410dc8839d41b6f68cdea46c80f4360d2
           return mediaData;
         })
       );
@@ -41,14 +49,18 @@ const useMedia = (myFilesOnly) => {
       console.error(error);
     } finally {
     }
+<<<<<<< HEAD
     //console.log(mediaArray);
+=======
+    // console.log(mediaArray);
+>>>>>>> 65d308e410dc8839d41b6f68cdea46c80f4360d2
   };
 
   // Call loadMedia() only once when the component is loaded
   // Or when update state is changed
   useEffect(() => {
     loadMedia(0, 10);
-  }, [update]);
+  }, []);
 
   const postMedia = async (formData, token) => {
     const options = {
@@ -120,7 +132,7 @@ const useUser = () => {
     return await doFetch(baseUrl + 'users', options);
   };
 
-  //require admin
+  // require admin
   const deleteUser = async (userId, token) => {
     const options = {
       method: 'DELETE',

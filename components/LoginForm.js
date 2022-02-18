@@ -1,5 +1,9 @@
 /* eslint-disable camelcase */
+<<<<<<< HEAD
 import React, {useContext} from 'react';
+=======
+import {useContext} from 'react';
+>>>>>>> 65d308e410dc8839d41b6f68cdea46c80f4360d2
 import {Button, Input, Text} from 'react-native-elements';
 import {View, StyleSheet} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
