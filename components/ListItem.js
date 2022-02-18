@@ -63,10 +63,19 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
               <DislikeIcon style={styles.x}></DislikeIcon>
             </View>
           )}
-          <Avatar
-            containerStyle={styles.avatar}
-            source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
-          ></Avatar>
+          {!myFilesOnly && (
+            <Avatar
+              containerStyle={styles.avatar}
+              source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+            ></Avatar>
+          )}
+          {myFilesOnly && (
+            <Avatar
+              containerStyle={styles.avatarProfile}
+              source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+            ></Avatar>
+          )}
+
           {!myFilesOnly && (
             <View style={{flexDirection: 'row'}}>
               <AgeIcon style={styles.ageIcon}></AgeIcon>
@@ -89,13 +98,13 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
               </Text>
             </View>
           )}
-          {myFilesOnly && (
-            <View style={{flexDirection: 'column'}}>
+          {/* {myFilesOnly && (
+            <View style={{flexDirection: 'row'}}>
               <Text style={styles.textDescription}>
                 {singleMedia.description}
               </Text>
             </View>
-          )}
+          )} */}
         </Card>
       </RNEListItem>
     </ScrollView>
@@ -122,6 +131,10 @@ const styles = StyleSheet.create({
   avatar: {
     width: '100%',
     height: '75%',
+  },
+  avatarProfile: {
+    width: '100%',
+    height: '100%',
   },
   text: {
     fontSize: 16,
