@@ -21,7 +21,7 @@ const doFetch = async (url, options = {}) => {
 
 const useMedia = (myFilesOnly) => {
   const [mediaArray, setMediaArray] = useState([]);
-  const {update, user} = useContext(MainContext);
+  const {user} = useContext(MainContext);
   const loadMedia = async (start = 0, limit = 10) => {
     try {
       let json = await useTag().getFileByTag(appId);
@@ -32,7 +32,7 @@ const useMedia = (myFilesOnly) => {
         json.map(async (item) => {
           const response = await fetch(baseUrl + 'media/' + item.file_id);
           const mediaData = await response.json();
-          console.log(mediaData);
+          // console.log(mediaData);
           return mediaData;
         })
       );
@@ -48,7 +48,7 @@ const useMedia = (myFilesOnly) => {
   // Or when update state is changed
   useEffect(() => {
     loadMedia(0, 10);
-  }, [update]);
+  }, []);
 
   const postMedia = async (formData, token) => {
     const options = {

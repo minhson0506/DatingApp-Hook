@@ -18,7 +18,7 @@ import {Card} from 'react-native-paper';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {getUserById} = useUser();
-  const [owner, setOwner] = useState({username: 'fetching...'});
+  // const [owner, setOwner] = useState({username: 'fetching...'});
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
 
   const fetchOwner = async () => {
@@ -28,8 +28,8 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       // console.log('user_id', singleMedia.user_id);
       const userData = await getUserById(singleMedia.user_id, token);
       // console.log('user data', userData);
-      setOwner(userData);
-      const allData = JSON.parse(userData.full_name);
+      // setOwner(userData);
+      const allData = await JSON.parse(userData.full_name);
       // console.log('addition data in listitem.js', allData);
       setAdditionData(allData);
     } catch (error) {
@@ -40,6 +40,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     }
   };
 
+  // console.log('type of', typeof additionData.interests);
+  // console.log('type of', additionData.interests[0]);
+  //var firstHobby = additionData.interests[0];
   useEffect(() => {
     fetchOwner();
   }, []);
@@ -79,7 +82,18 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                 style={{marginTop: 12, marginRight: 10}}
               />
               <InterestIcon style={styles.icons}></InterestIcon>
-              <Text style={styles.text}>{additionData.interests}</Text>
+              <Text style={styles.text}>
+                {typeof additionData.interests !== 'undefined'
+                  ? additionData.interests[0]
+                  : ''}
+              </Text>
+            </View>
+          )}
+          {myFilesOnly && (
+            <View style={{flexDirection: 'column'}}>
+              <Text style={styles.textDescription}>
+                {singleMedia.description}
+              </Text>
             </View>
           )}
         </Card>
@@ -127,6 +141,9 @@ const styles = StyleSheet.create({
     marginTop: 9,
     marginRight: 5,
     marginLeft: 25,
+  },
+  textDescription: {
+    fontSize: 40,
   },
 });
 
