@@ -59,11 +59,11 @@ const Profile = ({navigation}) => {
     setIsLoggedIn(false);
   };
 
-  console.log('Profile', user);
+  // console.log('Profile', user);
 
   const additionData = JSON.parse(user.full_name);
-  console.log('addition data full name', additionData.fullname);
-  console.log('number', additionData.age);
+  // console.log('addition data full name', additionData.fullname);
+  // console.log('number', additionData.age);
 
   const interest = () => {
     let string = '';

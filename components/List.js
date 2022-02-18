@@ -8,11 +8,13 @@ import {MainContext} from '../contexts/MainContext';
 const List = ({navigation}) => {
   const {myFilesOnly} = useContext(MainContext);
   console.log('bool myFilesOnly', myFilesOnly);
-  const {mediaArray} = useMedia(myFilesOnly);
+  let {mediaArray} = useMedia(myFilesOnly);
   if (myFilesOnly) {
-    mediaArray.filter((obj) => obj.title.toLowerCase() !== 'avatar');
+    mediaArray = mediaArray.filter(
+      (obj) => obj.title.toLowerCase() !== 'avatar'
+    );
   }
-  // console.log('media array in ListItem', mediaArray);
+  console.log('media array in ListItem', mediaArray);
 
   return (
     <FlatList
