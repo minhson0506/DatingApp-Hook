@@ -33,11 +33,14 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 
-const Profile = ({navigation, myFilesOnly = true}) => {
+const Profile = ({navigation}) => {
   const {setIsLoggedIn, user} = useContext(MainContext);
   // const [user, setUser] = useState();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
-  const {mediaArray} = useMedia(true);
+  let {mediaArray} = useMedia(true);
+
+  mediaArray = mediaArray.filter((obj) => obj.title.toLowerCase() !== 'avatar');
+  //   console.log('media array in ListItem', mediaArray);
   // console.log('media array profiler', mediaArray);
 
   // const findElement = (array, name) => {
@@ -163,10 +166,10 @@ const Profile = ({navigation, myFilesOnly = true}) => {
             <ListItem
               navigation={navigation}
               singleMedia={item}
-              myFilesOnly={myFilesOnly}
+              myFilesOnly={true}
             ></ListItem>
           )}
-          myFilesOnly={true}
+          // myFilesOnly={true}
         ></FlatList>
         <Button title={'Logout'} onPress={logOut} />
       </SafeAreaView>
