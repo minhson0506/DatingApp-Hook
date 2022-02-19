@@ -37,15 +37,13 @@ const Profile = ({navigation}) => {
   const {setIsLoggedIn, user} = useContext(MainContext);
   // const [user, setUser] = useState();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
-  let {mediaArray} = useMedia(true);
+  const {mediaArray} = useMedia(true);
 
-  mediaArray = mediaArray.filter((obj) => obj.title.toLowerCase() !== 'avatar');
+  const mediaData = mediaArray.filter(
+    (obj) => obj.title.toLowerCase() !== 'avatar'
+  );
   //   console.log('media array in ListItem', mediaArray);
   // console.log('media array profiler', mediaArray);
-
-  // const findElement = (array, name) => {
-  //   return array.find((element) => element.title.toLowerCase() === name);
-  // };
 
   const fetchAvatar = () => {
     // console.log('myfileonly in profile', myFilesOnly);
@@ -85,13 +83,6 @@ const Profile = ({navigation}) => {
     return string;
   };
   console.log('hobby', interest());
-
-  // TODO: delete avatar from list
-  // if (myFilesOnly) {
-  //   mediaArray = mediaArray.filter(
-  //     (obj) => obj.title.toLowerCase() !== 'avatar'
-  //   );
-  // }
 
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
@@ -160,7 +151,7 @@ const Profile = ({navigation}) => {
               </Card>
             </>
           }
-          data={mediaArray}
+          data={mediaData}
           keyExtractor={(item) => item.file_id.toString()}
           renderItem={({item}) => (
             <ListItem
