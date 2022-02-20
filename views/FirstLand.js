@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {Text, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 import React from 'react';
@@ -81,6 +82,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignSelf: 'center',
     marginTop: '8%',
+    marginBottom: 20,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   // buttonTitle: {
   //   fontFamily: 'Poppins_500Medium',

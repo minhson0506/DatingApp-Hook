@@ -1,4 +1,5 @@
-import React, {useEffect, useState, useContext} from 'react';
+/* eslint-disable camelcase */
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {
@@ -15,7 +16,13 @@ import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
 import DislikeIcon from '../assets/dislike.svg';
 import {Card} from 'react-native-paper';
-import {MainContext} from '../contexts/MainContext';
+import {
+  useFonts,
+  Poppins_600SemiBold,
+  Poppins_400Regular,
+  Poppins_400Regular_Italic,
+} from '@expo-google-fonts/poppins';
+import AppLoading from 'expo-app-loading';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {getUserById} = useUser();
@@ -48,87 +55,102 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     fetchOwner();
   }, []);
 
-  return (
-    <ScrollView>
-      <RNEListItem
-        onPress={() => {
-          {
-            !myFilesOnly && navigation.navigate('Single', {file: singleMedia});
-          }
-        }}
-      >
-        <Card style={styles.card}>
+  const [fontsLoaded] = useFonts({
+    Poppins_600SemiBold,
+    Poppins_400Regular,
+    Poppins_400Regular_Italic,
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <ScrollView>
+        <RNEListItem
+          onPress={() => {
+            {
+              !myFilesOnly &&
+                navigation.navigate('Single', {file: singleMedia});
+            }
+          }}
+        >
           {!myFilesOnly && (
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}
-            >
-              <Text style={styles.name}>{additionData.fullname}</Text>
-              <DislikeIcon style={styles.x}></DislikeIcon>
-            </View>
-          )}
-          {!myFilesOnly && (
-            <Avatar
-              containerStyle={styles.avatar}
-              source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
-            ></Avatar>
+            <Card style={styles.card}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Text style={styles.name}>{additionData.fullname}</Text>
+                <DislikeIcon style={styles.x}></DislikeIcon>
+              </View>
+              <Avatar
+                containerStyle={styles.avatar}
+                source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+              ></Avatar>
+              <View style={{flexDirection: 'row'}}>
+                <AgeIcon style={styles.ageIcon}></AgeIcon>
+                <Text style={styles.text}>{additionData.age}</Text>
+                <Divider
+                  orientation="vertical"
+                  style={{marginTop: 12, marginRight: 10}}
+                />
+                <LocationIcon style={styles.icons}></LocationIcon>
+                <Text style={styles.text}>{additionData.location}</Text>
+                <Divider
+                  orientation="vertical"
+                  style={{marginTop: 12, marginRight: 10}}
+                />
+                <InterestIcon style={styles.icons}></InterestIcon>
+                <Text style={styles.text}>
+                  {typeof additionData.interests !== 'undefined'
+                    ? additionData.interests[0]
+                    : ''}
+                </Text>
+              </View>
+            </Card>
           )}
           {myFilesOnly && (
-            <Avatar
-              containerStyle={styles.avatarProfile}
-              avatarStyle={{borderRadius: 10}}
-              source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
-            ></Avatar>
-          )}
-
-          {!myFilesOnly && (
-            <View style={{flexDirection: 'row'}}>
-              <AgeIcon style={styles.ageIcon}></AgeIcon>
-              <Text style={styles.text}>{additionData.age}</Text>
-              <Divider
-                orientation="vertical"
-                style={{marginTop: 12, marginRight: 10}}
-              />
-              <LocationIcon style={styles.icons}></LocationIcon>
-              <Text style={styles.text}>{additionData.location}</Text>
-              <Divider
-                orientation="vertical"
-                style={{marginTop: 12, marginRight: 10}}
-              />
-              <InterestIcon style={styles.icons}></InterestIcon>
-              <Text style={styles.text}>
-                {typeof additionData.interests !== 'undefined'
-                  ? additionData.interests[0]
-                  : ''}
-              </Text>
+            <View style={styles.cardProfile}>
+              <Avatar
+                containerStyle={styles.avatarProfile}
+                avatarStyle={{borderRadius: 10}}
+                source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+              ></Avatar>
+              <Card style={styles.descriptionBox}>
+                <Text style={styles.textDescription}>
+                  {singleMedia.description}
+                </Text>
+              </Card>
             </View>
           )}
-          {/* {myFilesOnly && (
-            <Text style={styles.textDescription}>
-              {singleMedia.description}
-            </Text>
-          )} */}
-        </Card>
-      </RNEListItem>
-    </ScrollView>
-  );
+        </RNEListItem>
+      </ScrollView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
   name: {
-    marginTop: 12,
-    marginBottom: 12,
+    marginTop: 10,
+    marginBottom: 10,
     marginLeft: 15,
-    fontWeight: 'bold',
     fontSize: 18,
+    fontFamily: 'Poppins_600SemiBold',
   },
   card: {
     width: '100%',
-    height: 350,
+    height: 370,
     margin: 0,
     padding: 0,
     borderColor: '#EB6833',
     borderRadius: 10,
     borderWidth: 1,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   avatar: {
     width: '100%',
@@ -136,13 +158,14 @@ const styles = StyleSheet.create({
   },
   avatarProfile: {
     width: '100%',
-    height: '100%',
+    height: 450,
     borderRadius: 10,
   },
   text: {
     fontSize: 16,
     marginTop: 12,
     marginRight: 20,
+    fontFamily: 'Poppins_400Regular',
   },
   icons: {
     marginTop: 12,
@@ -158,12 +181,27 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginLeft: 25,
   },
-  // textDescription: {
-  //   height: 50,
-  //   fontSize: 20,
-  //   color: 'black',
-  //   backgroundColor: 'orange',
-  // },
+  textDescription: {
+    fontSize: 16,
+    color: 'black',
+    padding: 20,
+    textAlign: 'center',
+    fontFamily: 'Poppins_400Regular_Italic',
+  },
+  cardProfile: {
+    width: '100%',
+    height: '100%',
+  },
+  descriptionBox: {
+    marginTop: 20,
+    borderColor: '#FCF2F2',
+    borderRadius: 10,
+    borderWidth: 1,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
 });
 
 ListItem.propTypes = {

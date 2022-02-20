@@ -1,17 +1,16 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {FlatList} from 'react-native';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
-import {MainContext} from '../contexts/MainContext';
 
 const List = ({navigation, myFilesOnly = false}) => {
-  let {mediaArray} = useMedia(myFilesOnly);
-  if (myFilesOnly) {
-    mediaArray = mediaArray.filter(
-      (obj) => obj.title.toLowerCase() !== 'avatar'
-    );
-  }
+  const {mediaArray} = useMedia(myFilesOnly);
+  // if (myFilesOnly) {
+  //   mediaArray = mediaArray.filter(
+  //     (obj) => obj.title.toLowerCase() !== 'avatar'
+  //   );
+  // }
   // console.log('media array in ListItem', mediaArray);
 
   return (
