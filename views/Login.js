@@ -27,7 +27,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 
 const Login = ({navigation}) => {
   const [formToggle, setFormToggle] = useState(true);
-  const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {setIsLoggedIn, setUser, setToken} = useContext(MainContext);
   const {getUserByToken} = useUser();
 
   const checkToken = async () => {
@@ -39,6 +39,7 @@ const Login = ({navigation}) => {
       // console.log('checkToken', userData);
       setUser(userData);
       setIsLoggedIn(true);
+      setToken(userToken);
     } catch (err) {
       console.error(err);
     }

@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import List from '../components/List';
@@ -12,12 +12,14 @@ import {FAB} from 'react-native-paper';
 import ReloadIcon from '../assets/reload.svg';
 import {useFonts, Poppins_700Bold} from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
+import {MainContext} from '../contexts/MainContext';
 
 const Home = ({navigation}) => {
+  const {setToken} = useContext(MainContext);
   const checkToken = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
-      console.log('token', userToken);
+      // console.log('token', userToken);
     } catch (err) {
       console.error(err);
     }

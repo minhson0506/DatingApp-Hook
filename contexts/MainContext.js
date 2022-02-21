@@ -7,6 +7,7 @@ const MainProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [update, setUpdate] = useState(0);
+  const [token, setToken] = useState('fetching...');
 
   return (
     <MainContext.Provider
@@ -17,6 +18,8 @@ const MainProvider = (props) => {
         setUser,
         update,
         setUpdate,
+        token,
+        setToken,
       }}
     >
       {props.children}
