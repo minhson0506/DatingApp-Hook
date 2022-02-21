@@ -200,7 +200,7 @@ const Instructions = ({navigation}) => {
           </View>
           <Divider style={{marginTop: 15, marginBottom: 30}} />
           <Button
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('Main')}
             style={styles.ScrollUpButton}
           >
             Ok I got this!

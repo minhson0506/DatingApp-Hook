@@ -138,6 +138,11 @@ const StackScreen = () => {
               component={Instructions}
               // options={{headerShown: false}}
             ></Stack.Screen>
+            <Stack.Screen
+              name="Main"
+              component={TabScreen}
+              options={{headerShown: false}}
+            ></Stack.Screen>
           </>
         ) : (
           <>
