@@ -52,7 +52,7 @@ const Instructions = ({navigation}) => {
             />
             <Divider style={{marginTop: 10, marginBottom: 10}} />
             <Text style={styles.DescribeText}>
-              Find new people{'\n'}Set your preferences
+              Home page{'\n'}Find new people
             </Text>
 
             {/* like function */}
