@@ -221,13 +221,6 @@ const RegisterForm = ({setFormToggle}) => {
           end: {x: 1, y: 0},
         }}
       />
-
-      <Button
-        title="Info"
-        onPress={() => {
-          setInstruction(true);
-        }}
-      ></Button>
     </View>
   );
 };

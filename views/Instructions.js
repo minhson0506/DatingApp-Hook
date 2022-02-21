@@ -9,7 +9,7 @@ import {Button} from 'react-native-paper';
 const Instructions = ({navigation}) => {
   return (
     <View style={{flex: 1}}>
-      <ScrollView contentContainerStyle={{flexGrow: 1, height: '900%'}}>
+      <ScrollView contentContainerStyle={{}}>
         {/* title */}
         <View
           style={{
@@ -232,6 +232,15 @@ const Instructions = ({navigation}) => {
             </View>
           </View>
         </View>
+
+        <View>
+          <Button
+            onPress={() => navigation.navigate('Home')}
+            style={styles.ScrollUpButton}
+          >
+            Ok I got this!
+          </Button>
+        </View>
       </ScrollView>
     </View>
   );
@@ -257,14 +266,14 @@ const styles = StyleSheet.create({
   },
   IconsBar: {
     // 10
-    height: '1%',
+    height: '5%',
     borderBottomColor: '#EDE0DA',
     borderBottomWidth: 1,
     justifyContent: 'center',
   },
   DescribeBar: {
     // 20
-    height: '2%',
+    height: '15%',
     borderBottomColor: '#EDE0DA',
     borderBottomWidth: 1,
     justifyContent: 'center',
@@ -282,6 +291,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     shadowColor: '0 4 4 rgba(0, 0, 0, 0.25)',
     shadowOpacity: 0.8,
+  },
+  ScrollUpButton: {
+    justifyContent: 'center',
+    width: 300,
+    height: 50,
+    left: 30,
+    backgroundColor: 'rgba(130, 0, 143, 0.69)',
+    borderRadius: 10,
+    color: 'white',
+    top: 50,
+    textAlign: 'center',
   },
 });
 
