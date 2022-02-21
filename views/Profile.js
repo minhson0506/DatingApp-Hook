@@ -82,7 +82,7 @@ const Profile = ({navigation}) => {
 
     return string;
   };
-  console.log('hobby', interest());
+  // console.log('hobby', interest());
 
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
