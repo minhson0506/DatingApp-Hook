@@ -268,6 +268,74 @@ const Chat = ({navigation}) => {
                 <Text style={styles.username}>{username.username}</Text>
               </View>
             </ListItem>
+            <ListItem>
+              <View
+                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 20,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <Text style={styles.username}>{username.username}</Text>
+              </View>
+            </ListItem>
+            <ListItem>
+              <View
+                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 20,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <Text style={styles.username}>{username.username}</Text>
+              </View>
+            </ListItem>
+            <ListItem>
+              <View
+                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 20,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <Text style={styles.username}>{username.username}</Text>
+              </View>
+            </ListItem>
+            <ListItem>
+              <View
+                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 20,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <Text style={styles.username}>{username.username}</Text>
+              </View>
+            </ListItem>
           </ScrollView>
         </View>
 
