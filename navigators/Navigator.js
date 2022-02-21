@@ -125,31 +125,39 @@ const TabScreen = () => {
 };
 
 const StackScreen = () => {
-  const {isLoggedIn} = useContext(MainContext);
+  const {isLoggedIn, instruction} = useContext(MainContext);
+  console.log('instruction', instruction);
+
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
-        <>
-          <Stack.Screen
-            name="Main"
-            component={TabScreen}
-            options={{headerShown: false}}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Single"
-            component={Single}
-            options={{headerShown: false}}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Modify user"
-            component={ModifyUser}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Instructions"
-            component={Instructions}
-            // options={{headerShown: false}}
-          ></Stack.Screen>
-        </>
+        instruction ? (
+          <>
+            <Stack.Screen
+              name="Instructions"
+              component={Instructions}
+              // options={{headerShown: false}}
+            ></Stack.Screen>
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="Main"
+              component={TabScreen}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen name="Single" component={Single}></Stack.Screen>
+            <Stack.Screen
+              name="Modify user"
+              component={ModifyUser}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Instructions"
+              component={Instructions}
+              // options={{headerShown: false}}
+            ></Stack.Screen>
+          </>
+        )
       ) : (
         <>
           <Stack.Screen
@@ -161,11 +169,6 @@ const StackScreen = () => {
             name="Login"
             component={Login}
             options={{headerShown: false}}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Instructions"
-            component={Instructions}
-            // options={{headerShown: false}}
           ></Stack.Screen>
         </>
       )}
