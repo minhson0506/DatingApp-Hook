@@ -36,7 +36,14 @@ const Instructions = ({navigation}) => {
     return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
         <Pages indicatorColor={'#EB6833'}>
-          <View style={{flex: 1, resizeMode: 'contain'}}>
+          <View
+            style={{
+              flex: 1,
+              resizeMode: 'contain',
+              justifyContent: 'space-evenly',
+              marginBottom: 20,
+            }}
+          >
             <Button
               style={{alignSelf: 'flex-end'}}
               onPress={() => navigation.navigate('Main')}

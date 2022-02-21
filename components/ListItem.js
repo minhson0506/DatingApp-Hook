@@ -96,7 +96,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                   justifyContent: 'center',
                 }}
               >
-                <AgeIcon style={styles.ageIcon}></AgeIcon>
+                <AgeIcon height={19} style={styles.icons}></AgeIcon>
                 <Text style={styles.text}>{additionData.age}</Text>
                 <Divider
                   orientation="vertical"
@@ -181,11 +181,6 @@ const styles = StyleSheet.create({
   x: {
     marginTop: 10,
     marginRight: 5,
-  },
-  ageIcon: {
-    marginTop: 9,
-    marginRight: 5,
-    marginLeft: 25,
   },
   textDescription: {
     fontSize: 16,
