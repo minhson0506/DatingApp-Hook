@@ -83,7 +83,12 @@ const Chat = ({navigation}) => {
           }}
         >
           <Text style={styles.subTitle}>New hooks</Text>
-          <ScrollView horizontal={true} style={{marginBottom: '8%'}}>
+          <ScrollView
+            horizontal={true}
+            style={{marginBottom: '8%'}}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+          >
             <ListItem>
               <View
                 style={{
@@ -202,7 +207,7 @@ const Chat = ({navigation}) => {
         <View style={{flex: 1}}>
           <Text style={styles.subTitle}>Messages</Text>
           <ScrollView horizontal={false} contentContainerStyle={{flexGrow: 1}}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
               <Avatar
                 style={styles.avatar}
                 avatarStyle={{
