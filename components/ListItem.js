@@ -89,18 +89,24 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                 containerStyle={styles.avatar}
                 source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
               ></Avatar>
-              <View style={{flexDirection: 'row'}}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}
+              >
                 <AgeIcon style={styles.ageIcon}></AgeIcon>
                 <Text style={styles.text}>{additionData.age}</Text>
                 <Divider
                   orientation="vertical"
-                  style={{marginTop: 12, marginRight: 10}}
+                  style={{marginTop: 12, marginRight: '2%'}}
                 />
                 <LocationIcon style={styles.icons}></LocationIcon>
                 <Text style={styles.text}>{additionData.location}</Text>
                 <Divider
                   orientation="vertical"
-                  style={{marginTop: 12, marginRight: 10}}
+                  style={{marginTop: 12, marginRight: '2%'}}
                 />
                 <InterestIcon style={styles.icons}></InterestIcon>
                 <Text style={styles.text}>
@@ -164,7 +170,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginTop: 12,
-    marginRight: 20,
+    marginRight: '5%',
     fontFamily: 'Poppins_400Regular',
   },
   icons: {

@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {SafeAreaView} from 'react-native';
@@ -36,7 +36,7 @@ const Instructions = ({navigation}) => {
     return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
         <Pages indicatorColor={'#EB6833'}>
-          <View style={{flex: 1}}>
+          <View style={{flex: 1, resizeMode: 'contain'}}>
             <Button
               style={{alignSelf: 'flex-end'}}
               onPress={() => navigation.navigate('Main')}
@@ -45,57 +45,57 @@ const Instructions = ({navigation}) => {
             </Button>
             <Text style={styles.header}>Navigation bar</Text>
             {/* home function */}
-            <Divider style={{marginBottom: 10}} />
+            <Divider style={{marginBottom: 5}} />
             <Image
               source={require('../assets/hookiconActive.png')}
               style={{height: 30, width: 30, left: '10%'}}
             />
-            <Divider style={{marginTop: 10, marginBottom: 10}} />
+            <Divider style={{marginTop: 5, marginBottom: 5}} />
             <Text style={styles.DescribeText}>
               Home page{'\n'}Find new people
             </Text>
 
             {/* like function */}
-            <Divider style={{marginTop: 10, marginBottom: 10}} />
+            <Divider style={{marginTop: 5, marginBottom: 5}} />
             <Image
               source={require('../assets/heartActive.png')}
               style={{height: 30, width: 30, left: '28%'}}
             />
-            <Divider style={{marginTop: 10, marginBottom: 10}} />
+            <Divider style={{marginTop: 5, marginBottom: 5}} />
 
             <Text style={styles.DescribeText}>See who already liked you</Text>
 
             {/* search function */}
-            <Divider style={{marginTop: 10, marginBottom: 10}} />
+            <Divider style={{marginTop: 5, marginBottom: 5}} />
             <Image
               source={require('../assets/searchActive.png')}
               style={{height: 30, width: 30, left: '43%'}}
             />
-            <Divider style={{marginTop: 10, marginBottom: 10}} />
+            <Divider style={{marginTop: 5, marginBottom: 5}} />
 
             <Text style={styles.DescribeText}>
               Search for users{'\n'}See top pick users
             </Text>
 
             {/* chat function */}
-            <Divider style={{marginTop: 10, marginBottom: 10}} />
+            <Divider style={{marginTop: 5, marginBottom: 5}} />
             <Image
               source={require('../assets/chatActive.png')}
               style={{height: 30, width: 30, left: '64%'}}
             />
-            <Divider style={{marginTop: 10, marginBottom: 10}} />
+            <Divider style={{marginTop: 5, marginBottom: 5}} />
 
             <Text style={styles.DescribeText}>
               Chat with your hooks{'\n'}Do quiz
             </Text>
 
             {/* profile function */}
-            <Divider style={{marginTop: 10, marginBottom: 10}} />
+            <Divider style={{marginTop: 5, marginBottom: 5}} />
             <Image
               source={require('../assets/userActive.png')}
               style={{height: 30, width: 30, left: '81%'}}
             />
-            <Divider style={{marginTop: 15, marginBottom: 15}} />
+            <Divider style={{marginTop: 5, marginBottom: 5}} />
 
             <Text style={styles.DescribeText}>
               View your profile{'\n'}Change your profile info
@@ -162,7 +162,7 @@ const Instructions = ({navigation}) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginBottom: '10%',
+                  marginBottom: 25,
                   alignItems: 'center',
                 }}
               >
@@ -179,7 +179,7 @@ const Instructions = ({navigation}) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginBottom: '10%',
+                  marginBottom: 25,
                   alignItems: 'center',
                 }}
               >
@@ -196,7 +196,7 @@ const Instructions = ({navigation}) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginBottom: '10%',
+                  marginBottom: 25,
                   alignItems: 'center',
                 }}
               >
@@ -215,7 +215,7 @@ const Instructions = ({navigation}) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginBottom: '10%',
+                  marginBottom: 25,
                   alignItems: 'center',
                 }}
               >
@@ -234,7 +234,7 @@ const Instructions = ({navigation}) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginBottom: '10%',
+                  marginBottom: 25,
                   alignItems: 'center',
                 }}
               >
@@ -253,7 +253,7 @@ const Instructions = ({navigation}) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginBottom: '10%',
+                  marginBottom: 25,
                   alignItems: 'center',
                 }}
               >
@@ -289,8 +289,7 @@ const styles = StyleSheet.create({
     color: '#DA535E',
     fontSize: 25,
     textAlign: 'center',
-    marginTop: 5,
-    marginBottom: 25,
+    marginBottom: '5%',
     fontFamily: 'Poppins_600SemiBold',
   },
   DescribeText: {
@@ -321,8 +320,8 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#DA535E',
     borderRadius: 10,
-    marginBottom: 30,
-    marginTop: 20,
+    marginBottom: '10%',
+    marginTop: '5%',
   },
   textButton: {
     fontFamily: 'Poppins_500Medium',

@@ -118,7 +118,7 @@ const Profile = ({navigation}) => {
               </View>
               <Text style={styles.name}>{additionData.fullname}</Text>
               <Card style={styles.card}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                   <AgeIcon style={styles.ageIcon}></AgeIcon>
                   <Text style={styles.text}>{additionData.age}</Text>
                   <Divider
@@ -134,7 +134,7 @@ const Profile = ({navigation}) => {
                   <DrinkIcon style={styles.icons}></DrinkIcon>
                   <Text style={styles.text}>{additionData.drinking}</Text>
                 </View>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                   <SchoolIcon style={styles.icons}></SchoolIcon>
                   <Text style={styles.text}>{additionData.school}</Text>
                   <Divider
@@ -144,7 +144,7 @@ const Profile = ({navigation}) => {
                   <NatIcon style={styles.icons}></NatIcon>
                   <Text style={styles.text}>{additionData.nationality}</Text>
                 </View>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                   <InterestIcon style={styles.icons}></InterestIcon>
                   <Text style={styles.text}>{interest()}</Text>
                 </View>
