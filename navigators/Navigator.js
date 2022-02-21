@@ -14,6 +14,7 @@ import Like from '../views/Like';
 import Search from '../views/Search';
 import FirstLand from '../views/FirstLand';
 import Instructions from '../views/Instructions';
+import Preference from '../views/Preference';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -155,6 +156,11 @@ const StackScreen = () => {
             <Stack.Screen
               name="Single"
               component={Single}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Preferences"
+              component={Preference}
               options={{headerShown: false}}
             ></Stack.Screen>
             <Stack.Screen

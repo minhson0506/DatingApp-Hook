@@ -1,6 +1,12 @@
 /* eslint-disable camelcase */
 import React, {useEffect} from 'react';
-import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  TouchableHighlight,
+} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import List from '../components/List';
 import PropTypes from 'prop-types';
@@ -40,7 +46,14 @@ const Home = ({navigation}) => {
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <MenuIcon style={styles.menu}></MenuIcon>
             <Text style={styles.appName}>hook</Text>
-            <FilterIcon style={styles.filter}></FilterIcon>
+            <TouchableHighlight
+              underlayColor="white"
+              onPress={() => {
+                navigation.navigate('Preferences');
+              }}
+            >
+              <FilterIcon style={styles.filter}></FilterIcon>
+            </TouchableHighlight>
           </View>
           <List navigation={navigation}></List>
           <FAB
