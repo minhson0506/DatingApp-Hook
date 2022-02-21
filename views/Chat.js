@@ -83,12 +83,7 @@ const Chat = ({navigation}) => {
           }}
         >
           <Text style={styles.subTitle}>New hooks</Text>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled={true}
-            style={{marginBottom: '8%'}}
-          >
+          <ScrollView horizontal={true} style={{marginBottom: '8%'}}>
             <ListItem>
               <View
                 style={{
