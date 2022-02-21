@@ -1,106 +1,84 @@
-import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
-// import {SafeAreaView} from 'react-native';
-// import GlobalStyles from '../utils/GlobalStyles';
-import {Image} from 'react-native-elements';
+import {SafeAreaView} from 'react-native';
+import GlobalStyles from '../utils/GlobalStyles';
+import {Image, Divider} from 'react-native-elements';
 import {Button} from 'react-native-paper';
 
 const Instructions = ({navigation}) => {
   return (
-    <View style={{flex: 1}}>
-      <ScrollView contentContainerStyle={{}}>
-        {/* title */}
-        <View
-          style={{
-            borderBottomColor: '#EDE0DA',
-            // marginBottom: '4%',
-            borderBottomWidth: 1,
-          }}
-        >
+    <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
+      <ScrollView contentContainerStyle={{flexGrow: 1}}>
+        <View style={{flex: 1}}>
           <Text style={styles.Title}>
-            How <Text style={styles.Hook}>hook</Text> works
+            how <Text style={styles.Hook}>Hook</Text> works
           </Text>
-          <Text style={[styles.Title, styles.Hook]}>Bottom navigation bar</Text>
-        </View>
-
-        {/* home function */}
-        <View style={styles.IconsBar}>
+          <Text style={styles.header}>Bottom navigation bar</Text>
+          {/* home function */}
+          <Divider style={{marginTop: 15, marginBottom: 15}} />
           <Image
             source={require('../assets/hookiconActive.png')}
             style={{height: 30, width: 30, left: '10%'}}
           />
-        </View>
-        <View style={styles.DescribeBar}>
+          <Divider style={{marginTop: 15, marginBottom: 15}} />
           <Text style={styles.DescribeText}>
             Find new people{'\n'}Set your preferences
           </Text>
-        </View>
 
-        {/* like function */}
-        <View style={styles.IconsBar}>
+          {/* like function */}
+          <Divider style={{marginTop: 15, marginBottom: 15}} />
           <Image
             source={require('../assets/heartActive.png')}
             style={{height: 30, width: 30, left: '28%'}}
           />
-        </View>
-        <View style={styles.DescribeBar}>
-          <Text style={styles.DescribeText}>See who already liked you</Text>
-        </View>
+          <Divider style={{marginTop: 15, marginBottom: 15}} />
 
-        {/* search function */}
-        <View style={styles.IconsBar}>
+          <Text style={styles.DescribeText}>See who already liked you</Text>
+
+          {/* search function */}
+          <Divider style={{marginTop: 15, marginBottom: 15}} />
           <Image
             source={require('../assets/searchActive.png')}
             style={{height: 30, width: 30, left: '43%'}}
           />
-        </View>
-        <View style={styles.DescribeBar}>
+          <Divider style={{marginTop: 15, marginBottom: 15}} />
+
           <Text style={styles.DescribeText}>
             Search for users{'\n'}See top pick users
           </Text>
-        </View>
 
-        {/* chat function */}
-        <View style={styles.IconsBar}>
+          {/* chat function */}
+          <Divider style={{marginTop: 15, marginBottom: 15}} />
           <Image
             source={require('../assets/chatActive.png')}
             style={{height: 30, width: 30, left: '64%'}}
           />
-        </View>
-        <View style={styles.DescribeBar}>
+          <Divider style={{marginTop: 15, marginBottom: 15}} />
+
           <Text style={styles.DescribeText}>
             Chat with your hooks{'\n'}Do quiz
           </Text>
-        </View>
 
-        {/* profile function */}
-        <View style={styles.IconsBar}>
+          {/* profile function */}
+          <Divider style={{marginTop: 15, marginBottom: 15}} />
           <Image
             source={require('../assets/userActive.png')}
             style={{height: 30, width: 30, left: '81%'}}
           />
-        </View>
-        <View style={styles.DescribeBar}>
+          <Divider style={{marginTop: 15, marginBottom: 15}} />
+
           <Text style={styles.DescribeText}>
             View your profile{'\n'}Change and add your profile info
             {'\n'}Upload pictures
           </Text>
-        </View>
 
-        <View
-          style={{
-            height: '5%',
-            borderBottomColor: '#EDE0DA',
-            borderBottomWidth: 1,
-          }}
-        >
-          <Text style={[styles.Title, styles.Hook]}>On Main page</Text>
-          <View style={{flexDirection: 'row'}}>
+          <Divider style={{marginTop: 40, marginBottom: 15}} />
+
+          <Text style={styles.header}>On Main page</Text>
+          <View style={{flexDirection: 'row', alignSelf: 'center'}}>
             <View
               style={{
-                left: '25%',
-                top: 30,
                 flexDirection: 'column',
                 alignItems: 'center',
               }}
@@ -114,7 +92,6 @@ const Instructions = ({navigation}) => {
 
             <View
               style={{
-                left: '32%',
                 flexDirection: 'column',
                 alignItems: 'center',
               }}
@@ -129,13 +106,10 @@ const Instructions = ({navigation}) => {
               ></Image>
               <Text style={{fontSize: 24}}>User details</Text>
             </View>
-
             <View
               style={{
-                left: '40%',
                 flexDirection: 'column',
                 alignItems: 'center',
-                top: 30,
               }}
             >
               <Image
@@ -145,18 +119,11 @@ const Instructions = ({navigation}) => {
               <Text style={{fontSize: 22}}>Like</Text>
             </View>
           </View>
-        </View>
+          <Divider style={{marginTop: 40, marginBottom: 15}} />
 
-        <View
-          style={{
-            height: '10%',
-            borderBottomColor: '#EDE0DA',
-            borderBottomWidth: 1,
-          }}
-        >
-          <Text style={[styles.Title, styles.Hook]}>Some buttons</Text>
+          <Text style={styles.header}>Some buttons</Text>
 
-          <View style={{flexDirection: 'column', left: 20}}>
+          <View style={{flexDirection: 'column'}}>
             <View
               style={{
                 flexDirection: 'row',
@@ -231,9 +198,7 @@ const Instructions = ({navigation}) => {
               </Text>
             </View>
           </View>
-        </View>
-
-        <View>
+          <Divider style={{marginTop: 15, marginBottom: 30}} />
           <Button
             onPress={() => navigation.navigate('Home')}
             style={styles.ScrollUpButton}
@@ -242,7 +207,7 @@ const Instructions = ({navigation}) => {
           </Button>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -261,28 +226,14 @@ const styles = StyleSheet.create({
   DescribeText: {
     fontSize: 22,
     fontWeight: '500',
-    left: '5%',
     lineHeight: 40,
-  },
-  IconsBar: {
-    // 10
-    height: '5%',
-    borderBottomColor: '#EDE0DA',
-    borderBottomWidth: 1,
-    justifyContent: 'center',
-  },
-  DescribeBar: {
-    // 20
-    height: '15%',
-    borderBottomColor: '#EDE0DA',
-    borderBottomWidth: 1,
-    justifyContent: 'center',
+    marginLeft: 20,
   },
   DescribeText2: {
     fontSize: 22,
     fontWeight: '500',
-    left: 25,
     lineHeight: 40,
+    marginLeft: 20,
   },
   Button: {
     width: 50,
@@ -291,17 +242,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     shadowColor: '0 4 4 rgba(0, 0, 0, 0.25)',
     shadowOpacity: 0.8,
+    marginLeft: 20,
   },
   ScrollUpButton: {
-    justifyContent: 'center',
-    width: 300,
-    height: 50,
-    left: 30,
+    alignSelf: 'center',
+    width: 200,
+    height: 40,
     backgroundColor: 'rgba(130, 0, 143, 0.69)',
     borderRadius: 10,
     color: 'white',
-    top: 50,
     textAlign: 'center',
+  },
+  header: {
+    color: '#EB6833',
+    fontSize: 24,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: 25,
+    marginBottom: '5%',
   },
 });
 
