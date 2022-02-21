@@ -87,9 +87,103 @@ const Chat = ({navigation}) => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             pagingEnabled={true}
-            style={{left: 2, marginBottom: '8%'}}
+            style={{marginBottom: '8%'}}
           >
             <ListItem>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 20,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <Text style={styles.username}>{username.username}</Text>
+              </View>
+              <View
+                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 20,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <Text style={styles.username}>{username.username}</Text>
+              </View>
+              <View
+                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 20,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <Text style={styles.username}>{username.username}</Text>
+              </View>
+              <View
+                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 20,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <Text style={styles.username}>{username.username}</Text>
+              </View>
+              <View
+                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 20,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <Text style={styles.username}>{username.username}</Text>
+              </View>
+              <View
+                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 20,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <Text style={styles.username}>{username.username}</Text>
+              </View>
               <View
                 style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
               >
@@ -110,14 +204,10 @@ const Chat = ({navigation}) => {
         </View>
 
         {/* list of messages */}
-        <View>
+        <View style={{flex: 1}}>
           <Text style={styles.subTitle}>Messages</Text>
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled={true}
-            style={{marginLeft: 2}}
-          >
-            <ListItem>
+          <ScrollView horizontal={false} contentContainerStyle={{flexGrow: 1}}>
+            <View style={{flex: 1, flexDirection: 'row'}}>
               <Avatar
                 style={styles.avatar}
                 avatarStyle={{
@@ -132,7 +222,87 @@ const Chat = ({navigation}) => {
                 <Text style={styles.username}>{username.username}</Text>
                 <Text style={styles.message}>{message.comment}</Text>
               </View>
-            </ListItem>
+            </View>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <Avatar
+                style={styles.avatar}
+                avatarStyle={{
+                  borderWidth: 2,
+                  borderColor: 'white',
+                  borderRadius: 60,
+                  borderStyle: 'solid',
+                }}
+                source={{uri: avatar}}
+              />
+              <View style={{flexDirection: 'column'}}>
+                <Text style={styles.username}>{username.username}</Text>
+                <Text style={styles.message}>{message.comment}</Text>
+              </View>
+            </View>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <Avatar
+                style={styles.avatar}
+                avatarStyle={{
+                  borderWidth: 2,
+                  borderColor: 'white',
+                  borderRadius: 60,
+                  borderStyle: 'solid',
+                }}
+                source={{uri: avatar}}
+              />
+              <View style={{flexDirection: 'column'}}>
+                <Text style={styles.username}>{username.username}</Text>
+                <Text style={styles.message}>{message.comment}</Text>
+              </View>
+            </View>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <Avatar
+                style={styles.avatar}
+                avatarStyle={{
+                  borderWidth: 2,
+                  borderColor: 'white',
+                  borderRadius: 60,
+                  borderStyle: 'solid',
+                }}
+                source={{uri: avatar}}
+              />
+              <View style={{flexDirection: 'column'}}>
+                <Text style={styles.username}>{username.username}</Text>
+                <Text style={styles.message}>{message.comment}</Text>
+              </View>
+            </View>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <Avatar
+                style={styles.avatar}
+                avatarStyle={{
+                  borderWidth: 2,
+                  borderColor: 'white',
+                  borderRadius: 60,
+                  borderStyle: 'solid',
+                }}
+                source={{uri: avatar}}
+              />
+              <View style={{flexDirection: 'column'}}>
+                <Text style={styles.username}>{username.username}</Text>
+                <Text style={styles.message}>{message.comment}</Text>
+              </View>
+            </View>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <Avatar
+                style={styles.avatar}
+                avatarStyle={{
+                  borderWidth: 2,
+                  borderColor: 'white',
+                  borderRadius: 60,
+                  borderStyle: 'solid',
+                }}
+                source={{uri: avatar}}
+              />
+              <View style={{flexDirection: 'column'}}>
+                <Text style={styles.username}>{username.username}</Text>
+                <Text style={styles.message}>{message.comment}</Text>
+              </View>
+            </View>
           </ScrollView>
         </View>
       </SafeAreaView>
