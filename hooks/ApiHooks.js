@@ -19,7 +19,7 @@ const doFetch = async (url, options = {}) => {
   }
 };
 
-const useMedia = (myFilesOnly) => {
+const useMedia = (myFilesOnly, userId = null) => {
   const [mediaArray, setMediaArray] = useState([]);
   const {update, user} = useContext(MainContext);
   const loadMedia = async (start = 0, limit = 10) => {
@@ -27,6 +27,9 @@ const useMedia = (myFilesOnly) => {
       let json = await useTag().getFileByTag(appId);
       if (myFilesOnly) {
         json = json.filter((file) => file.user_id === user.user_id);
+      }
+      if (userId) {
+        json = json.filter((file) => file.user_id === userId);
       }
       const media = await Promise.all(
         json.map(async (item) => {
@@ -60,6 +63,10 @@ const useMedia = (myFilesOnly) => {
     };
     return await doFetch(baseUrl + 'media', options);
   };
+
+  // const getMediaByUserId = async () => {
+  //   return await doFetch(baseUrl + 'media/user' + userId);
+  // };
 
   return {mediaArray, postMedia};
 };

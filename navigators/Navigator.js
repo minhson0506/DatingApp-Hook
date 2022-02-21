@@ -152,7 +152,11 @@ const StackScreen = () => {
               component={TabScreen}
               options={{headerShown: false}}
             ></Stack.Screen>
-            <Stack.Screen name="Single" component={Single}></Stack.Screen>
+            <Stack.Screen
+              name="Single"
+              component={Single}
+              options={{headerShown: false}}
+            ></Stack.Screen>
             <Stack.Screen
               name="Modify user"
               component={ModifyUser}

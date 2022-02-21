@@ -126,7 +126,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
               ></Avatar>
               <Card style={styles.descriptionBox}>
                 <Text style={styles.textDescription}>
-                  {singleMedia.description}
+                  {singleMedia.description === ''
+                    ? '...'
+                    : singleMedia.description}
                 </Text>
               </Card>
             </View>
