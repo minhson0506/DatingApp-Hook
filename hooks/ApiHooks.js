@@ -39,7 +39,6 @@ const useMedia = (myFilesOnly) => {
       setMediaArray(media);
     } catch (error) {
       console.error(error);
-    } finally {
     }
     // console.log(mediaArray);
   };
@@ -164,7 +163,7 @@ const useTag = () => {
     return await doFetch(baseUrl + 'tags/' + tag);
   };
 
-  return {postTag, getFileByTag, postTag};
+  return {postTag, getFileByTag};
 };
 
 const userComment = () => {
@@ -205,6 +204,7 @@ const userComment = () => {
     postComment,
     getComments,
     getCommentByFileId,
+    deleteComment,
   };
 };
 

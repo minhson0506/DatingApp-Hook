@@ -163,6 +163,10 @@ const Profile = ({navigation}) => {
           // myFilesOnly={true}
         ></FlatList>
         <Button title={'Logout'} onPress={logOut} />
+        <Button
+          title={'Instructions'}
+          onPress={() => navigation.navigate('Instructions')}
+        />
       </SafeAreaView>
     );
   }
