@@ -30,7 +30,7 @@ const FirstLand = ({navigation}) => {
         style={{flex: 1}}
       >
         <Text style={styles.appName}>hook</Text>
-        <Text style={styles.header}>That's a hook!</Text>
+        <Text style={styles.header}>That{"'"}s a hook!</Text>
         <Text style={styles.text}>
           By register and sign in for Hook, you agree to our Terms of Service.
           Learn how we process your data in our Privacy Policy and Cookies
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   appName: {
     textAlign: 'center',
     fontSize: 60,
-    marginTop: '40%',
+    marginTop: '30%',
     fontFamily: 'Poppins_700Bold',
     letterSpacing: 10,
     color: 'white',
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignSelf: 'center',
     marginTop: '8%',
-    marginBottom: 20,
     shadowColor: '#171717',
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,

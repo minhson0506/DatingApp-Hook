@@ -89,18 +89,24 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                 containerStyle={styles.avatar}
                 source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
               ></Avatar>
-              <View style={{flexDirection: 'row'}}>
-                <AgeIcon style={styles.ageIcon}></AgeIcon>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}
+              >
+                <AgeIcon height={19} style={styles.icons}></AgeIcon>
                 <Text style={styles.text}>{additionData.age}</Text>
                 <Divider
                   orientation="vertical"
-                  style={{marginTop: 12, marginRight: 10}}
+                  style={{marginTop: 12, marginRight: '2%'}}
                 />
                 <LocationIcon style={styles.icons}></LocationIcon>
                 <Text style={styles.text}>{additionData.location}</Text>
                 <Divider
                   orientation="vertical"
-                  style={{marginTop: 12, marginRight: 10}}
+                  style={{marginTop: 12, marginRight: '2%'}}
                 />
                 <InterestIcon style={styles.icons}></InterestIcon>
                 <Text style={styles.text}>
@@ -120,7 +126,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
               ></Avatar>
               <Card style={styles.descriptionBox}>
                 <Text style={styles.textDescription}>
-                  {singleMedia.description}
+                  {singleMedia.description === ''
+                    ? '...'
+                    : singleMedia.description}
                 </Text>
               </Card>
             </View>
@@ -164,7 +172,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginTop: 12,
-    marginRight: 20,
+    marginRight: '5%',
     fontFamily: 'Poppins_400Regular',
   },
   icons: {
@@ -175,11 +183,6 @@ const styles = StyleSheet.create({
   x: {
     marginTop: 10,
     marginRight: 5,
-  },
-  ageIcon: {
-    marginTop: 9,
-    marginRight: 5,
-    marginLeft: 25,
   },
   textDescription: {
     fontSize: 16,

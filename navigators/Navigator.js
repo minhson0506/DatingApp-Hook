@@ -24,7 +24,8 @@ const TabScreen = () => {
       screenOptions={({route}) => ({
         tabBarStyle: {
           justifyContent: 'center',
-          height: 70,
+          alignContent: 'center',
+          height: '9%',
           border: 0,
           margin: 0,
           padding: 0,
@@ -34,12 +35,12 @@ const TabScreen = () => {
             return focused ? (
               <Image
                 source={require('../assets/hookiconActive.png')}
-                style={{height: 30, width: 30}}
+                style={{height: 25, width: 25}}
               />
             ) : (
               <Image
                 source={require('../assets/hookiconNotActive.png')}
-                style={{height: 30, width: 30}}
+                style={{height: 25, width: 25}}
               />
             );
           }
@@ -48,12 +49,12 @@ const TabScreen = () => {
             return focused ? (
               <Image
                 source={require('../assets/heartActive.png')}
-                style={{height: 30, width: 30}}
+                style={{height: 25, width: 25}}
               />
             ) : (
               <Image
                 source={require('../assets/heartNotActive.png')}
-                style={{height: 30, width: 30}}
+                style={{height: 25, width: 25}}
               />
             );
           }
@@ -62,12 +63,12 @@ const TabScreen = () => {
             return focused ? (
               <Image
                 source={require('../assets/searchActive.png')}
-                style={{height: 30, width: 30}}
+                style={{height: 25, width: 25}}
               />
             ) : (
               <Image
                 source={require('../assets/searchNotActive.png')}
-                style={{height: 30, width: 30}}
+                style={{height: 25, width: 25}}
               />
             );
           }
@@ -76,12 +77,12 @@ const TabScreen = () => {
             return focused ? (
               <Image
                 source={require('../assets/chatActive.png')}
-                style={{height: 30, width: 30}}
+                style={{height: 25, width: 25}}
               />
             ) : (
               <Image
                 source={require('../assets/chatNotActive.png')}
-                style={{height: 30, width: 30}}
+                style={{height: 25, width: 25}}
               />
             );
           }
@@ -90,12 +91,12 @@ const TabScreen = () => {
             return focused ? (
               <Image
                 source={require('../assets/userActive.png')}
-                style={{height: 30, width: 30}}
+                style={{height: 25, width: 25}}
               />
             ) : (
               <Image
                 source={require('../assets/userNotActive.png')}
-                style={{height: 30, width: 30}}
+                style={{height: 25, width: 25}}
               />
             );
           }
@@ -151,7 +152,11 @@ const StackScreen = () => {
               component={TabScreen}
               options={{headerShown: false}}
             ></Stack.Screen>
-            <Stack.Screen name="Single" component={Single}></Stack.Screen>
+            <Stack.Screen
+              name="Single"
+              component={Single}
+              options={{headerShown: false}}
+            ></Stack.Screen>
             <Stack.Screen
               name="Modify user"
               component={ModifyUser}
