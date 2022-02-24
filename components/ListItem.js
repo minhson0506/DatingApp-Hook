@@ -111,7 +111,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                 <InterestIcon style={styles.icons}></InterestIcon>
                 <Text style={styles.text}>
                   {typeof additionData.interests !== 'undefined'
-                    ? additionData.interests[0]
+                    ? additionData.interests.split(',')[0]
                     : ''}
                 </Text>
               </View>

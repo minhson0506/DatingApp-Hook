@@ -38,7 +38,6 @@ const Preference = ({navigation}) => {
   const {putUser} = useUser();
   const {user} = useContext(MainContext);
   const additionData = JSON.parse(user.full_name);
-  console.log('addition data', additionData);
 
   // slider values
   if (additionData.age_range === 'none') {
@@ -53,7 +52,6 @@ const Preference = ({navigation}) => {
     additionData.preference_height = '150-200';
   }
   const stringHeight = additionData.preference_height.split('-');
-  console.log('string', stringHeight);
   const [height, setHeight] = useState([
     parseInt(stringHeight[0]),
     parseInt(stringHeight[1]),
@@ -84,8 +82,8 @@ const Preference = ({navigation}) => {
   );
   const [religion, setReligion] = useState(additionData.preference_religion);
   const [family, setFamily] = useState(null);
-  const [drinking, setDrinking] = useState(null);
-  const [smoking, setSmoking] = useState(null);
+  const [drinking, setDrinking] = useState(additionData.preference_drinking);
+  const [smoking, setSmoking] = useState(additionData.preference_smoking);
   const [pet, setPet] = useState(additionData.preference_pet);
 
   // Picker items
@@ -144,6 +142,7 @@ const Preference = ({navigation}) => {
     makeArrays();
   }, []);
 
+  // modify user's preferences
   const modifyPreferences = async () => {
     if (gender) additionData.interested = gender;
     else additionData.interested = 'none';
@@ -162,6 +161,13 @@ const Preference = ({navigation}) => {
     } else {
       additionData.age_range = 'none';
     }
+
+    if (nationality) additionData.preference_nationality = nationality;
+    if (religion) additionData.preference_religion = religion;
+    if (drinking) additionData.preference_drinking = drinking;
+    if (smoking) additionData.preference_smoking = smoking;
+    if (pet) additionData.preference_pet = pet;
+
     user.full_name = JSON.stringify(additionData);
     try {
       const userToken = await AsyncStorage.getItem('userToken');
@@ -277,10 +283,10 @@ const Preference = ({navigation}) => {
             Done
           </Button>
         </View>
-        <Divider style={{marginBottom: 5, marginTop: 10}} />
+        <Divider style={{marginBottom: 5, marginTop: 5}} />
         <ScrollView>
           <Text style={styles.header}>Basic Preferences</Text>
-          <Divider style={{marginBottom: 5, marginTop: 10}} />
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
           <Text style={styles.title}>I{"'"}m interested in</Text>
           <DropDownPicker
             zIndex={6000}
@@ -313,42 +319,48 @@ const Preference = ({navigation}) => {
             listMode="SCROLLVIEW"
             onOpen={onLocationOpen}
             containerStyle={styles.picker}
-            style={styles.picker2}
             textStyle={styles.textPicker}
-          />
-          <Divider style={{marginBottom: 10, marginTop: 5}} />
-          <Text style={styles.header}>Other Preferences</Text>
-          <Divider style={{marginBottom: 10, marginTop: 5}} />
-          <Text style={styles.title}>Age range</Text>
-          <MultiSlider
-            isMarkersSeparated={true}
-            enableLabel={true}
-            min={18}
-            max={40}
-            values={
-              ageRange[0] && ageRange[1] ? [ageRange[0], ageRange[1]] : [18, 40]
-            }
-            sliderLength={280}
-            onValuesChangeStart={disableScroll}
-            onValuesChangeFinish={enableScroll}
-            onValuesChange={setSliderAge}
-            trackStyle={styles.track}
-            markerStyle={styles.marker}
+            selectedItemLabelStyle={{color: '#EB6833'}}
+            labelStyle={{color: '#EB6833'}}
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Text style={styles.header}>Other Preferences</Text>
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Text style={styles.title}>Age range</Text>
+          <View style={styles.slider}>
+            <MultiSlider
+              isMarkersSeparated={true}
+              enableLabel={true}
+              min={18}
+              max={40}
+              values={
+                ageRange[0] && ageRange[1]
+                  ? [ageRange[0], ageRange[1]]
+                  : [18, 40]
+              }
+              sliderLength={280}
+              onValuesChangeStart={disableScroll}
+              onValuesChangeFinish={enableScroll}
+              onValuesChange={setSliderAge}
+              markerStyle={styles.marker}
+              selectedStyle={{backgroundColor: '#FF707B'}}
+            />
+          </View>
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
           <Text style={styles.title}>Maximum distance (km)</Text>
-          <MultiSlider
-            enableLabel={true}
-            isMarkersSeparated={false}
-            values={distance ? [distance] : [50]}
-            max={101}
-            onValuesChange={setSliderDistance}
-            onValuesChangeStart={disableScroll}
-            onValuesChangeFinish={enableScroll}
-            trackStyle={styles.track}
-            markerStyle={styles.marker}
-          />
-
+          <View style={styles.slider}>
+            <MultiSlider
+              enableLabel={true}
+              isMarkersSeparated={false}
+              values={distance ? [distance] : [50]}
+              max={101}
+              onValuesChange={setSliderDistance}
+              onValuesChangeStart={disableScroll}
+              onValuesChangeFinish={enableScroll}
+              markerStyle={styles.marker}
+              selectedStyle={{backgroundColor: '#FF707B'}}
+            />
+          </View>
           <Divider style={{marginBottom: 5, marginTop: 5}} />
 
           <Text style={styles.title}>Nationality</Text>
@@ -385,26 +397,30 @@ const Preference = ({navigation}) => {
             listMode="SCROLLVIEW"
             containerStyle={styles.picker}
             textStyle={styles.textPicker}
+            selectedItemLabelStyle={{color: '#EB6833'}}
+            labelStyle={{color: '#EB6833'}}
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
 
           <Text style={styles.title}>Height (cm)</Text>
-          <MultiSlider
-            isMarkersSeparated={true}
-            enableLabel={true}
-            min={150}
-            max={200}
-            step={5}
-            values={
-              height[0] && height[1] ? [height[0], height[1]] : [150, 200]
-            }
-            sliderLength={280}
-            onValuesChangeStart={disableScroll}
-            onValuesChangeFinish={enableScroll}
-            onValuesChange={setSliderHeight}
-            trackStyle={styles.track}
-            markerStyle={styles.marker}
-          />
+          <View style={styles.slider}>
+            <MultiSlider
+              isMarkersSeparated={true}
+              enableLabel={true}
+              min={150}
+              max={200}
+              step={5}
+              values={
+                height[0] && height[1] ? [height[0], height[1]] : [150, 200]
+              }
+              sliderLength={280}
+              onValuesChangeStart={disableScroll}
+              onValuesChangeFinish={enableScroll}
+              onValuesChange={setSliderHeight}
+              markerStyle={styles.marker}
+              selectedStyle={{backgroundColor: '#FF707B'}}
+            />
+          </View>
           <Divider style={{marginBottom: 5, marginTop: 5}} />
 
           <Text style={styles.title}>Family Plan</Text>
@@ -421,6 +437,8 @@ const Preference = ({navigation}) => {
             onOpen={onFamilyOpen}
             listMode="SCROLLVIEW"
             textStyle={styles.textPicker}
+            selectedItemLabelStyle={{color: '#EB6833'}}
+            labelStyle={{color: '#EB6833'}}
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
 
@@ -438,6 +456,8 @@ const Preference = ({navigation}) => {
             onOpen={onDrinkingOpen}
             listMode="SCROLLVIEW"
             textStyle={styles.textPicker}
+            selectedItemLabelStyle={{color: '#EB6833'}}
+            labelStyle={{color: '#EB6833'}}
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
 
@@ -453,6 +473,8 @@ const Preference = ({navigation}) => {
             onOpen={onSmokingOpen}
             listMode="SCROLLVIEW"
             textStyle={styles.textPicker}
+            selectedItemLabelStyle={{color: '#EB6833'}}
+            labelStyle={{color: '#EB6833'}}
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
 
@@ -468,7 +490,10 @@ const Preference = ({navigation}) => {
             listMode="SCROLLVIEW"
             containerStyle={styles.picker}
             textStyle={styles.textPicker}
+            selectedItemLabelStyle={{color: '#EB6833'}}
+            labelStyle={{color: '#EB6833'}}
           />
+          <View style={{marginBottom: 40}}></View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -507,19 +532,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderColor: '#EB6833',
   },
-  picker2: {
-    borderColor: '#EB6833',
-  },
   textPicker: {
     fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
   },
-  track: {
-    // marginLeft: 15,
-    alignItems: 'center',
+  slider: {
+    marginLeft: 30,
+    marginTop: 35,
   },
   marker: {
-    alignItems: 'center',
+    backgroundColor: '#EB6833',
+    borderColor: '#FCF2F2',
+    height: 20,
+    width: 20,
   },
 });
 

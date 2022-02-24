@@ -58,7 +58,7 @@ const Single = ({route, navigation}) => {
       console.log('addition data in listitem.js', allData);
       setAdditionData(allData);
       let string = '';
-      allData.interests.forEach((hobby) => {
+      allData.interests.split(',').forEach((hobby) => {
         string = string + hobby.charAt(0).toUpperCase() + hobby.slice(1);
         string += ' ';
       });
