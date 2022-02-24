@@ -537,7 +537,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
   },
   slider: {
-    marginLeft: 30,
+    marginLeft: 35,
     marginTop: 35,
   },
   marker: {
