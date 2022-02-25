@@ -64,7 +64,22 @@ const useMedia = () => {
     return await doFetch(baseUrl + 'media', options);
   };
 
-  return {mediaArray, postMedia};
+  const getMediaByUserId = async (userId) => {
+    const options = {
+      method: 'GET',
+    };
+    return await doFetch(`${baseUrl}media/user/${userId}`, options);
+  };
+
+  const getAllMediaByCurrentUserId = async (token) => {
+    const options = {
+      method: 'GET',
+      headers: {'x-access-token': token},
+    };
+    return await doFetch(baseUrl + 'media/user', options);
+  };
+
+  return {mediaArray, postMedia, getMediaByUserId, getAllMediaByCurrentUserId};
 };
 
 const useLogin = () => {
@@ -98,6 +113,15 @@ const useUser = () => {
     };
     return await doFetch(`${baseUrl}users/${userId}`, options);
   };
+
+  // const getAllUsers = async (token) => {
+  //   const options = {
+  //     method: 'GET',
+  //     headers: {'x-access-token': token},
+  //   };
+  //   const userData = await doFetch(baseUrl + 'users', options);
+  //   return userData;
+  // };
 
   const postUser = async (data) => {
     const options = {
@@ -137,6 +161,7 @@ const useUser = () => {
 
   return {
     getUserByToken,
+    // getAllUsers,
     postUser,
     putUser,
     checkUsername,
@@ -159,7 +184,7 @@ const useTag = () => {
     return await doFetch(baseUrl + 'tags/' + tag);
   };
 
-  return {postTag, getFileByTag, postTag};
+  return {postTag, getFileByTag};
 };
 
 const userComment = () => {
@@ -202,7 +227,7 @@ const userComment = () => {
   };
 };
 
-const userFavourite = async () => {
+const useFavourite = async () => {
   const postFavourite = async (fileId, token) => {
     const options = {
       method: 'POST',
@@ -220,11 +245,15 @@ const userFavourite = async () => {
     return await doFetch(baseUrl + 'favourites/files/' + fileId, options);
   };
 
+  // const getFavouritesByFileId = async (fileId) => {
+  //   const options = {
+  //     method: 'GET',
+  //   };
+  //   return await doFetch(baseUrl + 'favourites/file/' + fileId, options);
+  // };
+
   const getFavouritesByFileId = async (fileId) => {
-    const options = {
-      method: 'GET',
-    };
-    return await doFetch(baseUrl + 'favourites/file/' + fileId, options);
+    return await doFetch(`${baseUrl}favourites/file/${fileId}`);
   };
 
   const getFavourites = async (token) => {
@@ -235,7 +264,7 @@ const userFavourite = async () => {
     return await doFetch(baseUrl + 'favourites', options);
   };
 
-  return {postFavourite}, deleteFavourite, getFavourites, getFavouritesByFileId;
+  return {postFavourite, deleteFavourite, getFavourites, getFavouritesByFileId};
 };
 
-export {useMedia, useLogin, useUser, useTag, userComment, userFavourite};
+export {useMedia, useLogin, useUser, useTag, userComment, useFavourite};

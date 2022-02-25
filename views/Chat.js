@@ -1,4 +1,4 @@
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import {View, StyleSheet, Text, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {SafeAreaView} from 'react-native';
@@ -7,62 +7,102 @@ import {StatusBar} from 'expo-status-bar';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Avatar, ListItem} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useUser, useTag, userComment} from '../hooks/ApiHooks';
+import {
+  useUser,
+  useTag,
+  userComment,
+  useMedia,
+  useFavourite,
+} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 
 const Chat = ({navigation}) => {
   const {getUserById} = useUser();
   const {getFileByTag} = useTag();
   const {getCommentByFileId} = userComment();
+  const {getMediaByUserId, getAllMediaByCurrentUserId} = useMedia();
+  const {getFavouritesByFileId} = useFavourite();
   const [username, setUsername] = useState({username: 'fetching...'});
   const [avatar, setAvatar] = useState('http://placekitten.com/180');
-  const [message, setMessage] = useState({message: 'Not any message'});
+  const [message, setMessage] = useState([]);
+  const [hook, setHook] = useState([]);
 
-  const fetchMatchedUser = async () => {
+  // const whoLikeYou = async () => {
+  //   const newHooksUserId = await getFavouritesByFileId(719);
+  //   console.log('who liked u', newHooksUserId);
+  // };
+  const fetchAllYourFiles = async (token) => {
+    const myFile = await getAllMediaByCurrentUserId(token);
+    console.log('user own file', myFile);
+  };
+
+  const fetchLike = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
-      const userData = await getUserById(527, token);
-      setUsername(userData);
+      const liked = await getFavouritesByFileId(719);
+      console.log('who like you', liked);
     } catch (error) {
-      console.error('fetch owner error', error);
-      setUsername({username: '[not available]'});
+      console.log(error.message);
+      console.log('sth error');
     }
   };
 
-  const fetchAvatar = async () => {
+  const fetchNewHooks = async () => {
     try {
-      const avatarArray = await getFileByTag('avatar_' + 32);
-      if (avatarArray.length === 0) {
-        return;
+      const token = await AsyncStorage.getItem('userToken');
+      const ourUsersId = [478, 577, 576, 527, 528, 530, 575];
+      let newHooksData = [];
+
+      fetchAllYourFiles(token);
+
+      for (const x of ourUsersId) {
+        let avatarScraping = await getMediaByUserId(x);
+        const userScraping = await getUserById(x, token);
+        avatarScraping = avatarScraping.filter(
+          (obj) => obj.title.toLowerCase() === 'avatar'
+        );
+        const totalData = {
+          ...userScraping,
+          ...avatarScraping,
+        };
+        newHooksData = newHooksData.concat(totalData);
       }
-      const avatar = avatarArray.pop();
-      setAvatar(uploadsUrl + avatar.filename);
-      console.log('fetch avatar', avatar);
+      // console.log('Matched User Data:', matchedUserData);
+      // console.log(matchedUserData[1][0].file_id, matchedUserData[1].username);
+
+      setHook(newHooksData.slice(-5).reverse());
     } catch (error) {
-      console.error(error.message);
+      console.error('Fetch new hooks error', error);
+      setHook({username: 'unknown'});
+      setUsername({username: '[not available]'});
     }
   };
 
   const fetchMessage = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const userMessage = await getCommentByFileId(95, token);
-      setMessage(userMessage[userMessage.length - 1]);
-      // messages
-      for (const m of userMessage) {
-        console.log(m.comment);
+      const userMessage = await getCommentByFileId(719, token);
+      let messageData = [];
+      for (const message of userMessage) {
+        let avatarScraping = await getMediaByUserId(message.user_id);
+        avatarScraping = avatarScraping.filter(
+          (obj) => obj.title.toLowerCase() === 'avatar'
+        );
+        const userScraping = await getUserById(message.user_id, token);
+        const totalData = {...message, ...avatarScraping, ...userScraping};
+        messageData = messageData.concat(totalData);
       }
-      // console.log(userMessage[userMessage.length - 1].comment);
+      setMessage(messageData);
+      console.log('Message History', messageData);
     } catch (error) {
-      console.error(error.message);
-      setMessage({message: 'Chatroom is empty'});
+      console.log('Fetch messages error', error);
     }
   };
 
   useEffect(() => {
-    fetchMatchedUser();
-    fetchAvatar();
+    fetchNewHooks();
     fetchMessage();
+    fetchLike();
+    // whoLikeYou();
   }, []);
 
   return (
@@ -83,228 +123,105 @@ const Chat = ({navigation}) => {
           }}
         >
           <Text style={styles.subTitle}>New hooks</Text>
-          <ScrollView
+          <FlatList
             horizontal={true}
-            style={{marginBottom: '8%'}}
-            pagingEnabled={true}
+            contentContainerStyle={{flexGrow: 1}}
             showsHorizontalScrollIndicator={false}
-          >
-            <ListItem>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <Avatar
-                  style={styles.avatar}
-                  avatarStyle={{
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    borderRadius: 20,
-                    borderStyle: 'solid',
+            style={{marginBottom: '6%'}}
+            pagingEnabled={true}
+            data={hook}
+            keyExtractor={(item) => item.user_id.toString()}
+            renderItem={({item}) => (
+              <ListItem>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
                   }}
-                  source={{uri: avatar}}
-                />
-                <Text style={styles.username}>{username.username}</Text>
-              </View>
-              <View
-                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
-              >
-                <Avatar
-                  style={styles.avatar}
-                  avatarStyle={{
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    borderRadius: 20,
-                    borderStyle: 'solid',
-                  }}
-                  source={{uri: avatar}}
-                />
-                <Text style={styles.username}>{username.username}</Text>
-              </View>
-              <View
-                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
-              >
-                <Avatar
-                  style={styles.avatar}
-                  avatarStyle={{
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    borderRadius: 20,
-                    borderStyle: 'solid',
-                  }}
-                  source={{uri: avatar}}
-                />
-                <Text style={styles.username}>{username.username}</Text>
-              </View>
-              <View
-                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
-              >
-                <Avatar
-                  style={styles.avatar}
-                  avatarStyle={{
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    borderRadius: 20,
-                    borderStyle: 'solid',
-                  }}
-                  source={{uri: avatar}}
-                />
-                <Text style={styles.username}>{username.username}</Text>
-              </View>
-              <View
-                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
-              >
-                <Avatar
-                  style={styles.avatar}
-                  avatarStyle={{
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    borderRadius: 20,
-                    borderStyle: 'solid',
-                  }}
-                  source={{uri: avatar}}
-                />
-                <Text style={styles.username}>{username.username}</Text>
-              </View>
-              <View
-                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
-              >
-                <Avatar
-                  style={styles.avatar}
-                  avatarStyle={{
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    borderRadius: 20,
-                    borderStyle: 'solid',
-                  }}
-                  source={{uri: avatar}}
-                />
-                <Text style={styles.username}>{username.username}</Text>
-              </View>
-              <View
-                style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}
-              >
-                <Avatar
-                  style={styles.avatar}
-                  avatarStyle={{
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    borderRadius: 20,
-                    borderStyle: 'solid',
-                  }}
-                  source={{uri: avatar}}
-                />
-                <Text style={styles.username}>{username.username}</Text>
-              </View>
-            </ListItem>
-          </ScrollView>
+                >
+                  <Avatar
+                    style={styles.avatar}
+                    avatarStyle={{
+                      borderWidth: 2,
+                      borderColor: 'white',
+                      borderRadius: 20,
+                      borderStyle: 'solid',
+                    }}
+                    source={{uri: uploadsUrl + item[0].filename}}
+                  />
+                  <Text style={styles.username}>{item.username}</Text>
+                </View>
+              </ListItem>
+            )}
+          ></FlatList>
         </View>
 
         {/* list of messages */}
         <View style={{flex: 1}}>
           <Text style={styles.subTitle}>Messages</Text>
-          <ScrollView horizontal={false} contentContainerStyle={{flexGrow: 1}}>
-            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-              <Avatar
-                style={styles.avatar}
-                avatarStyle={{
-                  borderWidth: 2,
-                  borderColor: 'white',
-                  borderRadius: 60,
-                  borderStyle: 'solid',
-                }}
-                source={{uri: avatar}}
-              />
-              <View style={{flexDirection: 'column'}}>
-                <Text style={styles.username}>{username.username}</Text>
-                <Text style={styles.message}>{message.comment}</Text>
-              </View>
-            </View>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <Avatar
-                style={styles.avatar}
-                avatarStyle={{
-                  borderWidth: 2,
-                  borderColor: 'white',
-                  borderRadius: 60,
-                  borderStyle: 'solid',
-                }}
-                source={{uri: avatar}}
-              />
-              <View style={{flexDirection: 'column'}}>
-                <Text style={styles.username}>{username.username}</Text>
-                <Text style={styles.message}>{message.comment}</Text>
-              </View>
-            </View>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <Avatar
-                style={styles.avatar}
-                avatarStyle={{
-                  borderWidth: 2,
-                  borderColor: 'white',
-                  borderRadius: 60,
-                  borderStyle: 'solid',
-                }}
-                source={{uri: avatar}}
-              />
-              <View style={{flexDirection: 'column'}}>
-                <Text style={styles.username}>{username.username}</Text>
-                <Text style={styles.message}>{message.comment}</Text>
-              </View>
-            </View>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <Avatar
-                style={styles.avatar}
-                avatarStyle={{
-                  borderWidth: 2,
-                  borderColor: 'white',
-                  borderRadius: 60,
-                  borderStyle: 'solid',
-                }}
-                source={{uri: avatar}}
-              />
-              <View style={{flexDirection: 'column'}}>
-                <Text style={styles.username}>{username.username}</Text>
-                <Text style={styles.message}>{message.comment}</Text>
-              </View>
-            </View>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <Avatar
-                style={styles.avatar}
-                avatarStyle={{
-                  borderWidth: 2,
-                  borderColor: 'white',
-                  borderRadius: 60,
-                  borderStyle: 'solid',
-                }}
-                source={{uri: avatar}}
-              />
-              <View style={{flexDirection: 'column'}}>
-                <Text style={styles.username}>{username.username}</Text>
-                <Text style={styles.message}>{message.comment}</Text>
-              </View>
-            </View>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <Avatar
-                style={styles.avatar}
-                avatarStyle={{
-                  borderWidth: 2,
-                  borderColor: 'white',
-                  borderRadius: 60,
-                  borderStyle: 'solid',
-                }}
-                source={{uri: avatar}}
-              />
-              <View style={{flexDirection: 'column'}}>
-                <Text style={styles.username}>{username.username}</Text>
-                <Text style={styles.message}>{message.comment}</Text>
-              </View>
-            </View>
-          </ScrollView>
+          <FlatList
+            pagingEnabled={true}
+            contentContainerStyle={{flexGrow: 1}}
+            data={message}
+            keyExtractor={(item) => item.user_id.toString()}
+            renderItem={({item}) => (
+              <ListItem style={{flex: 1}}>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingBottom: '8%',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#C4C4C4',
+                  }}
+                >
+                  <Avatar
+                    style={styles.avatar}
+                    avatarStyle={{
+                      borderWidth: 2,
+                      borderColor: 'white',
+                      borderRadius: 60,
+                      borderStyle: 'solid',
+                    }}
+                    source={{uri: uploadsUrl + item[0].filename}}
+                  />
+                  <View style={{flexDirection: 'column', marginLeft: '6%'}}>
+                    <Text style={styles.username}>{item.username}</Text>
+                    <Text style={styles.message}>{item.comment}</Text>
+                  </View>
+                </View>
+              </ListItem>
+            )}
+          ></FlatList>
         </View>
+
+        {/* <View style={{flex: 1}}>
+          <Text style={styles.subTitle}>Messages</Text>
+          <ScrollView horizontal={false} contentContainerStyle={{flexGrow: 1}}>
+            <ListItem style={{flex: 1}}>
+              <View
+                style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}
+              >
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 60,
+                    borderStyle: 'solid',
+                  }}
+                  source={{uri: avatar}}
+                />
+                <View style={{flexDirection: 'column'}}>
+                  <Text style={styles.username}>{username.username}</Text>
+                  <Text style={styles.message}>{message.comment}</Text>
+                </View>
+              </View>
+            </ListItem>
+          </ScrollView>
+        </View> */}
       </SafeAreaView>
       <StatusBar style="auto"></StatusBar>
     </>
