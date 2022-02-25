@@ -19,7 +19,7 @@ const Home = ({navigation}) => {
   const checkToken = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
-      // console.log('token', userToken);
+      console.log('token', userToken);
     } catch (err) {
       console.error(err);
     }

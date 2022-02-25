@@ -39,7 +39,6 @@ const useMedia = (myFilesOnly) => {
       setMediaArray(media);
     } catch (error) {
       console.error(error);
-    } finally {
     }
     // console.log(mediaArray);
   };
@@ -79,7 +78,54 @@ const useLogin = () => {
   return {postLogin};
 };
 
+const isJsonString = (str) => {
+  try {
+    JSON.parse(str);
+  } catch (err) {
+    return false;
+  }
+  return true;
+};
+
 const useUser = () => {
+  // const [userArray, setUserArray] = useState([]);
+  // const loadUser = async (token) => {
+  //   const options = {
+  //     method: 'GET',
+  //     headers: {'x-access-token': token},
+  //   };
+  //   try {
+  //     const json = await doFetch(baseUrl + 'users/', options);
+  //     // console.log('list users', json);
+
+  //     let users = await Promise.all(
+  //       json.map(async (item) => {
+  //         const response = await doFetch(
+  //           baseUrl + 'users/' + item.user_id,
+  //           options
+  //         );
+  //         // console.log('user data', response);
+  //         // console.log('isjson', isJsonString(item.full_name));
+  //         return response;
+  //       })
+  //     );
+
+  //     users = users.filter((item) => {
+  //       console.log('item', item);
+  //       return item.email === 'wang@emai.com';
+  //     });
+
+  //     console.log('user data sau filter', users);
+  //     setUserArray(users);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   loadUser(token);
+  // }, []);
+
   const getUserByToken = async (token) => {
     const options = {
       method: 'GET',
@@ -140,6 +186,7 @@ const useUser = () => {
   };
 
   return {
+    // userArray,
     getUserByToken,
     postUser,
     putUser,
@@ -164,7 +211,7 @@ const useTag = () => {
     return await doFetch(baseUrl + 'tags/' + tag);
   };
 
-  return {postTag, getFileByTag, postTag};
+  return {postTag, getFileByTag};
 };
 
 const userComment = () => {
@@ -241,7 +288,7 @@ const userFavourite = async () => {
     return await doFetch(baseUrl + 'favourites', options);
   };
 
-  return {postFavourite}, deleteFavourite, getFavourites, getFavouritesByFileId;
+  return {postFavourite, deleteFavourite, getFavourites, getFavouritesByFileId};
 };
 
 export {useMedia, useLogin, useUser, useTag, userComment, userFavourite};
