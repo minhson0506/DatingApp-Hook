@@ -15,6 +15,7 @@ import Search from '../views/Search';
 import FirstLand from '../views/FirstLand';
 import Instructions from '../views/Instructions';
 import Preference from '../views/Preference';
+import EditProfile from '../views/EditProfile';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -161,6 +162,11 @@ const StackScreen = () => {
             <Stack.Screen
               name="Preferences"
               component={Preference}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Edit Profile"
+              component={EditProfile}
               options={{headerShown: false}}
             ></Stack.Screen>
             <Stack.Screen

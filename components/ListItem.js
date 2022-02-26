@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {
@@ -23,9 +23,11 @@ import {
   Poppins_400Regular_Italic,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
+import {Video} from 'expo-av';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {getUserById} = useUser();
+  const videoRef = useRef(null);
   // const [owner, setOwner] = useState({username: 'fetching...'});
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
 
@@ -119,18 +121,30 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           )}
           {myFilesOnly && (
             <View style={styles.cardProfile}>
-              <Avatar
-                containerStyle={styles.avatarProfile}
-                avatarStyle={{borderRadius: 10}}
-                source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
-              ></Avatar>
-              <Card style={styles.descriptionBox}>
-                <Text style={styles.textDescription}>
-                  {singleMedia.description === ''
-                    ? '...'
-                    : singleMedia.description}
-                </Text>
-              </Card>
+              {singleMedia.media_type === 'image' ? (
+                <Avatar
+                  containerStyle={styles.avatarProfile}
+                  avatarStyle={{borderRadius: 10}}
+                  source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+                ></Avatar>
+              ) : (
+                <Video
+                  ref={videoRef}
+                  style={styles.avatarProfile}
+                  source={{uri: uploadsUrl + singleMedia.filename}}
+                  useNativeControls
+                  resizeMode="contain"
+                ></Video>
+              )}
+              {singleMedia.description === '' ? (
+                <></>
+              ) : (
+                <Card style={styles.descriptionBox}>
+                  <Text style={styles.textDescription}>
+                    {singleMedia.description}
+                  </Text>
+                </Card>
+              )}
             </View>
           )}
         </RNEListItem>

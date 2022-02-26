@@ -22,7 +22,9 @@ const doFetch = async (url, options = {}) => {
 const useMedia = (myFilesOnly, userId = null) => {
   const [mediaArray, setMediaArray] = useState([]);
   const {update, user} = useContext(MainContext);
+  const [loading, setLoading] = useState(false);
   const loadMedia = async (start = 0, limit = 10) => {
+    setLoading(true);
     try {
       let json = await useTag().getFileByTag(appId);
       if (myFilesOnly) {
@@ -42,6 +44,8 @@ const useMedia = (myFilesOnly, userId = null) => {
       setMediaArray(media);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
     // console.log(mediaArray);
   };
@@ -50,7 +54,7 @@ const useMedia = (myFilesOnly, userId = null) => {
   // Or when update state is changed
   useEffect(() => {
     loadMedia(0, 10);
-  }, []);
+  }, [update]);
 
   const postMedia = async (formData, token) => {
     const options = {
@@ -63,12 +67,32 @@ const useMedia = (myFilesOnly, userId = null) => {
     };
     return await doFetch(baseUrl + 'media', options);
   };
+  const deleteMedia = async (id, token) => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': token,
+      },
+    };
+    return await doFetch(baseUrl + 'media/' + id, options);
+  };
 
   // const getMediaByUserId = async () => {
   //   return await doFetch(baseUrl + 'media/user' + userId);
   // };
+  const putMedia = async (id, token, data) => {
+    const options = {
+      method: 'PUT',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+    return await doFetch(baseUrl + 'media/' + id, options);
+  };
 
-  return {mediaArray, postMedia};
+  return {mediaArray, postMedia, loading, deleteMedia, putMedia};
 };
 
 const useLogin = () => {

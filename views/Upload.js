@@ -52,7 +52,7 @@ const Upload = ({navigation}) => {
     const formData = new FormData();
     const fileName = image.split('/').pop();
     let fileExtension = fileName.split('.').pop();
-    //if (fileExtension === 'jpg') fileExtension = 'jpeg';
+    // if (fileExtension === 'jpg') fileExtension = 'jpeg';
     fileExtension = fileExtension === 'jpg' ? 'jpeg' : fileExtension;
     formData.append('title', data.title);
     formData.append('description', data.description);
@@ -72,7 +72,7 @@ const Upload = ({navigation}) => {
         {
           text: 'ok',
           onPress: () => {
-            //TODO: clear the form value after submit
+            // TODO: clear the form value after submit
             setUpdate(update + 1);
             navigation.navigate('Home');
           },

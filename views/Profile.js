@@ -6,10 +6,11 @@ import {
   SafeAreaView,
   View,
   FlatList,
+  Alert,
 } from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Button, Text, Divider} from 'react-native-elements';
 import {PropTypes} from 'prop-types';
@@ -24,7 +25,8 @@ import DrinkIcon from '../assets/drink.svg';
 import {Card} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
 import ListItem from '../components/ListItem';
-
+import * as ImagePicker from 'expo-image-picker';
+import {appId} from '../utils/variables';
 import {
   useFonts,
   Poppins_700Bold,
@@ -34,10 +36,14 @@ import {
 import AppLoading from 'expo-app-loading';
 
 const Profile = ({navigation}) => {
-  const {setIsLoggedIn, user} = useContext(MainContext);
+  const {setIsLoggedIn, user, update, setUpdate} = useContext(MainContext);
   // const [user, setUser] = useState();
-  const [avatar, setAvatar] = useState('http://placekitten.com/640');
+  const [avatar, setAvatar] = useState(
+    'https://www.linkpicture.com/q/iPhone-8-2-1.png'
+  );
   const {mediaArray} = useMedia(true);
+  const {postMedia, putMedia} = useMedia();
+  const {postTag} = useTag();
 
   const mediaData = mediaArray.filter(
     (obj) => obj.title.toLowerCase() !== 'avatar'
@@ -79,10 +85,70 @@ const Profile = ({navigation}) => {
       string += hobby;
       string += ' ';
     });
-
     return string;
   };
-  console.log('hobby', interest());
+
+  const removeOldAvatar = async () => {
+    const avatar = mediaArray.find(
+      (obj) => obj.title.toLowerCase() === 'avatar'
+    );
+    console.log('avatar in formdata', avatar);
+    if (avatar) {
+      const data = {
+        title: 'title',
+        description: avatar.description,
+      };
+      try {
+        const userToken = await AsyncStorage.getItem('userToken');
+        await putMedia(avatar.file_id, userToken, data);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  };
+
+  const changeProfilePicture = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 0.5,
+    });
+    if (!result.cancelled) {
+      setAvatar(result.uri);
+    }
+    const formData = new FormData();
+    formData.append('title', 'avatar');
+    formData.append('description', '');
+    const filename = result.uri.split('/').pop();
+    let fileExtension = filename.split('.').pop();
+    fileExtension = fileExtension === 'jpg' ? 'jpeg' : fileExtension;
+    formData.append('file', {
+      uri: result.uri,
+      name: filename,
+      type: 'image' + '/' + fileExtension,
+    });
+    removeOldAvatar();
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      const response = await postMedia(formData, userToken);
+      const tagResponse = await postTag(
+        {file_id: response.file_id, tag: appId},
+        userToken
+      );
+      tagResponse &&
+        Alert.alert('Upload', 'Updated avatar successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setUpdate(update + 1);
+              navigation.navigate('Profile');
+            },
+          },
+        ]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
@@ -101,7 +167,7 @@ const Profile = ({navigation}) => {
           <EditIcon
             style={styles.edit}
             onPress={() => {
-              navigation.navigate('Modify user');
+              navigation.navigate('Edit Profile');
             }}
           ></EditIcon>
         </View>
@@ -114,6 +180,7 @@ const Profile = ({navigation}) => {
                   containerStyle={styles.image}
                   avatarStyle={{borderRadius: 100}}
                   PlaceholderContent={<ActivityIndicator></ActivityIndicator>}
+                  onPress={changeProfilePicture}
                 />
               </View>
               <Text style={styles.name}>{additionData.fullname}</Text>
