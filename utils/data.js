@@ -366,4 +366,13 @@ const religionArray = [
   'Buddhism',
   'Prefer not to say',
 ];
-export {locationArray, countryArray, religionArray};
+const educationArray = [
+  'None',
+  'Primary Education',
+  'Secondary Education',
+  'Vocational Education',
+  'Undergraduate',
+  'Postgraduate',
+  'Prefer not to say',
+];
+export {locationArray, countryArray, religionArray, educationArray};

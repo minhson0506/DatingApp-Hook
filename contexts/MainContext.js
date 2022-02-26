@@ -8,6 +8,7 @@ const MainProvider = (props) => {
   const [user, setUser] = useState({});
   const [update, setUpdate] = useState(0);
   const [instruction, setInstruction] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState(0);
 
   return (
     <MainContext.Provider
@@ -20,6 +21,8 @@ const MainProvider = (props) => {
         setUpdate,
         instruction,
         setInstruction,
+        updateInfo,
+        setUpdateInfo,
       }}
     >
       {props.children}

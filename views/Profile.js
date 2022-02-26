@@ -34,10 +34,11 @@ import {
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
+import {useIsFocused} from '@react-navigation/native';
 
 const Profile = ({navigation}) => {
   const {setIsLoggedIn, user, update, setUpdate} = useContext(MainContext);
-  // const [user, setUser] = useState();
+  const isFocused = useIsFocused();
   const [avatar, setAvatar] = useState(
     'https://www.linkpicture.com/q/iPhone-8-2-1.png'
   );
@@ -62,7 +63,7 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     fetchAvatar();
-  }, [mediaArray]);
+  }, [mediaArray, isFocused]);
 
   const logOut = async () => {
     try {
@@ -167,7 +168,7 @@ const Profile = ({navigation}) => {
           <EditIcon
             style={styles.edit}
             onPress={() => {
-              navigation.navigate('Edit Profile');
+              navigation.navigate('Upload');
             }}
           ></EditIcon>
         </View>
@@ -248,6 +249,10 @@ const Profile = ({navigation}) => {
         <Button
           title={'Instructions'}
           onPress={() => navigation.navigate('Instructions')}
+        />
+        <Button
+          title={'Interests'}
+          onPress={() => navigation.navigate('Interests')}
         />
       </SafeAreaView>
     );

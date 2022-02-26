@@ -15,6 +15,8 @@ import Search from '../views/Search';
 import FirstLand from '../views/FirstLand';
 import Instructions from '../views/Instructions';
 import Preference from '../views/Preference';
+import Interests from '../views/Interests';
+import Upload from '../views/Upload';
 import EditProfile from '../views/EditProfile';
 
 const Tab = createBottomTabNavigator();
@@ -165,6 +167,11 @@ const StackScreen = () => {
               options={{headerShown: false}}
             ></Stack.Screen>
             <Stack.Screen
+              name="Upload"
+              component={Upload}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
               name="Edit Profile"
               component={EditProfile}
               options={{headerShown: false}}
@@ -176,6 +183,11 @@ const StackScreen = () => {
             <Stack.Screen
               name="Instructions"
               component={Instructions}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Interests"
+              component={Interests}
               options={{headerShown: false}}
             ></Stack.Screen>
           </>

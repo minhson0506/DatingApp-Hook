@@ -81,6 +81,7 @@ const Preference = ({navigation}) => {
     additionData.preference_nationality
   );
   const [religion, setReligion] = useState(additionData.preference_religion);
+  // TODO: add preference family plan to database
   const [family, setFamily] = useState(null);
   const [drinking, setDrinking] = useState(additionData.preference_drinking);
   const [smoking, setSmoking] = useState(additionData.preference_smoking);
