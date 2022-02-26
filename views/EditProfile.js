@@ -95,24 +95,20 @@ const EditProfile = ({navigation}) => {
   const [educationItem, setEducationItems] = useState([]);
   const [religionItem, setReligionItems] = useState([]);
   const [familyItem, setFamilyItems] = useState([
-    {label: 'None', value: 'None'},
-    {label: 'I want kid', value: 'Yes'},
-    {label: 'I dont want kid', value: 'No'},
+    {label: 'I want kid', value: 'Want kid'},
+    {label: 'I dont want kid', value: 'Dont want kid'},
   ]);
   const [drinkingItem, setDrinkingItems] = useState([
     {label: 'Yassss', value: 'Yes'},
     {label: 'Nope', value: 'No'},
-    {label: 'None', value: 'None'},
   ]);
   const [smokingItem, setSmokingItems] = useState([
     {label: 'Yes', value: 'Yes'},
-    {label: 'Thats a nope', value: 'Nope'},
-    {label: 'None', value: 'None'},
+    {label: 'Thats a nope', value: 'No'},
   ]);
   const [petItem, setPetItems] = useState([
     {label: 'Pet lover', value: 'Yes'},
     {label: 'Urg no pet', value: 'No'},
-    {label: 'None', value: 'None'},
   ]);
 
   // make key value arrays for items

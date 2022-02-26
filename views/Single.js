@@ -29,6 +29,9 @@ import SchoolIcon from '../assets/school.svg';
 import DrinkIcon from '../assets/drink.svg';
 import {Card} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
+import SmokeIcon from '../assets/smoking.svg';
+import PetIcon from '../assets/pet.svg';
+import BabyIcon from '../assets/baby.svg';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from '../components/ListItem';
 
@@ -122,8 +125,29 @@ const Single = ({route, navigation}) => {
                       orientation="vertical"
                       style={{marginTop: 12, marginRight: 10}}
                     />
+                    <PetIcon height={20} style={styles.icons}></PetIcon>
+                    <Text style={styles.text}>{additionData.pet}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                  >
                     <DrinkIcon style={styles.icons}></DrinkIcon>
                     <Text style={styles.text}>{additionData.drinking}</Text>
+                    <Divider
+                      orientation="vertical"
+                      style={{marginTop: 12, marginRight: 10}}
+                    />
+                    <SmokeIcon height={20} style={styles.icons}></SmokeIcon>
+                    <Text style={styles.text}>{additionData.smoking}</Text>
+                    <Divider
+                      orientation="vertical"
+                      style={{marginTop: 12, marginRight: 10}}
+                    />
+                    <BabyIcon height={20} style={styles.icons}></BabyIcon>
+                    <Text style={styles.text}>{additionData.family_plan}</Text>
                   </View>
                   <View
                     style={{
@@ -216,7 +240,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    height: 150,
+    height: 200,
     marginBottom: 20,
     padding: 0,
     borderColor: '#FCF2F2',
