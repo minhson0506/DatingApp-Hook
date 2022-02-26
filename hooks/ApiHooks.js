@@ -227,7 +227,7 @@ const userComment = () => {
   };
 };
 
-const useFavourite = async () => {
+const useFavourite = () => {
   const postFavourite = async (fileId, token) => {
     const options = {
       method: 'POST',

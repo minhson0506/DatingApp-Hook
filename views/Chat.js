@@ -27,36 +27,50 @@ const Chat = ({navigation}) => {
   const [message, setMessage] = useState([]);
   const [hook, setHook] = useState([]);
 
-  // const whoLikeYou = async () => {
-  //   const newHooksUserId = await getFavouritesByFileId(719);
-  //   console.log('who liked u', newHooksUserId);
-  // };
-  const fetchAllYourFiles = async (token) => {
-    const myFile = await getAllMediaByCurrentUserId(token);
-    console.log('user own file', myFile);
-  };
-
-  const fetchLike = async () => {
-    try {
-      const liked = await getFavouritesByFileId(719);
-      console.log('who like you', liked);
-    } catch (error) {
-      console.log(error.message);
-      console.log('sth error');
-    }
-  };
-
   const fetchNewHooks = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const ourUsersId = [478, 577, 576, 527, 528, 530, 575];
+
+      // get fileIds of all files from current login user
+      const userFiles = await getAllMediaByCurrentUserId(token);
+      // console.log('All file from current user: ', userFiles);
+      const userFilesId = [];
+      for (const file of userFiles) {
+        userFilesId.push(file.file_id);
+      }
+      console.log('all fileId from current user: ', userFilesId);
+
+      // check who likes any photo from current login user
+      // and then get their userId
+      let likeData = [];
+      const seen = new Set();
+      for (const id of userFilesId) {
+        const likeScraping = await getFavouritesByFileId(id);
+        likeData = likeData.concat(likeScraping);
+      }
+
+      // sort the data in order by favouriteId, most recent -> least recent
+      likeData.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
+
+      // without filtering
+      console.log('like data: ', likeData);
+
+      // with filtering
+      likeData = likeData.filter((el) => {
+        const duplicate = seen.has(el.user_id);
+        seen.add(el.user_id);
+        return !duplicate;
+      });
+
+      likeData = likeData.slice(0, 5);
+      console.log('like data after data cleaning: ', likeData);
+      const likedUserId = likeData.map((id) => id.user_id);
+      console.log('who like you', likedUserId);
+
       let newHooksData = [];
-
-      fetchAllYourFiles(token);
-
-      for (const x of ourUsersId) {
-        let avatarScraping = await getMediaByUserId(x);
-        const userScraping = await getUserById(x, token);
+      for (const id of likedUserId) {
+        let avatarScraping = await getMediaByUserId(id);
+        const userScraping = await getUserById(id, token);
         avatarScraping = avatarScraping.filter(
           (obj) => obj.title.toLowerCase() === 'avatar'
         );
@@ -68,8 +82,7 @@ const Chat = ({navigation}) => {
       }
       // console.log('Matched User Data:', matchedUserData);
       // console.log(matchedUserData[1][0].file_id, matchedUserData[1].username);
-
-      setHook(newHooksData.slice(-5).reverse());
+      setHook(newHooksData);
     } catch (error) {
       console.error('Fetch new hooks error', error);
       setHook({username: 'unknown'});
@@ -92,7 +105,7 @@ const Chat = ({navigation}) => {
         messageData = messageData.concat(totalData);
       }
       setMessage(messageData);
-      console.log('Message History', messageData);
+      // console.log('Message History', messageData);
     } catch (error) {
       console.log('Fetch messages error', error);
     }
@@ -101,8 +114,6 @@ const Chat = ({navigation}) => {
   useEffect(() => {
     fetchNewHooks();
     fetchMessage();
-    fetchLike();
-    // whoLikeYou();
   }, []);
 
   return (
