@@ -21,22 +21,24 @@ import {
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
-import {useUser} from '../hooks/ApiHooks';
+import {useUser, userFavourite} from '../hooks/ApiHooks';
 import AgeIcon from '../assets/age.svg';
 import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
 import SchoolIcon from '../assets/school.svg';
 import DrinkIcon from '../assets/drink.svg';
-import {Card} from 'react-native-paper';
+import {Card, FAB} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
 import SmokeIcon from '../assets/smoking.svg';
 import PetIcon from '../assets/pet.svg';
-import BabyIcon from '../assets/baby.svg';
+import BabyIcon from '../assets/baby2.svg';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from '../components/ListItem';
+import LikeIcon from '../assets/hookiconActive.png';
 
 const Single = ({route, navigation}) => {
   const {file} = route.params;
+  const {postFavourite} = userFavourite();
   const {mediaArray} = useMedia(false, file.user_id);
   const {getUserById} = useUser();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
@@ -70,6 +72,24 @@ const Single = ({route, navigation}) => {
       Alert.alert([{text: 'Load owner failed'}]);
       console.error('fetch owner error', error);
       setAdditionData({fullname: '[not available]'});
+    }
+  };
+
+  const likeUser = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    if (!token) {
+      return;
+    }
+    try {
+      console.log('file id', file.file_id);
+      const response = await postFavourite(file.file_id, token);
+      if (response) {
+        Alert.alert('You have liked this user!');
+        console.log('users liked', response);
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -146,7 +166,7 @@ const Single = ({route, navigation}) => {
                       orientation="vertical"
                       style={{marginTop: 12, marginRight: 10}}
                     />
-                    <BabyIcon height={20} style={styles.icons}></BabyIcon>
+                    <BabyIcon height={22} style={styles.icons}></BabyIcon>
                     <Text style={styles.text}>{additionData.family_plan}</Text>
                   </View>
                   <View
@@ -186,6 +206,13 @@ const Single = ({route, navigation}) => {
               ></ListItem>
             )}
           ></FlatList>
+          <FAB
+            style={styles.fab}
+            medium
+            icon={LikeIcon}
+            color="#EB6833"
+            onPress={likeUser}
+          />
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
       </>
@@ -252,6 +279,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,
+  },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    backgroundColor: 'white',
   },
 });
 

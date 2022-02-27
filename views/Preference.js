@@ -162,7 +162,7 @@ const Preference = ({navigation}) => {
     } else {
       additionData.age_range = 'none';
     }
-
+    if (location) additionData.preference_location = location;
     if (nationality) additionData.preference_nationality = nationality;
     if (religion) additionData.preference_religion = religion;
     if (drinking) additionData.preference_drinking = drinking;

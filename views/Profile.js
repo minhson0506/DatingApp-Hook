@@ -26,7 +26,7 @@ import {Card} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
 import SmokeIcon from '../assets/smoking.svg';
 import PetIcon from '../assets/pet.svg';
-import BabyIcon from '../assets/baby.svg';
+import BabyIcon from '../assets/baby2.svg';
 
 import ListItem from '../components/ListItem';
 import * as ImagePicker from 'expo-image-picker';
@@ -225,7 +225,7 @@ const Profile = ({navigation}) => {
                     orientation="vertical"
                     style={{marginTop: 12, marginRight: 10}}
                   />
-                  <BabyIcon height={20} style={styles.icons}></BabyIcon>
+                  <BabyIcon height={22} style={styles.icons}></BabyIcon>
                   <Text style={styles.text}>{additionData.family_plan}</Text>
                 </View>
                 <View

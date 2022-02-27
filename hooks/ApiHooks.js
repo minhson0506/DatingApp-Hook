@@ -239,14 +239,17 @@ const userComment = () => {
   };
 };
 
-const userFavourite = async () => {
-  const postFavourite = async (fileId, token) => {
+const userFavourite = () => {
+  const postFavourite = async (data, token) => {
     const options = {
       method: 'POST',
-      headers: {'x-access-token': token},
-      body: JSON.stringify(fileId),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify({file_id: data}),
     };
-    return await doFetch(baseUrl + 'favourites', options);
+    return await doFetch(baseUrl + 'favourites/', options);
   };
 
   const deleteFavourite = async (fileId, token) => {
@@ -272,7 +275,7 @@ const userFavourite = async () => {
     return await doFetch(baseUrl + 'favourites', options);
   };
 
-  return {postFavourite}, deleteFavourite, getFavourites, getFavouritesByFileId;
+  return {postFavourite, deleteFavourite, getFavourites, getFavouritesByFileId};
 };
 
 export {useMedia, useLogin, useUser, useTag, userComment, userFavourite};

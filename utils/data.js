@@ -1,4 +1,5 @@
 const locationArray = [
+  'None',
   'Akaa',
   'Alajärvi',
   'Alavus',
