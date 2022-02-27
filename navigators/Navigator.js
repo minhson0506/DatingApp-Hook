@@ -141,7 +141,7 @@ const StackScreen = () => {
             <Stack.Screen
               name="Instructions"
               component={Instructions}
-              // options={{headerShown: false}}
+              options={{headerShown: false}}
             ></Stack.Screen>
             <Stack.Screen
               name="Upload"

@@ -36,6 +36,7 @@ const LoginForm = () => {
       const userData = await postLogin(data);
       await AsyncStorage.setItem('userToken', userData.token);
       setUser(userData.user);
+      console.log('user after login', userData);
       setIsLoggedIn(true);
     } catch (error) {
       console.error(error);

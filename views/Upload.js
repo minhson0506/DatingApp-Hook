@@ -89,7 +89,6 @@ const Upload = ({navigation}) => {
 
   const {postMedia, loading} = useMedia();
   const {postTag} = useTag();
-  const {user} = useContext(MainContext);
   const {update, setUpdate} = useContext(MainContext);
 
   // pick image function
@@ -272,9 +271,9 @@ const Upload = ({navigation}) => {
           <Text style={styles.appName}>Upload</Text>
           <Button
             labelStyle={styles.button}
-            onPress={() => navigation.navigate('Edit Profile')}
+            onPress={() => navigation.navigate('Profile')}
           >
-            Next
+            Done
           </Button>
         </View>
         <Divider style={{marginBottom: 5, marginTop: 5}} />

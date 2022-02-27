@@ -22,11 +22,12 @@ import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
 import SchoolIcon from '../assets/school.svg';
 import DrinkIcon from '../assets/drink.svg';
-import {Card} from 'react-native-paper';
+import {Card, FAB} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
 import SmokeIcon from '../assets/smoking.svg';
 import PetIcon from '../assets/pet.svg';
 import BabyIcon from '../assets/baby2.svg';
+import UploadIcon from '../assets/upload.svg';
 
 import ListItem from '../components/ListItem';
 import * as ImagePicker from 'expo-image-picker';
@@ -168,7 +169,7 @@ const Profile = ({navigation}) => {
           <EditIcon
             style={styles.edit}
             onPress={() => {
-              navigation.navigate('Upload');
+              navigation.navigate('Edit Profile');
             }}
           ></EditIcon>
         </View>
@@ -217,13 +218,13 @@ const Profile = ({navigation}) => {
                   <Text style={styles.text}>{additionData.drinking}</Text>
                   <Divider
                     orientation="vertical"
-                    style={{marginTop: 12, marginRight: 10}}
+                    style={{marginTop: 12, marginRight: 5}}
                   />
                   <SmokeIcon height={20} style={styles.icons}></SmokeIcon>
                   <Text style={styles.text}>{additionData.smoking}</Text>
                   <Divider
                     orientation="vertical"
-                    style={{marginTop: 12, marginRight: 10}}
+                    style={{marginTop: 12, marginRight: 5}}
                   />
                   <BabyIcon height={22} style={styles.icons}></BabyIcon>
                   <Text style={styles.text}>{additionData.family_plan}</Text>
@@ -273,6 +274,12 @@ const Profile = ({navigation}) => {
         <Button
           title={'Interests'}
           onPress={() => navigation.navigate('Interests')}
+        />
+        <FAB
+          style={styles.fab}
+          small
+          icon={UploadIcon}
+          onPress={() => navigation.navigate('Upload')}
         />
       </SafeAreaView>
     );
@@ -342,6 +349,14 @@ const styles = StyleSheet.create({
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 10,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'white',
+    paddingBottom: 3,
   },
 });
 

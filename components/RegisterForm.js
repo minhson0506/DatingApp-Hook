@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Fixed full_name for new user register
 const RegisterForm = ({setFormToggle}) => {
   const {postUser, checkUsername} = useUser();
   const {postLogin} = useLogin();
@@ -57,7 +58,7 @@ const RegisterForm = ({setFormToggle}) => {
       console.log('register onSubmit', userData);
       if (userData) {
         setFormToggle(true);
-        Alert.alert('Success', 'User created successfully! Please login!');
+        Alert.alert('Success', 'User created successfully!');
         delete data.full_name;
         delete data.email;
         console.log('data for login', data);
