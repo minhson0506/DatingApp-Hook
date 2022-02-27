@@ -277,7 +277,7 @@ const Instructions = ({navigation}) => {
               </View>
             </View>
             <Button
-              onPress={() => navigation.navigate('Main')}
+              onPress={() => navigation.navigate('Upload')}
               style={styles.ScrollUpButton}
               labelStyle={{color: 'white', textAlign: 'center', fontSize: 15}}
             >

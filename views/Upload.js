@@ -280,7 +280,7 @@ const Upload = ({navigation}) => {
         <Divider style={{marginBottom: 5, marginTop: 5}} />
 
         <ScrollView>
-          <Text style={styles.header}>Upload at least 3 pictures or video</Text>
+          <Text style={styles.header}>Upload your pictures or video</Text>
           <View style={styles.box}>
             <Card containerStyle={styles.card}>
               {type1 === 'image' ? (

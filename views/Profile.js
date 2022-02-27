@@ -41,7 +41,7 @@ import AppLoading from 'expo-app-loading';
 import {useIsFocused} from '@react-navigation/native';
 
 const Profile = ({navigation}) => {
-  const {setIsLoggedIn, user, update, setUpdate} = useContext(MainContext);
+  const {user, update, setUpdate} = useContext(MainContext);
   const isFocused = useIsFocused();
   const [avatar, setAvatar] = useState(
     'https://www.linkpicture.com/q/iPhone-8-2-1.png'
@@ -68,15 +68,6 @@ const Profile = ({navigation}) => {
   useEffect(() => {
     fetchAvatar();
   }, [mediaArray, isFocused]);
-
-  const logOut = async () => {
-    try {
-      await AsyncStorage.clear();
-    } catch (err) {
-      console.error(err);
-    }
-    setIsLoggedIn(false);
-  };
 
   // console.log('Profile', user);
 
@@ -167,7 +158,12 @@ const Profile = ({navigation}) => {
     return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <MenuIcon style={styles.menu}></MenuIcon>
+          <MenuIcon
+            style={styles.menu}
+            onPress={() => {
+              navigation.navigate('Modify user');
+            }}
+          ></MenuIcon>
           <Text style={styles.appName}>hook</Text>
           <EditIcon
             style={styles.edit}
@@ -270,7 +266,6 @@ const Profile = ({navigation}) => {
           )}
           // myFilesOnly={true}
         ></FlatList>
-        <Button title={'Logout'} onPress={logOut} />
         <Button
           title={'Instructions'}
           onPress={() => navigation.navigate('Instructions')}
