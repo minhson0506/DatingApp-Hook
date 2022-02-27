@@ -189,7 +189,7 @@ const Profile = ({navigation}) => {
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'center',
+                    justifyContent: 'space-around',
                   }}
                 >
                   <AgeIcon height={19} style={styles.icons}></AgeIcon>
@@ -210,7 +210,7 @@ const Profile = ({navigation}) => {
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'center',
+                    justifyContent: 'space-around',
                   }}
                 >
                   <DrinkIcon style={styles.icons}></DrinkIcon>
@@ -231,7 +231,7 @@ const Profile = ({navigation}) => {
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'center',
+                    justifyContent: 'space-around',
                   }}
                 >
                   <SchoolIcon style={styles.icons}></SchoolIcon>
