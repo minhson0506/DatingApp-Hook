@@ -47,7 +47,7 @@ const Single = ({route, navigation}) => {
   const fetchOwner = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-      console.log('token in single', token);
+      // console.log('token in single', token);
       // console.log('singlemedia', singleMedia);
       // console.log('user_id', singleMedia.description);
       const userData = await getUserById(file.user_id, token);
@@ -122,20 +122,20 @@ const Single = ({route, navigation}) => {
                   <View
                     style={{
                       flexDirection: 'row',
-                      justifyContent: 'center',
+                      justifyContent: 'space-around',
                     }}
                   >
                     <AgeIcon height={19} style={styles.icons}></AgeIcon>
                     <Text style={styles.text}>{additionData.age}</Text>
                     <Divider
                       orientation="vertical"
-                      style={{marginTop: 12, marginRight: 10}}
+                      style={{marginTop: 12, marginRight: 5}}
                     />
                     <LocationIcon style={styles.icons}></LocationIcon>
                     <Text style={styles.text}>{additionData.location}</Text>
                     <Divider
                       orientation="vertical"
-                      style={{marginTop: 12, marginRight: 10}}
+                      style={{marginTop: 12, marginRight: 5}}
                     />
                     <PetIcon height={20} style={styles.icons}></PetIcon>
                     <Text style={styles.text}>{additionData.pet}</Text>
@@ -143,20 +143,20 @@ const Single = ({route, navigation}) => {
                   <View
                     style={{
                       flexDirection: 'row',
-                      justifyContent: 'center',
+                      justifyContent: 'space-around',
                     }}
                   >
                     <DrinkIcon style={styles.icons}></DrinkIcon>
                     <Text style={styles.text}>{additionData.drinking}</Text>
                     <Divider
                       orientation="vertical"
-                      style={{marginTop: 12, marginRight: 10}}
+                      style={{marginTop: 12, marginRight: 5}}
                     />
                     <SmokeIcon height={20} style={styles.icons}></SmokeIcon>
                     <Text style={styles.text}>{additionData.smoking}</Text>
                     <Divider
                       orientation="vertical"
-                      style={{marginTop: 12, marginRight: 10}}
+                      style={{marginTop: 12, marginRight: 5}}
                     />
                     <BabyIcon height={22} style={styles.icons}></BabyIcon>
                     <Text style={styles.text}>{additionData.family_plan}</Text>
@@ -164,14 +164,14 @@ const Single = ({route, navigation}) => {
                   <View
                     style={{
                       flexDirection: 'row',
-                      justifyContent: 'center',
+                      justifyContent: 'space-around',
                     }}
                   >
                     <SchoolIcon style={styles.icons}></SchoolIcon>
                     <Text style={styles.text}>{additionData.school}</Text>
                     <Divider
                       orientation="vertical"
-                      style={{marginTop: 12, marginRight: 10}}
+                      style={{marginTop: 12, marginRight: 5}}
                     />
                     <NatIcon style={styles.icons}></NatIcon>
                     <Text style={styles.text}>{additionData.nationality}</Text>
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   },
   icons: {
     marginTop: 17,
-    marginRight: 5,
+    marginRight: 10,
     marginLeft: 15,
     marginBottom: 10,
   },
