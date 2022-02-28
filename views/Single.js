@@ -198,7 +198,7 @@ const Single = ({route, navigation}) => {
               ></ListItem>
             )}
           ></FlatList>
-          <FAB style={styles.fab} small icon={LikeIcon} onPress={likeUser} />
+          <FAB style={styles.fab} medium icon={LikeIcon} onPress={likeUser} />
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
       </>
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     right: 15,
-    bottom: 30,
+    bottom: 20,
     backgroundColor: 'white',
   },
 });

@@ -276,7 +276,7 @@ const Profile = ({navigation}) => {
         />
         <FAB
           style={styles.fab}
-          small
+          medium
           icon={UploadIcon}
           onPress={() => navigation.navigate('Upload')}
         />
