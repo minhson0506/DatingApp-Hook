@@ -10,6 +10,7 @@ const MainProvider = (props) => {
   const [instruction, setInstruction] = useState(false);
   const [updateInfo, setUpdateInfo] = useState(0);
   const [token, setToken] = useState('fetching...');
+  const [loading, setLoading] = useState(false);
 
   return (
     <MainContext.Provider
@@ -26,6 +27,8 @@ const MainProvider = (props) => {
         setUpdateInfo,
         token,
         setToken,
+        loading,
+        setLoading,
       }}
     >
       {props.children}

@@ -99,6 +99,7 @@ const Preference = ({navigation}) => {
   const [familyItem, setFamilyItems] = useState([
     {label: 'Want kid', value: 'Want kid'},
     {label: 'Dont want kid', value: 'Dont want kid'},
+    {label: 'None', value: 'None'},
   ]);
   const [drinkingItem, setDrinkingItems] = useState([
     {label: 'Yassss', value: 'Yes'},
@@ -460,7 +461,7 @@ const Preference = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginBottom: 30, marginTop: 30}} />
 
           <Text style={styles.title}>Smoking</Text>
           <DropDownPicker
@@ -477,7 +478,7 @@ const Preference = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginBottom: 30, marginTop: 30}} />
 
           <Text style={styles.title}>Pet</Text>
           <DropDownPicker

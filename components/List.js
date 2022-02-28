@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 
 const List = ({navigation, myFilesOnly = false}) => {
-  const {user} = useContext(MainContext);
+  const {user, loading} = useContext(MainContext);
   const {getUserById} = useUser();
   const {token} = useContext(MainContext);
   // console.log('token', token);
@@ -113,10 +113,10 @@ const List = ({navigation, myFilesOnly = false}) => {
         if (myAdditionData.age_range.toLowerCase() !== 'none') {
           const age = myAdditionData.age_range.split('-');
           userData = userData.filter((obj) => {
-            return (
-              obj.full_name.age >= parseInt(age[0]) &&
-              obj.full_name.age <= parseInt(age[1])
-            );
+            return obj.full_name.age >= parseInt(age[0]);
+          });
+          userData = userData.filter((obj) => {
+            return obj.full_name.age <= parseInt(age[1]);
           });
         }
       }
@@ -124,12 +124,12 @@ const List = ({navigation, myFilesOnly = false}) => {
 
       if (userData.length > 5) {
         if (myAdditionData.preference_height.toLowerCase() !== 'none') {
-          const height = myAdditionData.age_range.split('-');
+          const height = myAdditionData.preference_height.split('-');
           userData = userData.filter((obj) => {
-            return (
-              obj.full_name.height >= parseInt(height[0]) &&
-              obj.full_name.height <= parseInt(height[1])
-            );
+            return obj.full_name.height >= parseInt(height[0]);
+          });
+          userData = userData.filter((obj) => {
+            return obj.full_name.height <= parseInt(height[1]);
           });
         }
       }
@@ -154,7 +154,7 @@ const List = ({navigation, myFilesOnly = false}) => {
       // //Random 5 person for display
       // console.log('length', media.length);
       // shuffle array and display random 5 users
-      array = array.sort(() => 0, 5 - Math.random());
+      array = array.sort(() => 0.5 - Math.random());
       if (array.length > 5) array = array.slice(0, 5);
 
       // set data to display
@@ -165,7 +165,7 @@ const List = ({navigation, myFilesOnly = false}) => {
 
   useEffect(() => {
     filterData();
-  }, [mediaArray]);
+  }, [mediaArray, loading]);
 
   return (
     <FlatList

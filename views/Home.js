@@ -21,7 +21,7 @@ import AppLoading from 'expo-app-loading';
 import {MainContext} from '../contexts/MainContext';
 
 const Home = ({navigation}) => {
-  const {setToken} = useContext(MainContext);
+  const {setToken, loading, setLoading} = useContext(MainContext);
   const checkToken = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
@@ -62,7 +62,7 @@ const Home = ({navigation}) => {
             style={styles.fab}
             medium
             icon={ReloadIcon}
-            onPress={() => console.log('Pressed')}
+            onPress={() => setLoading(!loading)}
           />
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>

@@ -289,7 +289,7 @@ const Instructions = ({navigation}) => {
               others can find you!
             </Text>
             <Button
-              onPress={() => navigation.navigate('Profile')}
+              onPress={() => navigation.navigate('Main', {screen: 'Profile'})}
               style={styles.ScrollUpButton}
               labelStyle={{color: 'white', textAlign: 'center', fontSize: 15}}
             >
