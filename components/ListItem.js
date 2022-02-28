@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useContext} from 'react';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {
@@ -24,12 +24,16 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 import {Video} from 'expo-av';
+import {useMedia} from '../hooks/ApiHooks';
+import {MainContext} from '../contexts/MainContext';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {getUserById} = useUser();
   const videoRef = useRef(null);
   // const [owner, setOwner] = useState({username: 'fetching...'});
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
+  const {putMedia} = useMedia();
+  const {setUpdate, update} = useContext(MainContext);
 
   const fetchOwner = async () => {
     try {
@@ -48,6 +52,53 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       // setOwner({username: '[not available]'});
       setAdditionData({fullname: '[not available]'});
     }
+  };
+
+  const modifyTitle = async () => {
+    const data = {
+      title: 'deleted',
+      description: singleMedia.description,
+    };
+    console.log('data', data);
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      const response = await putMedia(singleMedia.file_id, userToken, data);
+      console.log('response for delete', response);
+      if (response) {
+        Alert.alert('Delete', 'Deleted successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setUpdate(update + 1);
+              navigation.navigate('Profile');
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  const deleteImage = async () => {
+    Alert.alert(
+      'Are you sure you want to delete this picture?',
+      'This picture will be deleted immediately. You cannot undo this action.',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {
+            navigation.navigate('Profile');
+          },
+        },
+        {
+          text: 'Delete',
+          onPress: () => {
+            modifyTitle();
+          },
+        },
+      ]
+    );
   };
 
   // console.log('type of', typeof additionData.interests);
@@ -126,6 +177,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                   containerStyle={styles.avatarProfile}
                   avatarStyle={{borderRadius: 10}}
                   source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+                  onLongPress={deleteImage}
                 ></Avatar>
               ) : (
                 <Video

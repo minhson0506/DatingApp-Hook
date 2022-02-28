@@ -51,11 +51,10 @@ const Profile = ({navigation}) => {
   const {postMedia, putMedia} = useMedia();
   const {postTag} = useTag();
 
+  // filter for file except avatar
   const mediaData = mediaArray.filter(
     (obj) => obj.title.toLowerCase() !== 'avatar'
   );
-  //   console.log('media array in ListItem', mediaArray);
-  // console.log('media array profiler', mediaArray);
 
   const fetchAvatar = () => {
     // console.log('myfileonly in profile', myFilesOnly);

@@ -144,7 +144,7 @@ const Upload = ({navigation}) => {
             text: 'OK',
             onPress: () => {
               setUpdate(update + 1);
-              navigation.navigate('Edit Profile');
+              navigation.navigate('Upload');
             },
           },
         ]);
@@ -178,7 +178,7 @@ const Upload = ({navigation}) => {
             text: 'OK',
             onPress: () => {
               setUpdate(update + 1);
-              navigation.navigate('Edit Profile');
+              navigation.navigate('Upload');
             },
           },
         ]);
@@ -212,7 +212,7 @@ const Upload = ({navigation}) => {
             text: 'OK',
             onPress: () => {
               setUpdate(update + 1);
-              navigation.navigate('Edit Profile');
+              navigation.navigate('Upload');
             },
           },
         ]);
