@@ -140,6 +140,11 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
               </View>
               <Avatar
                 containerStyle={styles.avatar}
+                avatarStyle={{
+                  borderRadius: 10,
+                  borderWidth: 2,
+                  borderColor: '#F2822F',
+                }}
                 source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
               ></Avatar>
               <View
@@ -153,13 +158,13 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                 <Text style={styles.text}>{additionData.age}</Text>
                 <Divider
                   orientation="vertical"
-                  style={{marginTop: 12, marginRight: '2%'}}
+                  style={{marginTop: 12, marginRight: '2%', marginBottom: 5}}
                 />
                 <LocationIcon style={styles.icons}></LocationIcon>
                 <Text style={styles.text}>{additionData.location}</Text>
                 <Divider
                   orientation="vertical"
-                  style={{marginTop: 12, marginRight: '2%'}}
+                  style={{marginTop: 12, marginRight: '2%', marginBottom: 5}}
                 />
                 <InterestIcon style={styles.icons}></InterestIcon>
                 <Text style={styles.text}>
@@ -215,20 +220,21 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '100%',
-    height: 370,
+    height: 400,
     margin: 0,
     padding: 0,
-    borderColor: '#EB6833',
     borderRadius: 10,
     borderWidth: 1,
     shadowColor: '#171717',
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,
+    justifyContent: 'center',
   },
   avatar: {
-    width: '100%',
+    width: '95%',
     height: '75%',
+    alignSelf: 'center',
   },
   avatarProfile: {
     width: '100%',

@@ -71,7 +71,7 @@ const Home = ({navigation}) => {
 
 const styles = StyleSheet.create({
   menu: {
-    marginLeft: 20,
+    marginLeft: 15,
     marginTop: 15,
     marginBottom: 20,
   },
