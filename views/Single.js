@@ -1,13 +1,6 @@
 /* eslint-disable camelcase */
 import React, {useEffect, useState} from 'react';
-import {
-  TouchableHighlight,
-  StyleSheet,
-  View,
-  SafeAreaView,
-  Alert,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, View, SafeAreaView, Alert, FlatList} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Text, Divider} from 'react-native-elements';
@@ -27,7 +20,7 @@ import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
 import SchoolIcon from '../assets/school.svg';
 import DrinkIcon from '../assets/drink.svg';
-import {Card, FAB} from 'react-native-paper';
+import {Button, Card, FAB} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
 import SmokeIcon from '../assets/smoking.svg';
 import PetIcon from '../assets/pet.svg';
@@ -103,17 +96,16 @@ const Single = ({route, navigation}) => {
     return (
       <>
         <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
-          <View style={{flexDirection: 'row'}}>
-            <TouchableHighlight
-              underlayColor="white"
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Button
+              style={styles.back}
               onPress={() => {
                 navigation.navigate('Home');
               }}
-            >
-              <BackIcon style={styles.back}></BackIcon>
-            </TouchableHighlight>
-
+              icon={BackIcon}
+            ></Button>
             <Text style={styles.appName}>hook</Text>
+            <Button disabled={true}></Button>
           </View>
           <FlatList
             ListHeaderComponent={
@@ -216,15 +208,14 @@ const Single = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   back: {
-    marginLeft: 20,
-    marginTop: '50%',
+    marginLeft: 10,
+    marginTop: 10,
   },
   appName: {
     fontSize: 40,
     color: '#EB6833',
     fontFamily: 'Poppins_700Bold',
     letterSpacing: 5,
-    marginLeft: '25%',
   },
   image: {
     width: '90%',
