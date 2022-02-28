@@ -276,8 +276,20 @@ const Instructions = ({navigation}) => {
                 </Text>
               </View>
             </View>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.textInfo}>
+              Remember to add your information and profile picture so that
+              others can find you!
+            </Text>
             <Button
-              onPress={() => navigation.navigate('Upload')}
+              onPress={() => navigation.navigate('Profile')}
               style={styles.ScrollUpButton}
               labelStyle={{color: 'white', textAlign: 'center', fontSize: 15}}
             >
@@ -323,16 +335,22 @@ const styles = StyleSheet.create({
   },
   ScrollUpButton: {
     alignSelf: 'center',
-    width: 200,
+    width: 180,
     height: 40,
-    backgroundColor: '#DA535E',
+    backgroundColor: '#EB6432',
     borderRadius: 10,
-    marginBottom: '10%',
-    marginTop: '5%',
+    marginTop: '50%',
   },
   textButton: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 22,
+  },
+  textInfo: {
+    textAlign: 'center',
+    fontSize: 22,
+    width: '90%',
+    color: '#DA535E',
+    fontFamily: 'Poppins_600SemiBold',
   },
 });
 

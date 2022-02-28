@@ -144,16 +144,6 @@ const StackScreen = () => {
               options={{headerShown: false}}
             ></Stack.Screen>
             <Stack.Screen
-              name="Upload"
-              component={Upload}
-              options={{headerShown: false}}
-            ></Stack.Screen>
-            <Stack.Screen
-              name="Edit Profile"
-              component={EditProfile}
-              options={{headerShown: false}}
-            ></Stack.Screen>
-            <Stack.Screen
               name="Main"
               component={TabScreen}
               options={{headerShown: false}}

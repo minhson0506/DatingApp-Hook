@@ -34,7 +34,7 @@ import PetIcon from '../assets/pet.svg';
 import BabyIcon from '../assets/baby2.svg';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from '../components/ListItem';
-import LikeIcon from '../assets/hookiconActive.png';
+import LikeIcon from '../assets/like.svg';
 
 const Single = ({route, navigation}) => {
   const {file} = route.params;
@@ -206,13 +206,7 @@ const Single = ({route, navigation}) => {
               ></ListItem>
             )}
           ></FlatList>
-          <FAB
-            style={styles.fab}
-            medium
-            icon={LikeIcon}
-            color="#EB6833"
-            onPress={likeUser}
-          />
+          <FAB style={styles.fab} small icon={LikeIcon} onPress={likeUser} />
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
       </>
@@ -282,8 +276,8 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    right: 20,
-    bottom: 20,
+    right: 15,
+    bottom: 30,
     backgroundColor: 'white',
   },
 });
