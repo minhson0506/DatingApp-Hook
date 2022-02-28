@@ -21,7 +21,6 @@ const RegisterForm = ({setFormToggle}) => {
     defaultValues: {
       username: '',
       password: '',
-      email: '',
       full_name: '',
     },
     mode: 'onBlur',
@@ -31,7 +30,41 @@ const RegisterForm = ({setFormToggle}) => {
     console.log(data);
     try {
       delete data.password_again;
-      // TODO: randomize email to post user
+      const additionData = {
+        deleted_hook: 0,
+        fullname: data.username,
+        work: 'none',
+        job: 'none',
+        interests: 'none',
+        education_level: 'none',
+        school: 'none',
+        religious_beliefs: 'none',
+        preference_drinking: 'none',
+        gender: 'nonbinary',
+        age: 0,
+        height: 0,
+        location: 'none',
+        nationality: 'none',
+        preference_smoking: 'none',
+        family_plan: 'none',
+        drinking: 'none',
+        smoking: 'none',
+        interested: 'nonbinary',
+        preference_location: 'none',
+        age_range: 'none',
+        preference_distance: 0,
+        preference_nationality: 'none',
+        preference_religion: 'none',
+        preference_height: 'none',
+        pet: 'none',
+        preference_pet: 'none',
+        pets: 'none',
+        dog_friend: 'none',
+        hiking: 'none',
+        books: 'none',
+      };
+      data.full_name = JSON.stringify(additionData);
+      data.append('email', `${data.username}@additionData.fi`);
       const userData = await postUser(data);
       console.log('register onSubmit', userData);
       if (userData) {

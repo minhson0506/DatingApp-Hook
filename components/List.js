@@ -83,6 +83,14 @@ const List = ({navigation, myFilesOnly = false}) => {
       console.log('length after filter drinking', userData.length);
 
       if (userData.length > 5) {
+        if (myAdditionData.preference_smoking.toLowerCase() !== 'none')
+          userData = userData.filter((obj) => {
+            return obj.full_name.smoking === myAdditionData.preference_smoking;
+          });
+      }
+      console.log('length after filter smoking', userData.length);
+
+      if (userData.length > 5) {
         if (myAdditionData.preference_nationality.toLowerCase() !== 'none')
           userData = userData.filter((obj) => {
             return (
@@ -151,7 +159,7 @@ const List = ({navigation, myFilesOnly = false}) => {
 
       // set data to display
       setMedia(array);
-      console.log('media after filter', media);
+      // console.log('media after filter', media);
     }
   };
 
