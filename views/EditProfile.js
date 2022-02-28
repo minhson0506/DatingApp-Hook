@@ -19,15 +19,20 @@ import {
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
-import {Divider} from 'react-native-elements';
+import {Divider, Input} from 'react-native-elements';
 import {useUser} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {locationArray, countryArray, religionArray} from '../utils/data';
+import {
+  locationArray,
+  countryArray,
+  religionArray,
+  educationArray,
+} from '../utils/data';
 import {MainContext} from '../contexts/MainContext';
 
-const Preference = ({navigation}) => {
+const EditProfile = ({navigation}) => {
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
@@ -39,35 +44,29 @@ const Preference = ({navigation}) => {
   const {user} = useContext(MainContext);
   const additionData = JSON.parse(user.full_name);
 
+  // input values
+  const [name, setName] = useState(additionData.fullname);
+  const [work, setWork] = useState(additionData.work);
+  const [job, setJob] = useState(additionData.job);
+  const [school, setSchool] = useState(additionData.school);
+
   // slider values
-  if (additionData.age_range === 'none') {
-    additionData.age_range = '18-40';
+  if (additionData.age === 'none') {
+    additionData.age = 0;
   }
-  const stringAge = additionData.age_range.split('-');
-  const [ageRange, setAgeRange] = useState([
-    parseInt(stringAge[0]),
-    parseInt(stringAge[1]),
-  ]);
-  if (additionData.preference_height === 'none') {
-    additionData.preference_height = '150-200';
+  if (additionData.height === 'none') {
+    additionData.height = 0;
   }
-  const stringHeight = additionData.preference_height.split('-');
-  const [height, setHeight] = useState([
-    parseInt(stringHeight[0]),
-    parseInt(stringHeight[1]),
-  ]);
-  if (additionData.preference_distance === 'none') {
-    additionData.preference_distance = 50;
-  }
-  const [distance, setDistance] = useState(additionData.preference_distance);
-  const setSliderDistance = (distance) => setDistance(distance[0]);
-  const setSliderHeight = (height) => setHeight(height);
-  const setSliderAge = (ageRange) => setAgeRange(ageRange);
+  const [age, setAge] = useState(additionData.age);
+  const [height, setHeight] = useState(additionData.height);
+  const setSliderHeight = (height) => setHeight(height[0]);
+  const setSliderAge = (distance) => setAge(age[0]);
 
   // Picker open states
   const [openGender, setOpenGender] = useState(false);
   const [openLocation, setOpenLocation] = useState(false);
   const [openNationality, setOpenNationality] = useState(false);
+  const [openEducation, setOpenEducation] = useState(additionData.false);
   const [openReligion, setOpenReligion] = useState(false);
   const [openFamily, setOpenFamily] = useState(false);
   const [openDrinking, setOpenDrinking] = useState(false);
@@ -75,17 +74,15 @@ const Preference = ({navigation}) => {
   const [openPet, setOpenPet] = useState(false);
 
   // Picker value states
-  const [gender, setGender] = useState(additionData.interested);
-  const [location, setLocation] = useState(additionData.preference_location);
-  const [nationality, setNationality] = useState(
-    additionData.preference_nationality
-  );
-  const [religion, setReligion] = useState(additionData.preference_religion);
-  // TODO: add preference family plan to database
-  const [family, setFamily] = useState(null);
-  const [drinking, setDrinking] = useState(additionData.preference_drinking);
-  const [smoking, setSmoking] = useState(additionData.preference_smoking);
-  const [pet, setPet] = useState(additionData.preference_pet);
+  const [gender, setGender] = useState(additionData.gender);
+  const [location, setLocation] = useState(additionData.location);
+  const [nationality, setNationality] = useState(additionData.nationality);
+  const [education, setEducation] = useState(additionData.education_level);
+  const [religion, setReligion] = useState(additionData.religious_beliefs);
+  const [family, setFamily] = useState(additionData.family_plan);
+  const [drinking, setDrinking] = useState(additionData.drinking);
+  const [smoking, setSmoking] = useState(additionData.smoking);
+  const [pet, setPet] = useState(additionData.pet);
 
   // Picker items
   const [genderItem, setGenderItems] = useState([
@@ -95,26 +92,23 @@ const Preference = ({navigation}) => {
   ]);
   const [locationItems, setLocationItems] = useState([]);
   const [nationalityItem, setNationalityItems] = useState([]);
+  const [educationItem, setEducationItems] = useState([]);
   const [religionItem, setReligionItems] = useState([]);
   const [familyItem, setFamilyItems] = useState([
-    {label: 'Want kid', value: 'Want kid'},
-    {label: 'Dont want kid', value: 'Dont want kid'},
-    {label: 'None', value: 'None'},
+    {label: 'I want kid', value: 'Want kid'},
+    {label: 'I dont want kid', value: 'Dont want kid'},
   ]);
   const [drinkingItem, setDrinkingItems] = useState([
     {label: 'Yassss', value: 'Yes'},
     {label: 'Nope', value: 'No'},
-    {label: 'None', value: 'None'},
   ]);
   const [smokingItem, setSmokingItems] = useState([
     {label: 'Yes', value: 'Yes'},
-    {label: 'Thats a nope', value: 'Nope'},
-    {label: 'None', value: 'None'},
+    {label: 'Thats a nope', value: 'No'},
   ]);
   const [petItem, setPetItems] = useState([
     {label: 'Pet lover', value: 'Yes'},
     {label: 'Urg no pet', value: 'No'},
-    {label: 'None', value: 'None'},
   ]);
 
   // make key value arrays for items
@@ -138,6 +132,12 @@ const Preference = ({navigation}) => {
         value: label,
       }))
     );
+    setEducationItems(
+      educationArray.map((label) => ({
+        label: label,
+        value: label,
+      }))
+    );
   };
 
   useEffect(() => {
@@ -149,26 +149,29 @@ const Preference = ({navigation}) => {
     if (gender) additionData.interested = gender;
     else additionData.interested = 'none';
 
-    if (distance) additionData.preference_distance = distance;
-    else additionData.preference_distance = 'none';
-
     if (height) {
-      additionData.preference_height = `${height[0]}-${height[1]}`;
+      additionData.height = height;
     } else {
-      additionData.preference_height = 'none';
+      additionData.height = 'none';
     }
 
-    if (ageRange) {
-      additionData.age_range = `${ageRange[0]}-${ageRange[1]}`;
+    if (age) {
+      additionData.age = age;
     } else {
-      additionData.age_range = 'none';
+      additionData.age = 'none';
     }
-    if (location) additionData.preference_location = location;
+
+    if (name) additionData.fullname = name;
+    if (work) additionData.work = work;
+    if (job) additionData.job = job;
+    if (school) additionData.school = school;
+    if (family) additionData.family_plan = family;
     if (nationality) additionData.preference_nationality = nationality;
-    if (religion) additionData.preference_religion = religion;
-    if (drinking) additionData.preference_drinking = drinking;
-    if (smoking) additionData.preference_smoking = smoking;
-    if (pet) additionData.preference_pet = pet;
+    if (religion) additionData.religious_beliefs = religion;
+    if (drinking) additionData.drinking = drinking;
+    if (smoking) additionData.smoking = smoking;
+    if (pet) additionData.pet = pet;
+    if (education) additionData.education_level = education;
 
     user.full_name = JSON.stringify(additionData);
     try {
@@ -176,7 +179,8 @@ const Preference = ({navigation}) => {
       const userData = await putUser(user, userToken);
       if (userData) {
         Alert.alert('Success', userData.message);
-        navigation.navigate('Home');
+        // update info after navigate
+        navigation.navigate('Profile');
       }
     } catch (error) {
       console.error(error);
@@ -192,6 +196,7 @@ const Preference = ({navigation}) => {
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
+    setOpenEducation(false);
   }, []);
 
   const onLocationOpen = useCallback(() => {
@@ -202,6 +207,7 @@ const Preference = ({navigation}) => {
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
+    setOpenEducation(false);
   }, []);
   const onNationalityOpen = useCallback(() => {
     setOpenGender(false);
@@ -211,6 +217,7 @@ const Preference = ({navigation}) => {
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
+    setOpenEducation(false);
   }, []);
   const onReligionOpen = useCallback(() => {
     setOpenGender(false);
@@ -220,6 +227,7 @@ const Preference = ({navigation}) => {
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
+    setOpenEducation(false);
   }, []);
   const onFamilyOpen = useCallback(() => {
     setOpenGender(false);
@@ -229,6 +237,7 @@ const Preference = ({navigation}) => {
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
+    setOpenEducation(false);
   }, []);
   const onDrinkingOpen = useCallback(() => {
     setOpenGender(false);
@@ -238,6 +247,7 @@ const Preference = ({navigation}) => {
     setOpenFamily(false);
     setOpenSmoking(false);
     setOpenPet(false);
+    setOpenEducation(false);
   }, []);
   const onSmokingOpen = useCallback(() => {
     setOpenGender(false);
@@ -247,6 +257,7 @@ const Preference = ({navigation}) => {
     setOpenDrinking(false);
     setOpenFamily(false);
     setOpenPet(false);
+    setOpenEducation(false);
   }, []);
   const onPetOpen = useCallback(() => {
     setOpenGender(false);
@@ -256,6 +267,17 @@ const Preference = ({navigation}) => {
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenFamily(false);
+    setOpenEducation(false);
+  }, []);
+  const onEducationOpen = useCallback(() => {
+    setOpenGender(false);
+    setOpenLocation(false);
+    setOpenNationality(false);
+    setOpenReligion(false);
+    setOpenDrinking(false);
+    setOpenSmoking(false);
+    setOpenFamily(false);
+    setOpenPet(false);
   }, []);
 
   // scroll for slider
@@ -276,20 +298,40 @@ const Preference = ({navigation}) => {
         >
           <Button
             labelStyle={styles.button}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.goBack()}
           >
             Cancel
           </Button>
-          <Text style={styles.appName}>Preferences</Text>
-          <Button labelStyle={styles.button} onPress={modifyPreferences}>
+          <Text style={styles.appName}>
+            {additionData.fullname ? additionData.fullname : 'hook'}
+          </Text>
+          <Button
+            labelStyle={styles.button}
+            onPress={() => {
+              navigation.navigate('Profile');
+              modifyPreferences();
+            }}
+          >
             Done
           </Button>
         </View>
         <Divider style={{marginBottom: 5, marginTop: 5}} />
         <ScrollView>
-          <Text style={styles.header}>Basic Preferences</Text>
+          <Text style={styles.header}>My Vital</Text>
           <Divider style={{marginBottom: 5, marginTop: 5}} />
-          <Text style={styles.title}>I{"'"}m interested in</Text>
+          <Text style={styles.title}>Name</Text>
+          <Input
+            value={name}
+            autoCapitalize="none"
+            placeholder="Work"
+            onChangeText={(value) => setName(value)}
+            containerStyle={{marginLeft: 10}}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={{borderBottomWidth: 0}}
+          />
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
+
+          <Text style={styles.title}>Gender</Text>
           <DropDownPicker
             zIndex={6000}
             zIndexInverse={1000}
@@ -307,7 +349,37 @@ const Preference = ({navigation}) => {
             labelStyle={{color: '#EB6833'}}
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
-          <Text style={styles.title}>Preferred Location</Text>
+          <Text style={styles.title}>Age</Text>
+          <View style={styles.slider}>
+            <MultiSlider
+              enableLabel={true}
+              isMarkersSeparated={false}
+              values={age ? [age] : [0]}
+              max={40}
+              onValuesChange={setSliderAge}
+              onValuesChangeStart={disableScroll}
+              onValuesChangeFinish={enableScroll}
+              markerStyle={styles.marker}
+              selectedStyle={{backgroundColor: '#FF707B'}}
+            />
+          </View>
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Text style={styles.title}>Height (cm)</Text>
+          <View style={styles.slider}>
+            <MultiSlider
+              enableLabel={true}
+              isMarkersSeparated={false}
+              values={height ? [height] : [0]}
+              max={200}
+              onValuesChange={setSliderHeight}
+              onValuesChangeStart={disableScroll}
+              onValuesChangeFinish={enableScroll}
+              markerStyle={styles.marker}
+              selectedStyle={{backgroundColor: '#FF707B'}}
+            />
+          </View>
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Text style={styles.title}>Location</Text>
           <DropDownPicker
             searchable={true}
             zIndex={5000}
@@ -326,45 +398,6 @@ const Preference = ({navigation}) => {
             labelStyle={{color: '#EB6833'}}
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
-          <Text style={styles.header}>Other Preferences</Text>
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
-          <Text style={styles.title}>Age range</Text>
-          <View style={styles.slider}>
-            <MultiSlider
-              isMarkersSeparated={true}
-              enableLabel={true}
-              min={18}
-              max={40}
-              values={
-                ageRange[0] && ageRange[1]
-                  ? [ageRange[0], ageRange[1]]
-                  : [18, 40]
-              }
-              sliderLength={280}
-              onValuesChangeStart={disableScroll}
-              onValuesChangeFinish={enableScroll}
-              onValuesChange={setSliderAge}
-              markerStyle={styles.marker}
-              selectedStyle={{backgroundColor: '#FF707B'}}
-            />
-          </View>
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
-          <Text style={styles.title}>Maximum distance (km)</Text>
-          <View style={styles.slider}>
-            <MultiSlider
-              enableLabel={true}
-              isMarkersSeparated={false}
-              values={distance ? [distance] : [50]}
-              max={101}
-              onValuesChange={setSliderDistance}
-              onValuesChangeStart={disableScroll}
-              onValuesChangeFinish={enableScroll}
-              markerStyle={styles.marker}
-              selectedStyle={{backgroundColor: '#FF707B'}}
-            />
-          </View>
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
-
           <Text style={styles.title}>Nationality</Text>
           <DropDownPicker
             searchable={true}
@@ -384,7 +417,91 @@ const Preference = ({navigation}) => {
             labelStyle={{color: '#EB6833'}}
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Text style={styles.title}>Family Plan</Text>
+          <DropDownPicker
+            zIndex={2000}
+            zIndexInverse={5000}
+            containerStyle={styles.picker}
+            open={openFamily}
+            value={family}
+            items={familyItem}
+            setOpen={setOpenFamily}
+            setValue={setFamily}
+            setItems={setFamilyItems}
+            onOpen={onFamilyOpen}
+            listMode="SCROLLVIEW"
+            textStyle={styles.textPicker}
+            selectedItemLabelStyle={{color: '#EB6833'}}
+            labelStyle={{color: '#EB6833'}}
+          />
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Text style={styles.title}>Pet</Text>
+          <DropDownPicker
+            open={openPet}
+            value={pet}
+            items={petItem}
+            setOpen={setOpenPet}
+            setValue={setPet}
+            setItems={setPetItems}
+            onOpen={onPetOpen}
+            listMode="SCROLLVIEW"
+            containerStyle={styles.picker}
+            textStyle={styles.textPicker}
+            selectedItemLabelStyle={{color: '#EB6833'}}
+            labelStyle={{color: '#EB6833'}}
+          />
+          <Text style={styles.header}>My virture</Text>
 
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Text style={styles.title}>Work</Text>
+          <Input
+            value={work}
+            autoCapitalize="none"
+            placeholder="Work"
+            onChangeText={(value) => setWork(value)}
+            containerStyle={{marginLeft: 10}}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={{borderBottomWidth: 0}}
+          />
+          <Text style={styles.title}>Job Title</Text>
+          <Input
+            value={job}
+            autoCapitalize="none"
+            placeholder="Job"
+            onChangeText={(value) => setJob(value)}
+            containerStyle={{marginLeft: 10}}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={{borderBottomWidth: 0}}
+          />
+
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Text style={styles.title}>Educational Level</Text>
+          <DropDownPicker
+            containerStyle={styles.picker}
+            open={openEducation}
+            value={education}
+            items={educationItem}
+            setOpen={setOpenEducation}
+            setValue={setEducation}
+            setItems={setEducationItems}
+            onOpen={onEducationOpen}
+            listMode="SCROLLVIEW"
+            textStyle={styles.textPicker}
+            selectedItemLabelStyle={{color: '#EB6833'}}
+            labelStyle={{color: '#EB6833'}}
+          />
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Text style={styles.title}>School</Text>
+          <Input
+            value={school}
+            autoCapitalize="none"
+            placeholder="School"
+            onChangeText={(value) => setSchool(value)}
+            containerStyle={{marginLeft: 10}}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={{borderBottomWidth: 0}}
+          />
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
           <Text style={styles.title}>Religion</Text>
           <DropDownPicker
             zIndex={3000}
@@ -403,45 +520,7 @@ const Preference = ({navigation}) => {
             labelStyle={{color: '#EB6833'}}
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
-
-          <Text style={styles.title}>Height (cm)</Text>
-          <View style={styles.slider}>
-            <MultiSlider
-              isMarkersSeparated={true}
-              enableLabel={true}
-              min={150}
-              max={200}
-              step={5}
-              values={
-                height[0] && height[1] ? [height[0], height[1]] : [150, 200]
-              }
-              sliderLength={280}
-              onValuesChangeStart={disableScroll}
-              onValuesChangeFinish={enableScroll}
-              onValuesChange={setSliderHeight}
-              markerStyle={styles.marker}
-              selectedStyle={{backgroundColor: '#FF707B'}}
-            />
-          </View>
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
-
-          <Text style={styles.title}>Family Plan</Text>
-          <DropDownPicker
-            zIndex={2000}
-            zIndexInverse={5000}
-            containerStyle={styles.picker}
-            open={openFamily}
-            value={family}
-            items={familyItem}
-            setOpen={setOpenFamily}
-            setValue={setFamily}
-            setItems={setFamilyItems}
-            onOpen={onFamilyOpen}
-            listMode="SCROLLVIEW"
-            textStyle={styles.textPicker}
-            selectedItemLabelStyle={{color: '#EB6833'}}
-            labelStyle={{color: '#EB6833'}}
-          />
+          <Text style={styles.header}>My Vices</Text>
           <Divider style={{marginBottom: 5, marginTop: 5}} />
 
           <Text style={styles.title}>Drinking</Text>
@@ -461,7 +540,7 @@ const Preference = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 30, marginTop: 30}} />
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
 
           <Text style={styles.title}>Smoking</Text>
           <DropDownPicker
@@ -478,23 +557,8 @@ const Preference = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 30, marginTop: 30}} />
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
 
-          <Text style={styles.title}>Pet</Text>
-          <DropDownPicker
-            open={openPet}
-            value={pet}
-            items={petItem}
-            setOpen={setOpenPet}
-            setValue={setPet}
-            setItems={setPetItems}
-            onOpen={onPetOpen}
-            listMode="SCROLLVIEW"
-            containerStyle={styles.picker}
-            textStyle={styles.textPicker}
-            selectedItemLabelStyle={{color: '#EB6833'}}
-            labelStyle={{color: '#EB6833'}}
-          />
           <View style={{marginBottom: 40}}></View>
         </ScrollView>
       </SafeAreaView>
@@ -548,9 +612,13 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
   },
+  inputStyle: {
+    fontFamily: 'Poppins_500Medium',
+    color: '#EB6833',
+  },
 });
 
-Preference.propTypes = {
+EditProfile.propTypes = {
   navigation: PropTypes.object,
 };
-export default Preference;
+export default EditProfile;

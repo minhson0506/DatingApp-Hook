@@ -14,6 +14,10 @@ import Like from '../views/Like';
 import Search from '../views/Search';
 import FirstLand from '../views/FirstLand';
 import Instructions from '../views/Instructions';
+import Preference from '../views/Preference';
+import Interests from '../views/Interests';
+import Upload from '../views/Upload';
+import EditProfile from '../views/EditProfile';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -137,7 +141,7 @@ const StackScreen = () => {
             <Stack.Screen
               name="Instructions"
               component={Instructions}
-              // options={{headerShown: false}}
+              options={{headerShown: false}}
             ></Stack.Screen>
             <Stack.Screen
               name="Main"
@@ -158,12 +162,33 @@ const StackScreen = () => {
               options={{headerShown: false}}
             ></Stack.Screen>
             <Stack.Screen
+              name="Preferences"
+              component={Preference}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Upload"
+              component={Upload}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Edit Profile"
+              component={EditProfile}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
               name="Modify user"
               component={ModifyUser}
+              options={{headerShown: false}}
             ></Stack.Screen>
             <Stack.Screen
               name="Instructions"
               component={Instructions}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Interests"
+              component={Interests}
               options={{headerShown: false}}
             ></Stack.Screen>
           </>

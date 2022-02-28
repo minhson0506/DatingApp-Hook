@@ -22,7 +22,9 @@ const doFetch = async (url, options = {}) => {
 const useMedia = (myFilesOnly, userId = null) => {
   const [mediaArray, setMediaArray] = useState([]);
   const {update, user} = useContext(MainContext);
+  const [loading, setLoading] = useState(false);
   const loadMedia = async (start = 0, limit = 10) => {
+    setLoading(true);
     try {
       let json = await useTag().getFileByTag(appId);
       if (myFilesOnly) {
@@ -31,7 +33,7 @@ const useMedia = (myFilesOnly, userId = null) => {
       if (userId) {
         json = json.filter((file) => file.user_id === userId);
       }
-      const media = await Promise.all(
+      let media = await Promise.all(
         json.map(async (item) => {
           const response = await fetch(baseUrl + 'media/' + item.file_id);
           const mediaData = await response.json();
@@ -39,9 +41,12 @@ const useMedia = (myFilesOnly, userId = null) => {
           return mediaData;
         })
       );
+      media = media.filter((obj) => obj.title.toLowerCase() !== 'deleted');
       setMediaArray(media);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
     // console.log(mediaArray);
   };
@@ -50,7 +55,7 @@ const useMedia = (myFilesOnly, userId = null) => {
   // Or when update state is changed
   useEffect(() => {
     loadMedia(0, 10);
-  }, []);
+  }, [update]);
 
   const postMedia = async (formData, token) => {
     const options = {
@@ -63,12 +68,32 @@ const useMedia = (myFilesOnly, userId = null) => {
     };
     return await doFetch(baseUrl + 'media', options);
   };
+  const deleteMedia = async (id, token) => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': token,
+      },
+    };
+    return await doFetch(baseUrl + 'media/' + id, options);
+  };
 
   // const getMediaByUserId = async () => {
   //   return await doFetch(baseUrl + 'media/user' + userId);
   // };
+  const putMedia = async (id, token, data) => {
+    const options = {
+      method: 'PUT',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+    return await doFetch(baseUrl + 'media/' + id, options);
+  };
 
-  return {mediaArray, postMedia};
+  return {mediaArray, postMedia, loading, deleteMedia, putMedia};
 };
 
 const useLogin = () => {
@@ -216,14 +241,17 @@ const userComment = () => {
   };
 };
 
-const userFavourite = async () => {
-  const postFavourite = async (fileId, token) => {
+const userFavourite = () => {
+  const postFavourite = async (data, token) => {
     const options = {
       method: 'POST',
-      headers: {'x-access-token': token},
-      body: JSON.stringify(fileId),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify({file_id: data}),
     };
-    return await doFetch(baseUrl + 'favourites', options);
+    return await doFetch(baseUrl + 'favourites/', options);
   };
 
   const deleteFavourite = async (fileId, token) => {

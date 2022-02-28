@@ -6,10 +6,11 @@ import {
   SafeAreaView,
   View,
   FlatList,
+  Alert,
 } from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Button, Text, Divider} from 'react-native-elements';
 import {PropTypes} from 'prop-types';
@@ -21,10 +22,16 @@ import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
 import SchoolIcon from '../assets/school.svg';
 import DrinkIcon from '../assets/drink.svg';
-import {Card} from 'react-native-paper';
+import {Card, FAB} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
-import ListItem from '../components/ListItem';
+import SmokeIcon from '../assets/smoking.svg';
+import PetIcon from '../assets/pet.svg';
+import BabyIcon from '../assets/baby2.svg';
+import UploadIcon from '../assets/upload.svg';
 
+import ListItem from '../components/ListItem';
+import * as ImagePicker from 'expo-image-picker';
+import {appId} from '../utils/variables';
 import {
   useFonts,
   Poppins_700Bold,
@@ -32,18 +39,22 @@ import {
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
+import {useIsFocused} from '@react-navigation/native';
 
 const Profile = ({navigation}) => {
-  const {setIsLoggedIn, user} = useContext(MainContext);
-  // const [user, setUser] = useState();
-  const [avatar, setAvatar] = useState('http://placekitten.com/640');
+  const {user, update, setUpdate} = useContext(MainContext);
+  const isFocused = useIsFocused();
+  const [avatar, setAvatar] = useState(
+    'https://www.linkpicture.com/q/iPhone-8-2-1.png'
+  );
   const {mediaArray} = useMedia(true);
+  const {postMedia, putMedia} = useMedia();
+  const {postTag} = useTag();
 
+  // filter for file except avatar
   const mediaData = mediaArray.filter(
     (obj) => obj.title.toLowerCase() !== 'avatar'
   );
-  //   console.log('media array in ListItem', mediaArray);
-  // console.log('media array profiler', mediaArray);
 
   const fetchAvatar = () => {
     // console.log('myfileonly in profile', myFilesOnly);
@@ -56,16 +67,7 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     fetchAvatar();
-  }, [mediaArray]);
-
-  const logOut = async () => {
-    try {
-      await AsyncStorage.clear();
-    } catch (err) {
-      console.error(err);
-    }
-    setIsLoggedIn(false);
-  };
+  }, [mediaArray, isFocused]);
 
   // console.log('Profile', user);
 
@@ -79,10 +81,70 @@ const Profile = ({navigation}) => {
       string += hobby;
       string += ' ';
     });
-
     return string;
   };
-  // console.log('hobby', interest());
+
+  const removeOldAvatar = async () => {
+    const avatar = mediaArray.find(
+      (obj) => obj.title.toLowerCase() === 'avatar'
+    );
+    console.log('avatar in formdata', avatar);
+    if (avatar) {
+      const data = {
+        title: 'title',
+        description: avatar.description,
+      };
+      try {
+        const userToken = await AsyncStorage.getItem('userToken');
+        await putMedia(avatar.file_id, userToken, data);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  };
+
+  const changeProfilePicture = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 0.5,
+    });
+    if (!result.cancelled) {
+      setAvatar(result.uri);
+    }
+    const formData = new FormData();
+    formData.append('title', 'avatar');
+    formData.append('description', '');
+    const filename = result.uri.split('/').pop();
+    let fileExtension = filename.split('.').pop();
+    fileExtension = fileExtension === 'jpg' ? 'jpeg' : fileExtension;
+    formData.append('file', {
+      uri: result.uri,
+      name: filename,
+      type: 'image' + '/' + fileExtension,
+    });
+    removeOldAvatar();
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      const response = await postMedia(formData, userToken);
+      const tagResponse = await postTag(
+        {file_id: response.file_id, tag: appId},
+        userToken
+      );
+      tagResponse &&
+        Alert.alert('Upload', 'Updated avatar successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setUpdate(update + 1);
+              navigation.navigate('Profile');
+            },
+          },
+        ]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
@@ -96,12 +158,17 @@ const Profile = ({navigation}) => {
     return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <MenuIcon style={styles.menu}></MenuIcon>
+          <MenuIcon
+            style={styles.menu}
+            onPress={() => {
+              navigation.navigate('Modify user');
+            }}
+          ></MenuIcon>
           <Text style={styles.appName}>hook</Text>
           <EditIcon
             style={styles.edit}
             onPress={() => {
-              navigation.navigate('Modify user');
+              navigation.navigate('Edit Profile');
             }}
           ></EditIcon>
         </View>
@@ -114,6 +181,7 @@ const Profile = ({navigation}) => {
                   containerStyle={styles.image}
                   avatarStyle={{borderRadius: 100}}
                   PlaceholderContent={<ActivityIndicator></ActivityIndicator>}
+                  onPress={changeProfilePicture}
                 />
               </View>
               <Text style={styles.name}>{additionData.fullname}</Text>
@@ -121,7 +189,7 @@ const Profile = ({navigation}) => {
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'center',
+                    justifyContent: 'space-around',
                   }}
                 >
                   <AgeIcon height={19} style={styles.icons}></AgeIcon>
@@ -136,13 +204,34 @@ const Profile = ({navigation}) => {
                     orientation="vertical"
                     style={{marginTop: 12, marginRight: 10}}
                   />
-                  <DrinkIcon style={styles.icons}></DrinkIcon>
-                  <Text style={styles.text}>{additionData.drinking}</Text>
+                  <PetIcon height={20} style={styles.icons}></PetIcon>
+                  <Text style={styles.text}>{additionData.pet}</Text>
                 </View>
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'center',
+                    justifyContent: 'space-around',
+                  }}
+                >
+                  <DrinkIcon style={styles.icons}></DrinkIcon>
+                  <Text style={styles.text}>{additionData.drinking}</Text>
+                  <Divider
+                    orientation="vertical"
+                    style={{marginTop: 12, marginRight: 5}}
+                  />
+                  <SmokeIcon height={20} style={styles.icons}></SmokeIcon>
+                  <Text style={styles.text}>{additionData.smoking}</Text>
+                  <Divider
+                    orientation="vertical"
+                    style={{marginTop: 12, marginRight: 5}}
+                  />
+                  <BabyIcon height={22} style={styles.icons}></BabyIcon>
+                  <Text style={styles.text}>{additionData.family_plan}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
                   }}
                 >
                   <SchoolIcon style={styles.icons}></SchoolIcon>
@@ -177,10 +266,19 @@ const Profile = ({navigation}) => {
           )}
           // myFilesOnly={true}
         ></FlatList>
-        <Button title={'Logout'} onPress={logOut} />
         <Button
           title={'Instructions'}
           onPress={() => navigation.navigate('Instructions')}
+        />
+        <Button
+          title={'Interests'}
+          onPress={() => navigation.navigate('Interests')}
+        />
+        <FAB
+          style={styles.fab}
+          medium
+          icon={UploadIcon}
+          onPress={() => navigation.navigate('Upload')}
         />
       </SafeAreaView>
     );
@@ -189,7 +287,7 @@ const Profile = ({navigation}) => {
 
 const styles = StyleSheet.create({
   menu: {
-    marginLeft: 20,
+    marginLeft: 15,
     marginTop: 15,
     marginBottom: 20,
   },
@@ -202,7 +300,7 @@ const styles = StyleSheet.create({
   edit: {
     marginTop: 10,
     marginBottom: 20,
-    marginRight: 15,
+    marginRight: 10,
   },
   image: {
     width: '90%',
@@ -238,7 +336,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    height: 150,
+    height: 200,
     marginBottom: 20,
     padding: 0,
     borderColor: '#FCF2F2',
@@ -250,6 +348,13 @@ const styles = StyleSheet.create({
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,
+  },
+  fab: {
+    position: 'absolute',
+    right: 10,
+    bottom: 5,
+    backgroundColor: 'white',
+    paddingBottom: 3,
   },
 });
 

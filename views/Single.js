@@ -1,13 +1,6 @@
 /* eslint-disable camelcase */
 import React, {useEffect, useState} from 'react';
-import {
-  TouchableHighlight,
-  StyleSheet,
-  View,
-  SafeAreaView,
-  Alert,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, View, SafeAreaView, Alert, FlatList} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Text, Divider} from 'react-native-elements';
@@ -21,19 +14,24 @@ import {
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
-import {useUser} from '../hooks/ApiHooks';
+import {useUser, userFavourite} from '../hooks/ApiHooks';
 import AgeIcon from '../assets/age.svg';
 import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
 import SchoolIcon from '../assets/school.svg';
 import DrinkIcon from '../assets/drink.svg';
-import {Card} from 'react-native-paper';
+import {Button, Card, FAB} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
+import SmokeIcon from '../assets/smoking.svg';
+import PetIcon from '../assets/pet.svg';
+import BabyIcon from '../assets/baby2.svg';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from '../components/ListItem';
+import LikeIcon from '../assets/like.svg';
 
 const Single = ({route, navigation}) => {
   const {file} = route.params;
+  const {postFavourite} = userFavourite();
   const {mediaArray} = useMedia(false, file.user_id);
   const {getUserById} = useUser();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
@@ -49,7 +47,7 @@ const Single = ({route, navigation}) => {
   const fetchOwner = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-      console.log('token in single', token);
+      // console.log('token in single', token);
       // console.log('singlemedia', singleMedia);
       // console.log('user_id', singleMedia.description);
       const userData = await getUserById(file.user_id, token);
@@ -58,7 +56,7 @@ const Single = ({route, navigation}) => {
       console.log('addition data in listitem.js', allData);
       setAdditionData(allData);
       let string = '';
-      allData.interests.forEach((hobby) => {
+      allData.interests.split(',').forEach((hobby) => {
         string = string + hobby.charAt(0).toUpperCase() + hobby.slice(1);
         string += ' ';
       });
@@ -67,6 +65,24 @@ const Single = ({route, navigation}) => {
       Alert.alert([{text: 'Load owner failed'}]);
       console.error('fetch owner error', error);
       setAdditionData({fullname: '[not available]'});
+    }
+  };
+
+  const likeUser = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    if (!token) {
+      return;
+    }
+    try {
+      console.log('file id', file.file_id);
+      const response = await postFavourite(file.file_id, token);
+      if (response) {
+        Alert.alert('You have liked this user!');
+        console.log('users liked', response);
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -80,17 +96,16 @@ const Single = ({route, navigation}) => {
     return (
       <>
         <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
-          <View style={{flexDirection: 'row'}}>
-            <TouchableHighlight
-              underlayColor="white"
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Button
+              style={styles.back}
               onPress={() => {
                 navigation.navigate('Home');
               }}
-            >
-              <BackIcon style={styles.back}></BackIcon>
-            </TouchableHighlight>
-
+              icon={BackIcon}
+            ></Button>
             <Text style={styles.appName}>hook</Text>
+            <Button disabled={true}></Button>
           </View>
           <FlatList
             ListHeaderComponent={
@@ -107,35 +122,56 @@ const Single = ({route, navigation}) => {
                   <View
                     style={{
                       flexDirection: 'row',
-                      justifyContent: 'center',
+                      justifyContent: 'space-around',
                     }}
                   >
                     <AgeIcon height={19} style={styles.icons}></AgeIcon>
                     <Text style={styles.text}>{additionData.age}</Text>
                     <Divider
                       orientation="vertical"
-                      style={{marginTop: 12, marginRight: 10}}
+                      style={{marginTop: 12, marginRight: 5}}
                     />
                     <LocationIcon style={styles.icons}></LocationIcon>
                     <Text style={styles.text}>{additionData.location}</Text>
                     <Divider
                       orientation="vertical"
-                      style={{marginTop: 12, marginRight: 10}}
+                      style={{marginTop: 12, marginRight: 5}}
                     />
-                    <DrinkIcon style={styles.icons}></DrinkIcon>
-                    <Text style={styles.text}>{additionData.drinking}</Text>
+                    <PetIcon height={20} style={styles.icons}></PetIcon>
+                    <Text style={styles.text}>{additionData.pet}</Text>
                   </View>
                   <View
                     style={{
                       flexDirection: 'row',
-                      justifyContent: 'center',
+                      justifyContent: 'space-around',
+                    }}
+                  >
+                    <DrinkIcon style={styles.icons}></DrinkIcon>
+                    <Text style={styles.text}>{additionData.drinking}</Text>
+                    <Divider
+                      orientation="vertical"
+                      style={{marginTop: 12, marginRight: 5}}
+                    />
+                    <SmokeIcon height={20} style={styles.icons}></SmokeIcon>
+                    <Text style={styles.text}>{additionData.smoking}</Text>
+                    <Divider
+                      orientation="vertical"
+                      style={{marginTop: 12, marginRight: 5}}
+                    />
+                    <BabyIcon height={22} style={styles.icons}></BabyIcon>
+                    <Text style={styles.text}>{additionData.family_plan}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
                     }}
                   >
                     <SchoolIcon style={styles.icons}></SchoolIcon>
                     <Text style={styles.text}>{additionData.school}</Text>
                     <Divider
                       orientation="vertical"
-                      style={{marginTop: 12, marginRight: 10}}
+                      style={{marginTop: 12, marginRight: 5}}
                     />
                     <NatIcon style={styles.icons}></NatIcon>
                     <Text style={styles.text}>{additionData.nationality}</Text>
@@ -162,6 +198,7 @@ const Single = ({route, navigation}) => {
               ></ListItem>
             )}
           ></FlatList>
+          <FAB style={styles.fab} medium icon={LikeIcon} onPress={likeUser} />
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
       </>
@@ -171,15 +208,14 @@ const Single = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   back: {
-    marginLeft: 20,
-    marginTop: '50%',
+    marginLeft: 10,
+    marginTop: 10,
   },
   appName: {
     fontSize: 40,
     color: '#EB6833',
     fontFamily: 'Poppins_700Bold',
     letterSpacing: 5,
-    marginLeft: '25%',
   },
   image: {
     width: '90%',
@@ -210,13 +246,13 @@ const styles = StyleSheet.create({
   },
   icons: {
     marginTop: 17,
-    marginRight: 5,
+    marginRight: 10,
     marginLeft: 15,
     marginBottom: 10,
   },
   card: {
     width: '90%',
-    height: 150,
+    height: 200,
     marginBottom: 20,
     padding: 0,
     borderColor: '#FCF2F2',
@@ -228,6 +264,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,
+  },
+  fab: {
+    position: 'absolute',
+    right: 15,
+    bottom: 20,
+    backgroundColor: 'white',
   },
 });
 

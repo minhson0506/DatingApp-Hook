@@ -1,6 +1,12 @@
 /* eslint-disable camelcase */
-import React, {useContext, useEffect} from 'react';
-import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
+import React, {useEffect, useContext} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  TouchableHighlight,
+} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import List from '../components/List';
 import PropTypes from 'prop-types';
@@ -15,7 +21,7 @@ import AppLoading from 'expo-app-loading';
 import {MainContext} from '../contexts/MainContext';
 
 const Home = ({navigation}) => {
-  const {setToken} = useContext(MainContext);
+  const {setToken, loading, setLoading} = useContext(MainContext);
   const checkToken = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
@@ -42,14 +48,21 @@ const Home = ({navigation}) => {
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <MenuIcon style={styles.menu}></MenuIcon>
             <Text style={styles.appName}>hook</Text>
-            <FilterIcon style={styles.filter}></FilterIcon>
+            <TouchableHighlight
+              underlayColor="white"
+              onPress={() => {
+                navigation.navigate('Preferences');
+              }}
+            >
+              <FilterIcon style={styles.filter}></FilterIcon>
+            </TouchableHighlight>
           </View>
           <List navigation={navigation}></List>
           <FAB
             style={styles.fab}
-            small
+            medium
             icon={ReloadIcon}
-            onPress={() => console.log('Pressed')}
+            onPress={() => setLoading(!loading)}
           />
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
@@ -60,7 +73,7 @@ const Home = ({navigation}) => {
 
 const styles = StyleSheet.create({
   menu: {
-    marginLeft: 20,
+    marginLeft: 15,
     marginTop: 15,
     marginBottom: 20,
   },
@@ -77,9 +90,8 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    margin: 10,
-    right: 0,
-    bottom: 0,
+    right: 10,
+    bottom: 5,
     backgroundColor: 'white',
     paddingBottom: 3,
   },
