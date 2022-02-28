@@ -50,9 +50,12 @@ const RegisterForm = ({setFormToggle}) => {
     try {
       delete data.password_again;
 <<<<<<< HEAD
+<<<<<<< HEAD
       // TODO: randomize email to post user
       data.email = 'test@a.fi';
 =======
+=======
+>>>>>>> 53751aa716e13f3e6e06181d6a90bf29a098bb89
       const additionData = {
         deleted_hook: 0,
         fullname: data.username,
@@ -88,7 +91,10 @@ const RegisterForm = ({setFormToggle}) => {
       };
       data.full_name = JSON.stringify(additionData);
       data.append('email', `${data.username}@additionData.fi`);
+<<<<<<< HEAD
 >>>>>>> 53751aa (login and register only allow for app's user)
+=======
+>>>>>>> 53751aa716e13f3e6e06181d6a90bf29a098bb89
       const userData = await postUser(data);
       setInstruction(true);
       console.log('register onSubmit', userData);
