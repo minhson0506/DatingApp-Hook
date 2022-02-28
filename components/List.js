@@ -19,7 +19,7 @@ const List = ({navigation, myFilesOnly = false}) => {
   // const [media, setMedia] = useState([]);
   const myAdditionData = JSON.parse(user.full_name);
   // console.log('inter of user', myAdditionData.interested);
-  const numberDisplay = 5;
+  // const numberDisplay = 5;
 
   const filterData = async () => {
     setMedia(mediaArray);
@@ -29,20 +29,20 @@ const List = ({navigation, myFilesOnly = false}) => {
     if (!myFilesOnly) {
       console.log('media Data original', mediaArray);
 
-      //filter avatar media
+      // filter avatar media
       let array = mediaArray.filter(
         (obj) => obj.title.toLowerCase() === 'avatar'
       );
 
       console.log('media data after filter avatar', array);
-      //filter current user
+      // filter current user
       array = array.filter((obj) => obj.user_id !== user.user_id);
       console.log(
         'media array after filter avatar and user before state',
         array
       );
 
-      //switch to user
+      // switch to user
       let userData = await Promise.all(
         array.map(async (obj) => {
           const userByFile = await getUserById(obj.user_id, token);

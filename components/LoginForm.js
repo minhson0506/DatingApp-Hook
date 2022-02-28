@@ -39,18 +39,6 @@ const LoginForm = () => {
     return true;
   }
 
-  function isContains(json, value) {
-    let contains = false;
-    Object.keys(json).some((key) => {
-      contains =
-        typeof json[key] === 'object'
-          ? isContains(json[key], value)
-          : json[key] === value;
-      return contains;
-    });
-    return contains;
-  }
-
   const onSubmit = async (data) => {
     console.log(data);
     try {

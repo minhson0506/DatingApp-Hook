@@ -46,16 +46,9 @@ const RegisterForm = ({setFormToggle}) => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     try {
       delete data.password_again;
-<<<<<<< HEAD
-<<<<<<< HEAD
-      // TODO: randomize email to post user
-      data.email = 'test@a.fi';
-=======
-=======
->>>>>>> 53751aa716e13f3e6e06181d6a90bf29a098bb89
       const additionData = {
         deleted_hook: 0,
         fullname: data.username,
@@ -91,10 +84,6 @@ const RegisterForm = ({setFormToggle}) => {
       };
       data.full_name = JSON.stringify(additionData);
       data.append('email', `${data.username}@additionData.fi`);
-<<<<<<< HEAD
->>>>>>> 53751aa (login and register only allow for app's user)
-=======
->>>>>>> 53751aa716e13f3e6e06181d6a90bf29a098bb89
       const userData = await postUser(data);
       setInstruction(true);
       console.log('register onSubmit', userData);
@@ -113,28 +102,6 @@ const RegisterForm = ({setFormToggle}) => {
 
   return (
     <View>
-      {/* <Controller
-        control={control}
-        rules={{
-          required: {value: true, message: 'This is required.'},
-          pattern: {
-            value:
-              /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-            message: 'Please enter a valid email!',
-          },
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            placeholder="email"
-            errorMessage={errors.email && errors.email.message}
-          />
-        )}
-        name="email"
-      /> */}
       <Controller
         control={control}
         rules={{
