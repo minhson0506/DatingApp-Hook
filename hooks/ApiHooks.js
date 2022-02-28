@@ -146,6 +146,7 @@ const useUser = () => {
   };
 
   return {
+    // userArray,
     getUserByToken,
     postUser,
     putUser,
@@ -248,7 +249,7 @@ const userFavourite = async () => {
     return await doFetch(baseUrl + 'favourites', options);
   };
 
-  return {postFavourite}, deleteFavourite, getFavourites, getFavouritesByFileId;
+  return {postFavourite, deleteFavourite, getFavourites, getFavouritesByFileId};
 };
 
 export {useMedia, useLogin, useUser, useTag, userComment, userFavourite};

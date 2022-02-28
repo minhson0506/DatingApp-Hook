@@ -25,7 +25,6 @@ const RegisterForm = ({setFormToggle}) => {
     defaultValues: {
       username: '',
       password: '',
-      email: '',
       full_name: '',
     },
     mode: 'onBlur',
@@ -47,11 +46,44 @@ const RegisterForm = ({setFormToggle}) => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     try {
       delete data.password_again;
-      // TODO: randomize email to post user
-      data.email = 'test@a.fi';
+      const additionData = {
+        deleted_hook: 0,
+        fullname: data.username,
+        work: 'none',
+        job: 'none',
+        interests: 'none',
+        education_level: 'none',
+        school: 'none',
+        religious_beliefs: 'none',
+        preference_drinking: 'none',
+        gender: 'nonbinary',
+        age: 0,
+        height: 0,
+        location: 'none',
+        nationality: 'none',
+        preference_smoking: 'none',
+        family_plan: 'none',
+        drinking: 'none',
+        smoking: 'none',
+        interested: 'nonbinary',
+        preference_location: 'none',
+        age_range: 'none',
+        preference_distance: 0,
+        preference_nationality: 'none',
+        preference_religion: 'none',
+        preference_height: 'none',
+        pet: 'none',
+        preference_pet: 'none',
+        pets: 'none',
+        dog_friend: 'none',
+        hiking: 'none',
+        books: 'none',
+      };
+      data.full_name = JSON.stringify(additionData);
+      data.append('email', `${data.username}@additionData.fi`);
       const userData = await postUser(data);
       setInstruction(true);
       console.log('register onSubmit', userData);
@@ -70,28 +102,6 @@ const RegisterForm = ({setFormToggle}) => {
 
   return (
     <View>
-      {/* <Controller
-        control={control}
-        rules={{
-          required: {value: true, message: 'This is required.'},
-          pattern: {
-            value:
-              /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-            message: 'Please enter a valid email!',
-          },
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            placeholder="email"
-            errorMessage={errors.email && errors.email.message}
-          />
-        )}
-        name="email"
-      /> */}
       <Controller
         control={control}
         rules={{
