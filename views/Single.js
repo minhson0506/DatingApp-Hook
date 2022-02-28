@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {StyleSheet, View, SafeAreaView, Alert, FlatList} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
@@ -28,6 +28,7 @@ import BabyIcon from '../assets/baby2.svg';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from '../components/ListItem';
 import LikeIcon from '../assets/like.svg';
+import {MainContext} from '../contexts/MainContext';
 
 const Single = ({route, navigation}) => {
   const {file} = route.params;
@@ -36,6 +37,7 @@ const Single = ({route, navigation}) => {
   const {getUserById} = useUser();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
+  const {loading, setLoading} = useContext(MainContext);
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_400Regular,
@@ -78,6 +80,7 @@ const Single = ({route, navigation}) => {
       const response = await postFavourite(file.file_id, token);
       if (response) {
         Alert.alert('You have liked this user!');
+        setLoading(!loading);
         console.log('users liked', response);
         navigation.goBack();
       }

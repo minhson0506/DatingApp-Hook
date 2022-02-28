@@ -92,8 +92,30 @@ const useMedia = (myFilesOnly, userId = null) => {
     };
     return await doFetch(baseUrl + 'media/' + id, options);
   };
+  const getMediaByUserId = async (userId) => {
+    const options = {
+      method: 'GET',
+    };
+    return await doFetch(`${baseUrl}media/user/${userId}`, options);
+  };
 
-  return {mediaArray, postMedia, loading, deleteMedia, putMedia};
+  const getAllMediaByCurrentUserId = async (token) => {
+    const options = {
+      method: 'GET',
+      headers: {'x-access-token': token},
+    };
+    return await doFetch(baseUrl + 'media/user', options);
+  };
+
+  return {
+    mediaArray,
+    postMedia,
+    loading,
+    deleteMedia,
+    putMedia,
+    getMediaByUserId,
+    getAllMediaByCurrentUserId,
+  };
 };
 
 const useLogin = () => {
@@ -263,10 +285,7 @@ const userFavourite = () => {
   };
 
   const getFavouritesByFileId = async (fileId) => {
-    const options = {
-      method: 'GET',
-    };
-    return await doFetch(baseUrl + 'favourites/file/' + fileId, options);
+    return await doFetch(`${baseUrl}favourites/file/${fileId}`);
   };
 
   const getFavourites = async (token) => {
