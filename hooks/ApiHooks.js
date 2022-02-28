@@ -171,6 +171,7 @@ const useUser = () => {
   };
 
   return {
+    // userArray,
     getUserByToken,
     postUser,
     putUser,
