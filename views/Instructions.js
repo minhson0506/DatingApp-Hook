@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import {View, Text, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
 import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
@@ -21,8 +21,11 @@ import FilterIcon from '../assets/filter.svg';
 import MenuIcon from '../assets/menu.svg';
 import EditIcon from '../assets/editProfile.svg';
 import {Pages} from 'react-native-pages';
+import {MainContext} from '../contexts/MainContext';
 
 const Instructions = ({navigation}) => {
+  const {instruction} = useContext(MainContext);
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
@@ -289,7 +292,11 @@ const Instructions = ({navigation}) => {
               others can find you!
             </Text>
             <Button
-              onPress={() => navigation.goBack()}
+              onPress={() => {
+                instruction
+                  ? navigation.navigate('Main', {screen: 'Profile'})
+                  : navigation.goBack();
+              }}
               style={styles.ScrollUpButton}
               labelStyle={{color: 'white', textAlign: 'center', fontSize: 15}}
             >
