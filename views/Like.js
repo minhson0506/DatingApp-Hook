@@ -34,20 +34,37 @@ const Like = ({navigation}) => {
 
       // cannot get Media Array ...
       const userFiles = await getAllMediaByCurrentUserId(token);
-      const avatarFile = userFiles.filter(
-        (obj) => obj.title.toLowerCase() === 'avatar'
-      );
-      console.log('avatar', avatarFile);
+      const userFilesId = [];
+      for (const file of userFiles) {
+        userFilesId.push(file.file_id);
+      }
+      console.log('all fileId from current user: ', userFilesId);
 
-      // get likes from avatar
-      const likes = await getFavouritesByFileId(avatarFile[0].file_id);
-      console.log('likes in avatar', likes);
-
+      // get likes from every file
+      let likeData = [];
+      const seen = new Set();
+      for (const id of userFilesId) {
+        const likeScraping = await getFavouritesByFileId(id);
+        likeData = likeData.concat(likeScraping);
+      }
       // sort the data in order by favouriteId, most recent -> least recent
-      likes.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
+      likeData.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
+
+      // without filtering
+      console.log('like data: ', likeData);
+
+      // with filtering
+      likeData = likeData.filter((el) => {
+        const duplicate = seen.has(el.user_id);
+        seen.add(el.user_id);
+        return !duplicate;
+      });
+
+      likeData = likeData.slice(0, 10);
+      console.log('like data after data cleaning: ', likeData);
 
       // map file id to user id
-      const likedUserId = likes.map((id) => id.user_id);
+      const likedUserId = likeData.map((id) => id.user_id);
       console.log('who like you', likedUserId);
 
       let newHooksData = [];
