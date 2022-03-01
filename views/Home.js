@@ -22,7 +22,8 @@ import {MainContext} from '../contexts/MainContext';
 import {Menu, MenuItem} from 'react-native-material-menu';
 
 const Home = ({navigation}) => {
-  const {loading, setLoading} = useContext(MainContext);
+  const {loading, setLoading, user} = useContext(MainContext);
+  console.log('user', user);
   // menu state & functions
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);

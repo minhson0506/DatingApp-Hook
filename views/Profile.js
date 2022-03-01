@@ -44,7 +44,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {Menu, MenuItem} from 'react-native-material-menu';
 
 const Profile = ({navigation}) => {
-  const {user, update, setUpdate} = useContext(MainContext);
+  const {user, update, setUpdate, loading} = useContext(MainContext);
   const isFocused = useIsFocused();
   const [avatar, setAvatar] = useState(
     'https://www.linkpicture.com/q/iPhone-8-2-1.png'
@@ -75,7 +75,7 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     fetchAvatar();
-  }, [mediaArray, isFocused]);
+  }, [mediaArray, isFocused, loading]);
 
   // console.log('Profile', user);
 

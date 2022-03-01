@@ -41,7 +41,7 @@ const EditProfile = ({navigation}) => {
   });
 
   const {putUser} = useUser();
-  const {user} = useContext(MainContext);
+  const {user, setLoading, loading} = useContext(MainContext);
   const additionData = JSON.parse(user.full_name);
 
   // input values
@@ -60,7 +60,7 @@ const EditProfile = ({navigation}) => {
   const [age, setAge] = useState(additionData.age);
   const [height, setHeight] = useState(additionData.height);
   const setSliderHeight = (height) => setHeight(height[0]);
-  const setSliderAge = (distance) => setAge(age[0]);
+  const setSliderAge = (age) => setAge(age[0]);
 
   // Picker open states
   const [openGender, setOpenGender] = useState(false);
@@ -146,8 +146,8 @@ const EditProfile = ({navigation}) => {
 
   // modify user's preferences
   const modifyPreferences = async () => {
-    if (gender) additionData.interested = gender;
-    else additionData.interested = 'none';
+    if (gender) additionData.gender = gender;
+    else additionData.gender = 'none';
 
     if (height) {
       additionData.height = height;
@@ -161,12 +161,13 @@ const EditProfile = ({navigation}) => {
       additionData.age = 'none';
     }
 
+    if (location) additionData.location = location;
     if (name) additionData.fullname = name;
     if (work) additionData.work = work;
     if (job) additionData.job = job;
     if (school) additionData.school = school;
     if (family) additionData.family_plan = family;
-    if (nationality) additionData.preference_nationality = nationality;
+    if (nationality) additionData.nationality = nationality;
     if (religion) additionData.religious_beliefs = religion;
     if (drinking) additionData.drinking = drinking;
     if (smoking) additionData.smoking = smoking;
@@ -180,6 +181,7 @@ const EditProfile = ({navigation}) => {
       if (userData) {
         Alert.alert('Success', userData.message);
         // update info after navigate
+        setLoading(!loading);
         navigation.navigate('Profile');
       }
     } catch (error) {

@@ -156,6 +156,36 @@ const StackScreen = () => {
               component={TabScreen}
               options={{headerShown: false}}
             ></Stack.Screen>
+            <Stack.Screen
+              name="Single"
+              component={Single}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Preferences"
+              component={Preference}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Upload"
+              component={Upload}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Edit Profile"
+              component={EditProfile}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Modify user"
+              component={ModifyUser}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Interests"
+              component={Interests}
+              options={{headerShown: false}}
+            ></Stack.Screen>
           </>
         ) : (
           <>
