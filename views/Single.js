@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {StyleSheet, View, SafeAreaView, Alert, FlatList} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
@@ -28,6 +28,7 @@ import BabyIcon from '../assets/baby2.svg';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from '../components/ListItem';
 import LikeIcon from '../assets/like.svg';
+import {MainContext} from '../contexts/MainContext';
 
 const Single = ({route, navigation}) => {
   const {file} = route.params;
@@ -36,6 +37,7 @@ const Single = ({route, navigation}) => {
   const {getUserById} = useUser();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
+  const {loading, setLoading} = useContext(MainContext);
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_400Regular,
@@ -43,6 +45,7 @@ const Single = ({route, navigation}) => {
   const mediaData = mediaArray.filter(
     (obj) => obj.title.toLowerCase() !== 'avatar'
   );
+  // console.log('file in single', file);
 
   const fetchOwner = async () => {
     try {
@@ -51,9 +54,9 @@ const Single = ({route, navigation}) => {
       // console.log('singlemedia', singleMedia);
       // console.log('user_id', singleMedia.description);
       const userData = await getUserById(file.user_id, token);
-      console.log('user data', userData);
+      // console.log('user data', userData);
       const allData = await JSON.parse(userData.full_name);
-      console.log('addition data in listitem.js', allData);
+      // console.log('addition data in listitem.js', allData);
       setAdditionData(allData);
       let string = '';
       allData.interests.split(',').forEach((hobby) => {
@@ -74,11 +77,12 @@ const Single = ({route, navigation}) => {
       return;
     }
     try {
-      console.log('file id', file.file_id);
+      // console.log('file id', file.file_id);
       const response = await postFavourite(file.file_id, token);
       if (response) {
         Alert.alert('You have liked this user!');
-        console.log('users liked', response);
+        setLoading(!loading);
+        // console.log('users liked', response);
         navigation.goBack();
       }
     } catch (error) {
@@ -100,7 +104,7 @@ const Single = ({route, navigation}) => {
             <Button
               style={styles.back}
               onPress={() => {
-                navigation.navigate('Home');
+                navigation.goBack();
               }}
               icon={BackIcon}
             ></Button>

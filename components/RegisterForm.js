@@ -36,9 +36,9 @@ const RegisterForm = ({setFormToggle}) => {
     console.log(data);
     try {
       const userData = await postLogin(data);
-      console.log('userData after register', userData);
+      // console.log('userData after register', userData);
       await AsyncStorage.setItem('userToken', userData.token);
-      console.log('token after register', userData.token);
+      // console.log('token after register', userData.token);
       setUser(userData.user);
       setIsLoggedIn(true);
     } catch (error) {
@@ -88,13 +88,13 @@ const RegisterForm = ({setFormToggle}) => {
       data.email = `${data.username}@additionData.fi`;
       const userData = await postUser(data);
       setInstruction(true);
-      console.log('register onSubmit', userData);
+      // console.log('register onSubmit', userData);
       if (userData) {
         setFormToggle(true);
         Alert.alert('Success', 'User created successfully!');
         delete data.full_name;
         delete data.email;
-        console.log('data for login', data);
+        // console.log('data for login', data);
         onLogin(data);
       }
     } catch (error) {

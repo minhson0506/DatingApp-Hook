@@ -59,11 +59,11 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       title: 'deleted',
       description: singleMedia.description,
     };
-    console.log('data', data);
+    // console.log('data', data);
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       const response = await putMedia(singleMedia.file_id, userToken, data);
-      console.log('response for delete', response);
+      // console.log('response for delete', response);
       if (response) {
         Alert.alert('Delete', 'Deleted successfully', [
           {
@@ -103,7 +103,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
 
   // console.log('type of', typeof additionData.interests);
   // console.log('type of', additionData.interests[0]);
-  // var firstHobby = additionData.interests[0];
   useEffect(() => {
     fetchOwner();
   }, []);

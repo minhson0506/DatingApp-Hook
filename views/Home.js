@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, {useEffect, useContext} from 'react';
+import React, {useEffect, useContext, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -19,9 +19,15 @@ import ReloadIcon from '../assets/reload.svg';
 import {useFonts, Poppins_700Bold} from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 import {MainContext} from '../contexts/MainContext';
+import {Menu, MenuItem} from 'react-native-material-menu';
 
 const Home = ({navigation}) => {
-  const {setToken, loading, setLoading} = useContext(MainContext);
+  const {loading, setLoading} = useContext(MainContext);
+  // menu state & functions
+  const [visible, setVisible] = useState(false);
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
+
   const checkToken = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
@@ -46,7 +52,40 @@ const Home = ({navigation}) => {
       <>
         <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <MenuIcon style={styles.menu}></MenuIcon>
+            <Menu
+              style={styles.menuBox}
+              visible={visible}
+              anchor={
+                <MenuIcon
+                  style={styles.menu}
+                  onPress={() => {
+                    showMenu();
+                  }}
+                ></MenuIcon>
+              }
+              onRequestClose={hideMenu}
+            >
+              <MenuItem
+                pressColor={'#FDC592'}
+                textStyle={styles.textMenu}
+                onPress={() => {
+                  hideMenu();
+                  navigation.navigate('Modify user');
+                }}
+              >
+                Account
+              </MenuItem>
+              <MenuItem
+                pressColor={'#FDC592'}
+                textStyle={styles.textMenu}
+                onPress={() => {
+                  hideMenu();
+                  navigation.navigate('Instructions');
+                }}
+              >
+                How Hook works
+              </MenuItem>
+            </Menu>
             <Text style={styles.appName}>hook</Text>
             <TouchableHighlight
               underlayColor="white"
@@ -76,6 +115,15 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 15,
     marginBottom: 20,
+  },
+  menuBox: {
+    marginTop: 45,
+    marginLeft: 10,
+    borderRadius: 5,
+  },
+  textMenu: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 16,
   },
   appName: {
     fontSize: 40,

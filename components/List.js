@@ -23,24 +23,24 @@ const List = ({navigation, myFilesOnly = false}) => {
 
   const filterData = async () => {
     setMedia(mediaArray);
-    console.log('my file only', myFilesOnly);
+    // console.log('my file only', myFilesOnly);
     // setMedia(mediaArray);
     // console.log('interested', myAdditionData.interested);
     if (!myFilesOnly) {
-      console.log('media Data original', mediaArray);
+      // console.log('media Data original', mediaArray);
 
       // filter avatar media
       let array = mediaArray.filter(
         (obj) => obj.title.toLowerCase() === 'avatar'
       );
 
-      console.log('media data after filter avatar', array);
+      // console.log('media data after filter avatar', array);
       // filter current user
       array = array.filter((obj) => obj.user_id !== user.user_id);
-      console.log(
-        'media array after filter avatar and user before state',
-        array
-      );
+      // console.log(
+      //   'media array after filter avatar and user before state',
+      //   array
+      // );
 
       // switch to user
       let userData = await Promise.all(
@@ -52,9 +52,9 @@ const List = ({navigation, myFilesOnly = false}) => {
         })
       );
 
-      console.log('user data start', userData);
+      // console.log('user data start', userData);
 
-      console.log('current user', myAdditionData);
+      // console.log('current user', myAdditionData);
       // filter by gender
       if (myAdditionData.gender !== 'nonbinary') {
         userData = userData.filter((obj) => {
@@ -62,7 +62,7 @@ const List = ({navigation, myFilesOnly = false}) => {
           return obj.full_name.gender === myAdditionData.interested;
         });
       }
-      console.log('length after filter gender', userData.length);
+      // console.log('length after filter gender', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_location.toLowerCase() !== 'none')
@@ -72,7 +72,7 @@ const List = ({navigation, myFilesOnly = false}) => {
             );
           });
       }
-      console.log('length after filter location', userData.length);
+      // console.log('length after filter location', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_drinking.toLowerCase() !== 'none')
@@ -80,7 +80,7 @@ const List = ({navigation, myFilesOnly = false}) => {
             return obj.full_name.driking === myAdditionData.preference_drinking;
           });
       }
-      console.log('length after filter drinking', userData.length);
+      // console.log('length after filter drinking', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_smoking.toLowerCase() !== 'none')
@@ -88,7 +88,7 @@ const List = ({navigation, myFilesOnly = false}) => {
             return obj.full_name.smoking === myAdditionData.preference_smoking;
           });
       }
-      console.log('length after filter smoking', userData.length);
+      // console.log('length after filter smoking', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_nationality.toLowerCase() !== 'none')
@@ -99,7 +99,7 @@ const List = ({navigation, myFilesOnly = false}) => {
             );
           });
       }
-      console.log('length after filter nationality', userData.length);
+      // console.log('length after filter nationality', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_pet.toLowerCase() !== 'none')
@@ -107,7 +107,7 @@ const List = ({navigation, myFilesOnly = false}) => {
             return obj.full_name.pet === myAdditionData.preference_pet;
           });
       }
-      console.log('length after filter pet', userData.length);
+      // console.log('length after filter pet', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.age_range.toLowerCase() !== 'none') {
@@ -120,7 +120,7 @@ const List = ({navigation, myFilesOnly = false}) => {
           });
         }
       }
-      console.log('length after filter age', userData.length);
+      // console.log('length after filter age', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_height.toLowerCase() !== 'none') {
@@ -133,9 +133,9 @@ const List = ({navigation, myFilesOnly = false}) => {
           });
         }
       }
-      console.log('length after filter height', userData.length);
+      // console.log('length after filter height', userData.length);
 
-      console.log('user data after filter', userData);
+      // console.log('user data after filter', userData);
 
       // setMedia(array);
       // console.log('user array modified', userData);

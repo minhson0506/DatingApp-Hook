@@ -33,7 +33,7 @@ const useMedia = (myFilesOnly, userId = null) => {
       if (userId) {
         json = json.filter((file) => file.user_id === userId);
       }
-      let media = await Promise.all(
+      const media = await Promise.all(
         json.map(async (item) => {
           const response = await fetch(baseUrl + 'media/' + item.file_id);
           const mediaData = await response.json();
@@ -41,7 +41,6 @@ const useMedia = (myFilesOnly, userId = null) => {
           return mediaData;
         })
       );
-      media = media.filter((obj) => obj.title.toLowerCase() !== 'deleted');
       setMediaArray(media);
     } catch (error) {
       console.error(error);
@@ -92,8 +91,30 @@ const useMedia = (myFilesOnly, userId = null) => {
     };
     return await doFetch(baseUrl + 'media/' + id, options);
   };
+  const getMediaByUserId = async (userId) => {
+    const options = {
+      method: 'GET',
+    };
+    return await doFetch(`${baseUrl}media/user/${userId}`, options);
+  };
 
-  return {mediaArray, postMedia, loading, deleteMedia, putMedia};
+  const getAllMediaByCurrentUserId = async (token) => {
+    const options = {
+      method: 'GET',
+      headers: {'x-access-token': token},
+    };
+    return await doFetch(baseUrl + 'media/user', options);
+  };
+
+  return {
+    mediaArray,
+    postMedia,
+    loading,
+    deleteMedia,
+    putMedia,
+    getMediaByUserId,
+    getAllMediaByCurrentUserId,
+  };
 };
 
 const useLogin = () => {
@@ -263,10 +284,7 @@ const userFavourite = () => {
   };
 
   const getFavouritesByFileId = async (fileId) => {
-    const options = {
-      method: 'GET',
-    };
-    return await doFetch(baseUrl + 'favourites/file/' + fileId, options);
+    return await doFetch(`${baseUrl}favourites/file/${fileId}`);
   };
 
   const getFavourites = async (token) => {

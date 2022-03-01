@@ -1,5 +1,15 @@
 {
   "expo": {
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": [
+        "js",
+        "jsx",
+        "json",
+        "wasm",
+        "svg"
+      ]
+    },
     "name": "DatingApp",
     "slug": "DatingApp",
     "version": "1.0.0",

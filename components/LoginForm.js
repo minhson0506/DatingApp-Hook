@@ -40,7 +40,7 @@ const LoginForm = () => {
   }
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     try {
       const userData = await postLogin(data);
       if (isJson(userData.user.full_name)) {
