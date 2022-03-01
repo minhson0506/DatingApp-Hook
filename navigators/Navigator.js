@@ -118,7 +118,11 @@ const TabScreen = () => {
         component={Like}
         options={{headerShown: false}}
       ></Tab.Screen>
-      <Tab.Screen name="Search" component={Search}></Tab.Screen>
+      <Tab.Screen
+        name="Search"
+        component={Search}
+        options={{headerShown: false}}
+      ></Tab.Screen>
       <Tab.Screen
         name="Chat"
         component={Chat}
@@ -135,7 +139,7 @@ const TabScreen = () => {
 
 const StackScreen = () => {
   const {isLoggedIn, instruction} = useContext(MainContext);
-  console.log('instruction', instruction);
+  // console.log('instruction', instruction);
 
   return (
     <Stack.Navigator>

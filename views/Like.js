@@ -16,12 +16,18 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 import {MainContext} from '../contexts/MainContext';
+import {Menu, MenuItem} from 'react-native-material-menu';
 
 const Like = ({navigation}) => {
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_500Medium,
   });
+  // menu state & functions
+  const [visible, setVisible] = useState(false);
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
+
   const [hook, setHook] = useState([]);
   const {getUserById} = useUser();
   const {getMediaByUserId, getAllMediaByCurrentUserId} = useMedia();
@@ -38,7 +44,7 @@ const Like = ({navigation}) => {
       for (const file of userFiles) {
         userFilesId.push(file.file_id);
       }
-      console.log('all fileId from current user: ', userFilesId);
+      // console.log('all fileId from current user: ', userFilesId);
 
       // get likes from every file
       let likeData = [];
@@ -51,7 +57,7 @@ const Like = ({navigation}) => {
       likeData.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
 
       // without filtering
-      console.log('like data: ', likeData);
+      // console.log('like data: ', likeData);
 
       // with filtering
       likeData = likeData.filter((el) => {
@@ -61,11 +67,11 @@ const Like = ({navigation}) => {
       });
 
       likeData = likeData.slice(0, 10);
-      console.log('like data after data cleaning: ', likeData);
+      // console.log('like data after data cleaning: ', likeData);
 
       // map file id to user id
       const likedUserId = likeData.map((id) => id.user_id);
-      console.log('who like you', likedUserId);
+      // console.log('who like you', likedUserId);
 
       let newHooksData = [];
       for (const id of likedUserId) {
@@ -104,13 +110,42 @@ const Like = ({navigation}) => {
           colors={['#FF707B', '#FF934E']}
         >
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Image
-              source={require('../assets/menu2.png')}
-              style={styles.menu}
-              onPress={() => {
-                navigation.navigate('Modify user');
-              }}
-            />
+            <Menu
+              style={styles.menuBox}
+              visible={visible}
+              anchor={
+                <Image
+                  source={require('../assets/menu2.png')}
+                  style={styles.menu}
+                  onPress={() => {
+                    showMenu();
+                  }}
+                />
+              }
+              onRequestClose={hideMenu}
+            >
+              <MenuItem
+                pressColor={'#FDC592'}
+                textStyle={styles.textMenu}
+                onPress={() => {
+                  hideMenu();
+                  navigation.navigate('Modify user');
+                }}
+              >
+                Account
+              </MenuItem>
+              <MenuItem
+                pressColor={'#FDC592'}
+                textStyle={styles.textMenu}
+                onPress={() => {
+                  hideMenu();
+                  navigation.navigate('Instructions');
+                }}
+              >
+                How Hook works
+              </MenuItem>
+            </Menu>
+
             <Text style={styles.appName}>hook</Text>
             <Button style={{width: 0, margin: 0}} disabled={true}></Button>
           </View>
@@ -129,7 +164,11 @@ const Like = ({navigation}) => {
           data={hook}
           keyExtractor={(item) => item.user_id.toString()}
           renderItem={({item}) => (
-            <ListItem>
+            <ListItem
+              onPress={() => {
+                navigation.navigate('Single', {file: item[0]});
+              }}
+            >
               {item[0] ? (
                 <View
                   style={{
@@ -171,6 +210,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     height: 25,
     width: 25,
+  },
+  menuBox: {
+    marginTop: 45,
+    marginLeft: 10,
+    borderRadius: 5,
+  },
+  textMenu: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 16,
   },
   appName: {
     fontSize: 40,

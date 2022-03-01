@@ -36,10 +36,12 @@ import {
   useFonts,
   Poppins_700Bold,
   Poppins_600SemiBold,
+  Poppins_500Medium,
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 import {useIsFocused} from '@react-navigation/native';
+import {Menu, MenuItem} from 'react-native-material-menu';
 
 const Profile = ({navigation}) => {
   const {user, update, setUpdate} = useContext(MainContext);
@@ -51,10 +53,16 @@ const Profile = ({navigation}) => {
   const {postMedia, putMedia} = useMedia();
   const {postTag} = useTag();
 
+  // menu state & functions
+  const [visible, setVisible] = useState(false);
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
+
   // filter for file except avatar
-  const mediaData = mediaArray.filter(
+  let mediaData = mediaArray.filter(
     (obj) => obj.title.toLowerCase() !== 'avatar'
   );
+  mediaData = mediaData.filter((obj) => obj.title.toLowerCase() !== 'deleted');
 
   const fetchAvatar = () => {
     // console.log('myfileonly in profile', myFilesOnly);
@@ -149,6 +157,7 @@ const Profile = ({navigation}) => {
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
+    Poppins_500Medium,
     Poppins_400Regular,
   });
 
@@ -158,12 +167,50 @@ const Profile = ({navigation}) => {
     return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <MenuIcon
-            style={styles.menu}
-            onPress={() => {
-              navigation.navigate('Modify user');
-            }}
-          ></MenuIcon>
+          <Menu
+            style={styles.menuBox}
+            visible={visible}
+            anchor={
+              <MenuIcon
+                style={styles.menu}
+                onPress={() => {
+                  showMenu();
+                }}
+              ></MenuIcon>
+            }
+            onRequestClose={hideMenu}
+          >
+            <MenuItem
+              pressColor={'#FDC592'}
+              textStyle={styles.textMenu}
+              onPress={() => {
+                hideMenu();
+                navigation.navigate('Modify user');
+              }}
+            >
+              Account
+            </MenuItem>
+            <MenuItem
+              pressColor={'#FDC592'}
+              textStyle={styles.textMenu}
+              onPress={() => {
+                hideMenu();
+                navigation.navigate('Instructions');
+              }}
+            >
+              How Hook works
+            </MenuItem>
+            <MenuItem
+              pressColor={'#FDC592'}
+              textStyle={styles.textMenu}
+              onPress={() => {
+                hideMenu();
+                navigation.navigate('Interests');
+              }}
+            >
+              Interests
+            </MenuItem>
+          </Menu>
           <Text style={styles.appName}>hook</Text>
           <EditIcon
             style={styles.edit}
@@ -266,14 +313,6 @@ const Profile = ({navigation}) => {
           )}
           // myFilesOnly={true}
         ></FlatList>
-        <Button
-          title={'Instructions'}
-          onPress={() => navigation.navigate('Instructions')}
-        />
-        <Button
-          title={'Interests'}
-          onPress={() => navigation.navigate('Interests')}
-        />
         <FAB
           style={styles.fab}
           medium
@@ -290,6 +329,15 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 15,
     marginBottom: 20,
+  },
+  menuBox: {
+    marginTop: 45,
+    marginLeft: 10,
+    borderRadius: 5,
+  },
+  textMenu: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 16,
   },
   appName: {
     fontSize: 40,
