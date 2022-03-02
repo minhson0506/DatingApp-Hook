@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import React, {useContext, useState, useCallback} from 'react';
+import React, {useContext, useState, useCallback, useEffect} from 'react';
 import GlobalStyles from '../utils/GlobalStyles';
 import PropTypes from 'prop-types';
 import {Button} from 'react-native-paper';
@@ -29,8 +29,12 @@ import {useForm, Controller} from 'react-hook-form';
 import {useFocusEffect} from '@react-navigation/native';
 import {appId} from '../utils/variables';
 import backIcon from '../assets/back.svg';
+import LottieView from 'lottie-react-native';
 
 const Upload = ({navigation}) => {
+  const animation = React.createRef();
+  const [upload, setUpload] = useState(false);
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
@@ -122,6 +126,10 @@ const Upload = ({navigation}) => {
     }, [])
   );
 
+  // useEffect(() => {
+  //   animation.current?.play(0, 48);
+  // }, [upload]);
+
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
@@ -184,17 +192,32 @@ const Upload = ({navigation}) => {
                 style={{flexDirection: 'row', justifyContent: 'space-evenly'}}
               >
                 <Button onPress={reset}>Reset</Button>
+
                 <Button
                   // style={{marginLRight: 20}}
                   disabled={!imageSelected}
                   loading={loading}
-                  onPress={handleSubmit(onSubmit)}
+                  onPress={() => {
+                    setUpload(!upload);
+                    handleSubmit(onSubmit);
+                  }}
                 >
                   Upload
                 </Button>
               </View>
             </Card>
           </View>
+          {/* <LottieView
+            style={{marginTop: 170}}
+            ref={animation}
+            source={require('../assets/animation/upload.json')}
+            autoPlay={false}
+            loop={false}
+            resizeMode="cover"
+            onAnimationFinish={() => {
+              console.log('animation finished');
+            }}
+          /> */}
         </ScrollView>
       </SafeAreaView>
     );

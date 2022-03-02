@@ -86,10 +86,12 @@ const Single = ({route, navigation}) => {
         setIsLiked(!isLiked);
         Alert.alert('You have liked this user!');
         setLoading(!loading);
+
         // console.log('users liked', response);
         // navigation.goBack();
       }
     } catch (error) {
+      Alert.alert('You have already liked this user!');
       console.error(error);
     }
   };
@@ -98,9 +100,9 @@ const Single = ({route, navigation}) => {
     fetchOwner();
   }, []);
 
-  useEffect(() => {
-    animation.current?.play(1, 210);
-  }, [isLiked]);
+  // useEffect(() => {
+  //   animation.current?.play(1, 210);
+  // }, [isLiked]);
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -210,7 +212,7 @@ const Single = ({route, navigation}) => {
               ></ListItem>
             )}
           ></FlatList>
-          <LottieView
+          {/* <LottieView
             ref={animation}
             style={{position: 'absolute', left: 80, top: 170}}
             source={require('../assets/animation/heart.json')}
@@ -219,7 +221,7 @@ const Single = ({route, navigation}) => {
             onAnimationFinish={() => {
               console.log('animation finished');
             }}
-          />
+          /> */}
           <FAB style={styles.fab} medium icon={LikeIcon} onPress={likeUser} />
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
