@@ -29,8 +29,10 @@ import {useMedia} from '../hooks/ApiHooks';
 import ListItem from '../components/ListItem';
 import LikeIcon from '../assets/like.svg';
 import {MainContext} from '../contexts/MainContext';
+import LottieView from 'lottie-react-native';
 
 const Single = ({route, navigation}) => {
+  const animation = React.createRef();
   const {file} = route.params;
   const {postFavourite} = userFavourite();
   const {mediaArray} = useMedia(false, file.user_id);
@@ -38,6 +40,7 @@ const Single = ({route, navigation}) => {
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
   const {loading, setLoading} = useContext(MainContext);
+  const [isLiked, setIsLiked] = useState(false);
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_400Regular,
@@ -80,10 +83,11 @@ const Single = ({route, navigation}) => {
       // console.log('file id', file.file_id);
       const response = await postFavourite(file.file_id, token);
       if (response) {
+        setIsLiked(!isLiked);
         Alert.alert('You have liked this user!');
         setLoading(!loading);
         // console.log('users liked', response);
-        navigation.goBack();
+        // navigation.goBack();
       }
     } catch (error) {
       console.error(error);
@@ -93,6 +97,10 @@ const Single = ({route, navigation}) => {
   useEffect(() => {
     fetchOwner();
   }, []);
+
+  useEffect(() => {
+    animation.current?.play(1, 210);
+  }, [isLiked]);
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -202,6 +210,16 @@ const Single = ({route, navigation}) => {
               ></ListItem>
             )}
           ></FlatList>
+          <LottieView
+            ref={animation}
+            style={{position: 'absolute', left: 80, top: 170}}
+            source={require('../assets/animation/heart.json')}
+            autoPlay={false}
+            loop={false}
+            onAnimationFinish={() => {
+              console.log('animation finished');
+            }}
+          />
           <FAB style={styles.fab} medium icon={LikeIcon} onPress={likeUser} />
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
