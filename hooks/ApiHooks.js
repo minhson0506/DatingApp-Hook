@@ -43,7 +43,7 @@ const useMedia = () => {
     } catch (error) {
       console.error(error);
     }
-    console.log(mediaArray);
+    // console.log(mediaArray);
   };
 
   // Call loadMedia() only once when the component is loaded
@@ -79,7 +79,21 @@ const useMedia = () => {
     return await doFetch(baseUrl + 'media/user', options);
   };
 
-  return {mediaArray, postMedia, getMediaByUserId, getAllMediaByCurrentUserId};
+  const getMediaByFileId = async (fileId) => {
+    return await doFetch(`${baseUrl}media/${fileId}`);
+  };
+
+  // const getFavouritesByFileId = async (fileId) => {
+  //   return await doFetch(`${baseUrl}favourites/file/${fileId}`);
+  // };
+
+  return {
+    mediaArray,
+    postMedia,
+    getMediaByUserId,
+    getAllMediaByCurrentUserId,
+    getMediaByFileId,
+  };
 };
 
 const useLogin = () => {

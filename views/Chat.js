@@ -14,31 +14,46 @@ import {
   useMedia,
   useFavourite,
 } from '../hooks/ApiHooks';
-import {uploadsUrl} from '../utils/variables';
+import {baseUrl, uploadsUrl} from '../utils/variables';
 
 const Chat = ({navigation}) => {
-  const {getUserById} = useUser();
+  const {getUserById, getUserByToken} = useUser();
   const {getFileByTag} = useTag();
-  const {getCommentByFileId} = userComment();
-  const {getMediaByUserId, getAllMediaByCurrentUserId} = useMedia();
+  const {getCommentByFileId, getComments} = userComment();
+  const {getMediaByUserId, getAllMediaByCurrentUserId, getMediaByFileId} =
+    useMedia();
   const {getFavouritesByFileId} = useFavourite();
+  const {getFavourites} = useFavourite();
   const [username, setUsername] = useState({username: 'fetching...'});
   const [avatar, setAvatar] = useState('http://placekitten.com/180');
-  const [message, setMessage] = useState([]);
-  const [hook, setHook] = useState([]);
+  const [message, setMessage] = useState(0);
+  const [hook, setHook] = useState(0);
 
   const fetchNewHooks = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
 
+      // get fileId of all files current users liked
+      const userLike = await getFavourites(token);
+      // console.log('what files current user liked: ', userLike);
+
+      // get the owner userId of those files
+      const userLikeFileId = userLike.map((file) => file.file_id);
+      // console.log('the file id current user liked: ', userLikeFileId);
+      let hookUserId = [];
+      for (const fileId of userLikeFileId) {
+        const fileInfo = await getMediaByFileId(fileId);
+        hookUserId.push(fileInfo.user_id);
+      }
+      // remove duplicate
+      hookUserId = [...new Set(hookUserId)];
+      // console.log('Hook users id', hookUserId);
+
       // get fileIds of all files from current login user
       const userFiles = await getAllMediaByCurrentUserId(token);
       // console.log('All file from current user: ', userFiles);
-      const userFilesId = [];
-      for (const file of userFiles) {
-        userFilesId.push(file.file_id);
-      }
-      console.log('all fileId from current user: ', userFilesId);
+      const userFilesId = userFiles.map((file) => file.file_id);
+      // console.log('all fileId from current user: ', userFilesId);
 
       // check who likes any photo from current login user
       // and then get their userId
@@ -53,19 +68,26 @@ const Chat = ({navigation}) => {
       likeData.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
 
       // without filtering
-      console.log('like data: ', likeData);
+      // console.log('like data: ', likeData);
 
       // with filtering
+      // if only one side liked then remove the hook id
       likeData = likeData.filter((el) => {
         const duplicate = seen.has(el.user_id);
         seen.add(el.user_id);
         return !duplicate;
       });
+      for (let i = 0; i < likeData.length; ++i) {
+        if (hookUserId.includes(likeData[i].user_id) === false) {
+          likeData.splice(i, 1);
+        }
+      }
 
+      // take five hooks
       likeData = likeData.slice(0, 5);
-      console.log('like data after data cleaning: ', likeData);
+      // console.log('like data after data cleaning: ', likeData);
       const likedUserId = likeData.map((id) => id.user_id);
-      console.log('who like you', likedUserId);
+      // console.log('who like you', likedUserId);
 
       let newHooksData = [];
       for (const id of likedUserId) {
@@ -80,32 +102,119 @@ const Chat = ({navigation}) => {
         };
         newHooksData = newHooksData.concat(totalData);
       }
-      // console.log('Matched User Data:', matchedUserData);
+      // console.log('Matched User Data:', newHooksData);
       // console.log(matchedUserData[1][0].file_id, matchedUserData[1].username);
-      setHook(newHooksData);
+      newHooksData != [] ? setHook(newHooksData) : setHook(0);
     } catch (error) {
       console.error('Fetch new hooks error', error);
-      setHook({username: 'unknown'});
-      setUsername({username: '[not available]'});
+      // setHook({username: 'unknown'});
+      // setUsername({username: '[not available]'});
     }
   };
 
   const fetchMessage = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const userMessage = await getCommentByFileId(719, token);
+      const userFiles = await getAllMediaByCurrentUserId(token);
+
+      // see who comment(chat) on any of your file
+      // get all fileId from current login user
+      const userFilesId = userFiles.map((file) => file.file_id);
+      console.log('fileIds from current user', userFilesId);
+      // get the userId from new hooks who message you
+      let hookUserId = [];
+      for (const fileId of userFilesId) {
+        const file = await getCommentByFileId(fileId);
+        for (const fileInfo of file) {
+          hookUserId.push(fileInfo.user_id);
+        }
+      }
+
+      // Getting userId of both sides
+      // console.log('hook id before cleaning', hookUserId);
+      hookUserId = [...new Set(hookUserId)];
+      // console.log('hook Id: ', hookUserId);
+      const currentUserId = (await getUserByToken(token)).user_id;
+      // console.log('my user Id is', currentUserId);
+
       let messageData = [];
-      for (const message of userMessage) {
-        let avatarScraping = await getMediaByUserId(message.user_id);
+
+      for (const userId of hookUserId) {
+        // first part get hook avatar info and user info by hooks user Id
+        // avatar info to get the avatar filename
+        let avatarScraping = await getMediaByUserId(userId);
         avatarScraping = avatarScraping.filter(
           (obj) => obj.title.toLowerCase() === 'avatar'
         );
-        const userScraping = await getUserById(message.user_id, token);
-        const totalData = {...message, ...avatarScraping, ...userScraping};
+        // console.log('avatar data', avatarScraping);
+
+        // user info to get the username of hooks
+        const userInfoScraping = await getUserById(userId, token);
+        // console.log('user info', userInfoScraping);
+
+        // get new hooks message
+        let allCm = [];
+        for (const id of userFilesId) {
+          allCm = allCm.concat(await getCommentByFileId(id));
+        }
+        allCm = allCm.filter((obj) => obj.user_id === userId);
+        // console.log('message', allCm.slice(-1));
+
+
+
+
+        // console.log('hook ge cm', allCm.slice(-1));
+        const totalData = {
+          ...avatarScraping.pop(),
+          ...userInfoScraping,
+          ...allCm.slice(-1).pop(),
+        };
+        // console.log('total data', totalData);
         messageData = messageData.concat(totalData);
       }
+
+      // console.log('message info', messageData);
+
+      // let allCm = [];
+      // for (const id of userFilesId) {
+      //   allCm = allCm.concat(await getCommentByFileId(id));
+      // }
+
+      // let some = [];
+      // for (const cm of allCm) {
+      //   let avatarScraping = await getMediaByUserId(cm.user_id);
+      //   avatarScraping = avatarScraping.filter(
+      //     (obj) => obj.title.toLowerCase() === 'avatar'
+      //   );
+      //   some = some.concat(avatarScraping);
+      // }
+
+      // allCm = Object.values(
+      //   allCm.reduce((acc, x) => {
+      //     acc[x.user_id] = [...(acc[x.user_id] || []), x];
+      //     return acc;
+      //   }, {})
+      // );
+      // allCm.sort((a, b) =>
+      //   a.slice(-1)[0].comment_id > b.slice(-1)[0].comment_id ? -1 : 1
+      // );
+
+      // console.log('list of all comments', allCm);
+
+      // const userMessage = await getCommentByFileId(719, token);
+      // console.log(userMessage);
+      // let messageData = [];
+      // for (const message of userMessage) {
+      //   let avatarScraping = await getMediaByUserId(message.user_id);
+      //   avatarScraping = avatarScraping.filter(
+      //     (obj) => obj.title.toLowerCase() === 'avatar'
+      //   );
+      //   const userScraping = await getUserById(message.user_id, token);
+      //   const totalData = {...message, ...avatarScraping, ...userScraping};
+      //   messageData = messageData.concat(totalData);
+      // }
       setMessage(messageData);
-      // console.log('Message History', messageData);
+      console.log('Message History', messageData);
     } catch (error) {
       console.log('Fetch messages error', error);
     }
@@ -134,38 +243,62 @@ const Chat = ({navigation}) => {
           }}
         >
           <Text style={styles.subTitle}>New hooks</Text>
-          <FlatList
-            horizontal={true}
-            contentContainerStyle={{flexGrow: 1}}
-            showsHorizontalScrollIndicator={false}
-            style={{marginBottom: '6%'}}
-            pagingEnabled={true}
-            data={hook}
-            keyExtractor={(item) => item.user_id.toString()}
-            renderItem={({item}) => (
-              <ListItem>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Avatar
-                    style={styles.avatar}
-                    avatarStyle={{
-                      borderWidth: 2,
-                      borderColor: 'white',
-                      borderRadius: 20,
-                      borderStyle: 'solid',
+          {hook != 0 ? (
+            <FlatList
+              horizontal={true}
+              contentContainerStyle={{flexGrow: 1}}
+              showsHorizontalScrollIndicator={false}
+              style={{marginBottom: '6%'}}
+              pagingEnabled={true}
+              data={hook}
+              keyExtractor={(item) => item.user_id.toString()}
+              renderItem={({item}) => (
+                <ListItem>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'column',
+                      alignItems: 'center',
                     }}
-                    source={{uri: uploadsUrl + item[0].filename}}
-                  />
-                  <Text style={styles.username}>{item.username}</Text>
-                </View>
-              </ListItem>
-            )}
-          ></FlatList>
+                  >
+                    <Avatar
+                      style={styles.avatar}
+                      avatarStyle={{
+                        borderWidth: 2,
+                        borderColor: 'white',
+                        borderRadius: 20,
+                        borderStyle: 'solid',
+                      }}
+                      source={{uri: uploadsUrl + item[0].filename}}
+                    />
+                    <Text style={styles.username}>{item.username}</Text>
+                  </View>
+                </ListItem>
+              )}
+            ></FlatList>
+          ) : (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={[
+                  styles.username,
+                  {
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    marginVertical: '20%',
+                    color: '#555151',
+                  },
+                ]}
+              >
+                No any hook yet
+              </Text>
+            </View>
+          )}
         </View>
 
         {/* list of messages */}
@@ -196,7 +329,7 @@ const Chat = ({navigation}) => {
                       borderRadius: 60,
                       borderStyle: 'solid',
                     }}
-                    source={{uri: uploadsUrl + item[0].filename}}
+                    source={{uri: uploadsUrl + item.filename}}
                   />
                   <View style={{flexDirection: 'column', marginLeft: '6%'}}>
                     <Text style={styles.username}>{item.username}</Text>
@@ -207,32 +340,6 @@ const Chat = ({navigation}) => {
             )}
           ></FlatList>
         </View>
-
-        {/* <View style={{flex: 1}}>
-          <Text style={styles.subTitle}>Messages</Text>
-          <ScrollView horizontal={false} contentContainerStyle={{flexGrow: 1}}>
-            <ListItem style={{flex: 1}}>
-              <View
-                style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}
-              >
-                <Avatar
-                  style={styles.avatar}
-                  avatarStyle={{
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    borderRadius: 60,
-                    borderStyle: 'solid',
-                  }}
-                  source={{uri: avatar}}
-                />
-                <View style={{flexDirection: 'column'}}>
-                  <Text style={styles.username}>{username.username}</Text>
-                  <Text style={styles.message}>{message.comment}</Text>
-                </View>
-              </View>
-            </ListItem>
-          </ScrollView>
-        </View> */}
       </SafeAreaView>
       <StatusBar style="auto"></StatusBar>
     </>
