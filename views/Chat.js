@@ -7,25 +7,16 @@ import {StatusBar} from 'expo-status-bar';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Avatar, ListItem} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  useUser,
-  useTag,
-  userComment,
-  useMedia,
-  useFavourite,
-} from '../hooks/ApiHooks';
+import {useUser, userComment, useMedia, useFavourite} from '../hooks/ApiHooks';
 import {baseUrl, uploadsUrl} from '../utils/variables';
 
 const Chat = ({navigation}) => {
   const {getUserById, getUserByToken} = useUser();
-  const {getFileByTag} = useTag();
   const {getCommentByFileId, getComments} = userComment();
   const {getMediaByUserId, getAllMediaByCurrentUserId, getMediaByFileId} =
     useMedia();
   const {getFavouritesByFileId} = useFavourite();
   const {getFavourites} = useFavourite();
-  const [username, setUsername] = useState({username: 'fetching...'});
-  const [avatar, setAvatar] = useState('http://placekitten.com/180');
   const [message, setMessage] = useState(0);
   const [hook, setHook] = useState(0);
 
@@ -116,6 +107,8 @@ const Chat = ({navigation}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const userFiles = await getAllMediaByCurrentUserId(token);
+      const currentUserId = (await getUserByToken(token)).user_id;
+      // console.log('my user Id is', currentUserId);
 
       // see who comment(chat) on any of your file
       // get all fileId from current login user
@@ -129,13 +122,22 @@ const Chat = ({navigation}) => {
           hookUserId.push(fileInfo.user_id);
         }
       }
+      // what if current user is the one who start first?
+      // all files current users like
+      const userLikeFile = await getComments(token);
+      // console.log('what user likes', userLikeFile[0].file_id);
+      const userLikeFileId = userLikeFile.map((item) => item.file_id);
+      // console.log('fileId', userLikeFileId);
+      for (const fileId of userLikeFileId) {
+        const owner = await getMediaByFileId(fileId);
+        // console.log('hi', owner.user_id);
+        hookUserId.push(owner.user_id);
+      }
 
       // Getting userId of both sides
       // console.log('hook id before cleaning', hookUserId);
       hookUserId = [...new Set(hookUserId)];
       // console.log('hook Id: ', hookUserId);
-      const currentUserId = (await getUserByToken(token)).user_id;
-      // console.log('my user Id is', currentUserId);
 
       let messageData = [];
 
@@ -171,10 +173,12 @@ const Chat = ({navigation}) => {
           myCm = myCm.concat(await getCommentByFileId(id));
         }
         myCm = myCm.filter((obj) => obj.user_id === currentUserId);
+        myCm.forEach((item) => {
+          item.user_id = userId;
+        });
         // console.log('current user message to hook', myCm);
-
         allCm = allCm.concat(myCm);
-        // console.log('message', allCm);
+        // console.log(allCm);
 
         const totalData = {
           ...avatarScraping.pop(),
@@ -226,8 +230,8 @@ const Chat = ({navigation}) => {
       //   const totalData = {...message, ...avatarScraping, ...userScraping};
       //   messageData = messageData.concat(totalData);
       // }
-      setMessage(messageData);
-      console.log('Message History', messageData);
+      messageData != [] ? setMessage(messageData) : setMessage(0);
+      // console.log('Message History', messageData);
     } catch (error) {
       console.log('Fetch messages error', error);
     }
@@ -317,41 +321,69 @@ const Chat = ({navigation}) => {
         {/* list of messages */}
         <View style={{flex: 1}}>
           <Text style={styles.subTitle}>Messages</Text>
-          <FlatList
-            pagingEnabled={true}
-            contentContainerStyle={{flexGrow: 1}}
-            data={message}
-            keyExtractor={(item) => item.user_id.toString()}
-            renderItem={({item}) => (
-              <ListItem style={{flex: 1}}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingBottom: '8%',
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#C4C4C4',
-                  }}
-                >
-                  <Avatar
-                    style={styles.avatar}
-                    avatarStyle={{
-                      borderWidth: 2,
-                      borderColor: 'white',
-                      borderRadius: 60,
-                      borderStyle: 'solid',
+          {message != 0 ? (
+            <FlatList
+              pagingEnabled={true}
+              contentContainerStyle={{flexGrow: 1}}
+              data={message}
+              keyExtractor={(item) => item.user_id.toString()}
+              renderItem={({item}) => (
+                <ListItem style={{flex: 1}}>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      paddingBottom: '8%',
+                      borderBottomWidth: 1,
+                      borderBottomColor: '#C4C4C4',
                     }}
-                    source={{uri: uploadsUrl + item.filename}}
-                  />
-                  <View style={{flexDirection: 'column', marginLeft: '6%'}}>
-                    <Text style={styles.username}>{item.username}</Text>
-                    <Text style={styles.message}>{item.comment}</Text>
+                  >
+                    <Avatar
+                      style={styles.avatar}
+                      avatarStyle={{
+                        borderWidth: 2,
+                        borderColor: 'white',
+                        borderRadius: 60,
+                        borderStyle: 'solid',
+                      }}
+                      source={{uri: uploadsUrl + item.filename}}
+                    />
+                    <View style={{flexDirection: 'column', marginLeft: '6%'}}>
+                      <Text style={styles.username}>{item.username}</Text>
+                      <Text style={styles.message}>
+                        {item.comment.length > 24
+                          ? item.comment.slice(0, 25) + '...'
+                          : item.comment}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </ListItem>
-            )}
-          ></FlatList>
+                </ListItem>
+              )}
+            ></FlatList>
+          ) : (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={[
+                  styles.username,
+                  {
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    marginVertical: '40%',
+                    color: '#555151',
+                  },
+                ]}
+              >
+                No any message yet
+              </Text>
+            </View>
+          )}
         </View>
       </SafeAreaView>
       <StatusBar style="auto"></StatusBar>
