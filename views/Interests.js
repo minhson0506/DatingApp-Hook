@@ -9,7 +9,7 @@ import {useUser} from '../hooks/ApiHooks';
 
 const Interests = ({navigation}) => {
   const {putUser, getUserByToken} = useUser();
-  const {user, loading, setLoading, token} = useContext(MainContext);
+  const {user, token} = useContext(MainContext);
   let additionData = JSON.parse(user.full_name);
   // let array = [];
   const [media, setMedia] = useState([]);
@@ -40,12 +40,6 @@ const Interests = ({navigation}) => {
   const onPressHandler = async (id) => {
     console.log('id', id);
     const array = media;
-    // console.log('array', array);
-    // if (array[id].selected === true) {
-    //   array[id].selected = false;
-    // } else {
-    //   array[id].selected = true;
-    // }
     array[id].selected = !array[id].selected;
     // console.log('array of data', array);
     // TODO put data to users
