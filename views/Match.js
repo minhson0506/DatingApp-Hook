@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import {View, Text, Alert, StyleSheet} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
 import {LinearGradient} from 'expo-linear-gradient';
 import {Button} from 'react-native-paper';
@@ -16,9 +16,11 @@ import AppLoading from 'expo-app-loading';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar} from 'react-native-elements/dist/avatar/Avatar';
 import UpIcon from '../assets/up-arrow.svg';
+import {MainContext} from '../contexts/MainContext';
 
 const Match = ({route, navigation}) => {
   const {file} = route.params;
+  const {loading, setLoading} = useContext(MainContext);
   const {getUserById} = useUser();
   const {getMediaByUserId} = useMedia();
   const [name, setName] = useState();
@@ -116,6 +118,7 @@ const Match = ({route, navigation}) => {
           uppercase={false}
           contentStyle={{height: 50}}
           onPress={() => {
+            setLoading(!loading);
             navigation.navigate('Main', {screen: 'Home'});
           }}
           style={styles.button2}

@@ -12,7 +12,7 @@ import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
-import {Avatar, Button, Text, Divider} from 'react-native-elements';
+import {Avatar, Text, Divider} from 'react-native-elements';
 import {PropTypes} from 'prop-types';
 import GlobalStyles from '../utils/GlobalStyles';
 import EditIcon from '../assets/editProfile.svg';
