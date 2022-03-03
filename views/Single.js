@@ -32,12 +32,14 @@ import {MainContext} from '../contexts/MainContext';
 
 const Single = ({route, navigation}) => {
   const {file} = route.params;
-  const {postFavourite} = userFavourite();
+  const {postFavourite, getFavouritesByFileId} = userFavourite();
   const {mediaArray} = useMedia(false, file.user_id);
   const {getUserById} = useUser();
+  const {getAllMediaByCurrentUserId} = useMedia();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
-  const {loading, setLoading} = useContext(MainContext);
+  const {loading, setLoading, user} = useContext(MainContext);
+  const [like, setLike] = useState(false);
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_400Regular,
@@ -71,6 +73,47 @@ const Single = ({route, navigation}) => {
     }
   };
 
+  const checkLike = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      // get all favourite of this single user's file
+      const allLikes = await getFavouritesByFileId(file.file_id);
+      console.log('all like of this single user', allLikes);
+      for (let i = 0; i < allLikes.length; i++) {
+        if (allLikes[i].user_id === user.user_id) {
+          setLike(true);
+          console.log('you liked this user');
+          // navigation.navigate('Profile');
+        }
+      }
+      const userFiles = await getAllMediaByCurrentUserId(token);
+      // console.log('All file from current user: ', userFiles);
+      const userFilesId = userFiles.map((file) => file.file_id);
+      // console.log('all fileId from current user: ', userFilesId);
+
+      // check who likes any photo from current login user
+      // and then get their userId
+      let allLikesofCurrentUsers = [];
+      for (const id of userFilesId) {
+        allLikesofCurrentUsers = await getFavouritesByFileId(id);
+      }
+      console.log(
+        'all likes that current user receive',
+        allLikesofCurrentUsers
+      );
+      for (let i = 0; i < allLikesofCurrentUsers.length; i++) {
+        if (allLikesofCurrentUsers[i].user_id === file.user_id) {
+          if (like === true) {
+            console.log('this user liked you');
+            navigation.navigate('Match', {file});
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const likeUser = async () => {
     const token = await AsyncStorage.getItem('userToken');
     if (!token) {
@@ -80,19 +123,21 @@ const Single = ({route, navigation}) => {
       // console.log('file id', file.file_id);
       const response = await postFavourite(file.file_id, token);
       if (response) {
-        Alert.alert('You have liked this user!');
         setLoading(!loading);
+        checkLike();
         // console.log('users liked', response);
-        navigation.goBack();
+        // navigation.goBack();
       }
     } catch (error) {
+      Alert.alert('Fail', 'You have already liked this user!');
       console.error(error);
     }
   };
 
   useEffect(() => {
     fetchOwner();
-  }, []);
+    checkLike();
+  }, [like]);
 
   if (!fontsLoaded) {
     return <AppLoading />;
