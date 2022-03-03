@@ -98,7 +98,7 @@ const Chat = ({navigation}) => {
         );
         const totalData = {
           ...userScraping,
-          ...avatarScraping,
+          ...avatarScraping.pop(),
         };
         newHooksData = newHooksData.concat(totalData);
       }
@@ -120,7 +120,7 @@ const Chat = ({navigation}) => {
       // see who comment(chat) on any of your file
       // get all fileId from current login user
       const userFilesId = userFiles.map((file) => file.file_id);
-      console.log('fileIds from current user', userFilesId);
+      // console.log('fileIds from current user', userFilesId);
       // get the userId from new hooks who message you
       let hookUserId = [];
       for (const fileId of userFilesId) {
@@ -152,18 +152,30 @@ const Chat = ({navigation}) => {
         const userInfoScraping = await getUserById(userId, token);
         // console.log('user info', userInfoScraping);
 
-        // get new hooks message
+        // get message from hook or current users, depends on who send message first
         let allCm = [];
         for (const id of userFilesId) {
           allCm = allCm.concat(await getCommentByFileId(id));
         }
         allCm = allCm.filter((obj) => obj.user_id === userId);
-        // console.log('message', allCm.slice(-1));
+        // likeData.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
 
+        // get all files from the hook users
+        const hookFile = await getMediaByUserId(userId);
+        // console.log('hook file info', hookFile);
+        const hookFileId = hookFile.map((file) => file.file_id);
+        // console.log('hook file id', hookFileId);
 
+        let myCm = [];
+        for (const id of hookFileId) {
+          myCm = myCm.concat(await getCommentByFileId(id));
+        }
+        myCm = myCm.filter((obj) => obj.user_id === currentUserId);
+        // console.log('current user message to hook', myCm);
 
+        allCm = allCm.concat(myCm);
+        // console.log('message', allCm);
 
-        // console.log('hook ge cm', allCm.slice(-1));
         const totalData = {
           ...avatarScraping.pop(),
           ...userInfoScraping,
@@ -172,6 +184,7 @@ const Chat = ({navigation}) => {
         // console.log('total data', totalData);
         messageData = messageData.concat(totalData);
       }
+      messageData.sort((a, b) => (a.comment_id > b.comment_id ? -1 : 1));
 
       // console.log('message info', messageData);
 
@@ -269,7 +282,7 @@ const Chat = ({navigation}) => {
                         borderRadius: 20,
                         borderStyle: 'solid',
                       }}
-                      source={{uri: uploadsUrl + item[0].filename}}
+                      source={{uri: uploadsUrl + item.filename}}
                     />
                     <Text style={styles.username}>{item.username}</Text>
                   </View>
