@@ -250,6 +250,7 @@ const Search = ({navigation}) => {
           }}
         >
           <Button
+            uppercase={false}
             labelStyle={styles.labelButton}
             style={styles.buttons}
             onPress={() => {
@@ -260,6 +261,7 @@ const Search = ({navigation}) => {
             Search
           </Button>
           <Button
+            uppercase={false}
             labelStyle={styles.labelButton}
             style={styles.buttons}
             onPress={() => {
@@ -403,7 +405,6 @@ const styles = StyleSheet.create({
     borderColor: '#82008F',
   },
   labelButton: {
-    textTransform: 'lowercase',
     fontSize: 15,
   },
 });
