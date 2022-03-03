@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Avatar, ListItem} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser, userComment, useMedia, useFavourite} from '../hooks/ApiHooks';
-import {baseUrl, uploadsUrl} from '../utils/variables';
+import {uploadsUrl} from '../utils/variables';
 
 const Chat = ({navigation}) => {
   const {getUserById, getUserByToken} = useUser();
@@ -189,47 +189,7 @@ const Chat = ({navigation}) => {
         messageData = messageData.concat(totalData);
       }
       messageData.sort((a, b) => (a.comment_id > b.comment_id ? -1 : 1));
-
       // console.log('message info', messageData);
-
-      // let allCm = [];
-      // for (const id of userFilesId) {
-      //   allCm = allCm.concat(await getCommentByFileId(id));
-      // }
-
-      // let some = [];
-      // for (const cm of allCm) {
-      //   let avatarScraping = await getMediaByUserId(cm.user_id);
-      //   avatarScraping = avatarScraping.filter(
-      //     (obj) => obj.title.toLowerCase() === 'avatar'
-      //   );
-      //   some = some.concat(avatarScraping);
-      // }
-
-      // allCm = Object.values(
-      //   allCm.reduce((acc, x) => {
-      //     acc[x.user_id] = [...(acc[x.user_id] || []), x];
-      //     return acc;
-      //   }, {})
-      // );
-      // allCm.sort((a, b) =>
-      //   a.slice(-1)[0].comment_id > b.slice(-1)[0].comment_id ? -1 : 1
-      // );
-
-      // console.log('list of all comments', allCm);
-
-      // const userMessage = await getCommentByFileId(719, token);
-      // console.log(userMessage);
-      // let messageData = [];
-      // for (const message of userMessage) {
-      //   let avatarScraping = await getMediaByUserId(message.user_id);
-      //   avatarScraping = avatarScraping.filter(
-      //     (obj) => obj.title.toLowerCase() === 'avatar'
-      //   );
-      //   const userScraping = await getUserById(message.user_id, token);
-      //   const totalData = {...message, ...avatarScraping, ...userScraping};
-      //   messageData = messageData.concat(totalData);
-      // }
       messageData != [] ? setMessage(messageData) : setMessage(0);
       // console.log('Message History', messageData);
     } catch (error) {
