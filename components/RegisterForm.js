@@ -16,7 +16,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const RegisterForm = ({setFormToggle}) => {
   const {postUser, checkUsername} = useUser();
   const {postLogin} = useLogin();
-  const {setInstruction, setUser, setIsLoggedIn} = useContext(MainContext);
+  const {setInstruction, setUser, setIsLoggedIn, setToken} =
+    useContext(MainContext);
   const {
     getValues,
     control,
@@ -38,6 +39,7 @@ const RegisterForm = ({setFormToggle}) => {
       const userData = await postLogin(data);
       // console.log('userData after register', userData);
       await AsyncStorage.setItem('userToken', userData.token);
+      setToken(userData.token);
       // console.log('token after register', userData.token);
       setUser(userData.user);
       setIsLoggedIn(true);
