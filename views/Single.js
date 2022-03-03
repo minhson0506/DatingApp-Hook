@@ -100,9 +100,9 @@ const Single = ({route, navigation}) => {
     fetchOwner();
   }, []);
 
-  // useEffect(() => {
-  //   animation.current?.play(1, 210);
-  // }, [isLiked]);
+  useEffect(() => {
+    animation.current?.play(0, 210);
+  }, [isLiked]);
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -200,6 +200,17 @@ const Single = ({route, navigation}) => {
                     <Text style={styles.text}>{interests}</Text>
                   </View>
                 </Card>
+                <LottieView
+                  ref={animation}
+                  // style={{marginTop: 100, marginLeft: 40}}
+                  resizeMode="cover"
+                  source={require('../assets/animation/heart.json')}
+                  autoPlay={false}
+                  loop={false}
+                  onAnimationFinish={() => {
+                    console.log('animation finished');
+                  }}
+                />
               </>
             }
             data={mediaData}
@@ -212,16 +223,7 @@ const Single = ({route, navigation}) => {
               ></ListItem>
             )}
           ></FlatList>
-          {/* <LottieView
-            ref={animation}
-            style={{position: 'absolute', left: 80, top: 170}}
-            source={require('../assets/animation/heart.json')}
-            autoPlay={false}
-            loop={false}
-            onAnimationFinish={() => {
-              console.log('animation finished');
-            }}
-          /> */}
+
           <FAB style={styles.fab} medium icon={LikeIcon} onPress={likeUser} />
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>

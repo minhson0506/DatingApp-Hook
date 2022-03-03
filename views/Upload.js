@@ -98,13 +98,15 @@ const Upload = ({navigation}) => {
         {file_id: response.file_id, tag: appId},
         userToken
       );
+      setUpload(!upload);
+      // TODO: make Alert after loading is done with animation
       tagResponse &&
         Alert.alert('Upload', 'Uploaded successfully', [
           {
             text: 'OK',
             onPress: () => {
               setUpdate(update + 1);
-              navigation.navigate('Upload');
+              // navigation.navigate('Upload');
             },
           },
         ]);
@@ -126,9 +128,9 @@ const Upload = ({navigation}) => {
     }, [])
   );
 
-  // useEffect(() => {
-  //   animation.current?.play(0, 48);
-  // }, [upload]);
+  useEffect(() => {
+    animation.current?.play(0, 520);
+  }, [upload]);
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -154,6 +156,18 @@ const Upload = ({navigation}) => {
 
         <ScrollView>
           <Text style={styles.header}>Upload your pictures or video</Text>
+          <LottieView
+            style={{width: '80%', alignSelf: 'center'}}
+            ref={animation}
+            source={require('../assets/animation/load2.json')}
+            autoPlay={false}
+            loop={false}
+            speed={2}
+            resizeMode="cover"
+            onAnimationFinish={() => {
+              console.log('animation finished');
+            }}
+          />
           <View style={styles.box}>
             <Card containerStyle={styles.card}>
               {type === 'image' ? (
@@ -173,6 +187,7 @@ const Upload = ({navigation}) => {
                   }}
                 />
               )}
+
               <Controller
                 control={control}
                 render={({field: {onChange, onBlur, value}}) => (
@@ -197,27 +212,13 @@ const Upload = ({navigation}) => {
                   // style={{marginLRight: 20}}
                   disabled={!imageSelected}
                   loading={loading}
-                  onPress={() => {
-                    setUpload(!upload);
-                    handleSubmit(onSubmit);
-                  }}
+                  onPress={handleSubmit(onSubmit)}
                 >
                   Upload
                 </Button>
               </View>
             </Card>
           </View>
-          {/* <LottieView
-            style={{marginTop: 170}}
-            ref={animation}
-            source={require('../assets/animation/upload.json')}
-            autoPlay={false}
-            loop={false}
-            resizeMode="cover"
-            onAnimationFinish={() => {
-              console.log('animation finished');
-            }}
-          /> */}
         </ScrollView>
       </SafeAreaView>
     );
@@ -240,6 +241,7 @@ const styles = StyleSheet.create({
     color: '#7C7878',
     textAlign: 'center',
     marginTop: 20,
+    marginBottom: 20,
   },
   box: {
     justifyContent: 'center',
