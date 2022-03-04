@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -41,6 +41,7 @@ import {
 import AppLoading from 'expo-app-loading';
 import {useIsFocused} from '@react-navigation/native';
 import {Menu, MenuItem} from 'react-native-material-menu';
+import {Button} from 'react-native-paper';
 
 const Profile = ({navigation}) => {
   const {user, update, setUpdate, loading, token} = useContext(MainContext);
@@ -48,6 +49,8 @@ const Profile = ({navigation}) => {
   const [avatar, setAvatar] = useState(
     'https://www.linkpicture.com/q/iPhone-8-2-1.png'
   );
+
+  const listRef = useRef(null);
   const {mediaArray} = useMedia(true);
   const {postMedia, putMedia} = useMedia();
   const {postTag} = useTag();
@@ -62,6 +65,7 @@ const Profile = ({navigation}) => {
     (obj) => obj.title.toLowerCase() !== 'avatar'
   );
   mediaData = mediaData.filter((obj) => obj.title.toLowerCase() !== 'deleted');
+  console.log('mediaData', mediaData);
 
   const fetchAvatar = () => {
     // console.log('myfileonly in profile', myFilesOnly);
@@ -85,9 +89,10 @@ const Profile = ({navigation}) => {
   const interest = () => {
     let string = '';
     additionData.interests.split(',').forEach((hobby) => {
-      string += hobby;
-      string += ' ';
+      string += hobby.charAt(0).toUpperCase() + hobby.slice(1);
+      string += ',  ';
     });
+    string = string.slice(0, -3);
     return string;
   };
 
@@ -207,6 +212,7 @@ const Profile = ({navigation}) => {
           ></EditIcon>
         </View>
         <FlatList
+          ref={listRef}
           ListHeaderComponent={
             <>
               <View style={styles.avatar}>
@@ -281,13 +287,37 @@ const Profile = ({navigation}) => {
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
+                    alignSelf: 'center',
                   }}
                 >
                   <InterestIcon style={styles.icons}></InterestIcon>
-                  <Text style={styles.text}>{interest()}</Text>
+                  <Text style={[styles.text, styles.interests]}>
+                    {interest()}
+                  </Text>
                 </View>
               </Card>
             </>
+          }
+          ListFooterComponent={
+            mediaData.length >= 4 ? (
+              <Button
+                onPress={() => {
+                  listRef.current.scrollToOffset({offset: 0, animated: true});
+                }}
+                style={{
+                  width: '95%',
+                  alignSelf: 'center',
+                  marginBottom: 20,
+                  borderWidth: 1,
+                  borderColor: '#82008F',
+                  borderRadius: 5,
+                }}
+              >
+                Back to top
+              </Button>
+            ) : (
+              <></>
+            )
           }
           data={mediaData}
           keyExtractor={(item) => item.file_id.toString()}
@@ -300,6 +330,7 @@ const Profile = ({navigation}) => {
           )}
           // myFilesOnly={true}
         ></FlatList>
+
         <FAB
           style={styles.fab}
           medium
@@ -363,6 +394,10 @@ const styles = StyleSheet.create({
     marginRight: 30,
     fontFamily: 'Poppins_400Regular',
   },
+  interests: {
+    flexShrink: 1,
+    flexWrap: 'wrap',
+  },
   icons: {
     marginTop: 17,
     marginRight: 5,
@@ -371,9 +406,8 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    height: 200,
     marginBottom: 20,
-    padding: 0,
+    paddingBottom: 15,
     borderColor: '#FCF2F2',
     borderRadius: 10,
     borderWidth: 1,

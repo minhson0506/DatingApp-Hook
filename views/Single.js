@@ -66,8 +66,9 @@ const Single = ({route, navigation}) => {
       let string = '';
       allData.interests.split(',').forEach((hobby) => {
         string = string + hobby.charAt(0).toUpperCase() + hobby.slice(1);
-        string += ' ';
+        string += ',  ';
       });
+      string = string.slice(0, -3);
       setInterests(string);
     } catch (error) {
       Alert.alert([{text: 'Load owner failed'}]);
@@ -269,7 +270,9 @@ const Single = ({route, navigation}) => {
                     }}
                   >
                     <InterestIcon style={styles.icons}></InterestIcon>
-                    <Text style={styles.text}>{interests}</Text>
+                    <Text style={[styles.text, styles.interests]}>
+                      {interests}
+                    </Text>
                   </View>
                 </Card>
                 <LottieView
@@ -342,6 +345,10 @@ const styles = StyleSheet.create({
     marginRight: 30,
     fontFamily: 'Poppins_400Regular',
   },
+  interests: {
+    flexShrink: 1,
+    flexWrap: 'wrap',
+  },
   icons: {
     marginTop: 17,
     marginRight: 10,
@@ -350,9 +357,8 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    height: 200,
     marginBottom: 20,
-    padding: 0,
+    paddingBottom: 10,
     borderColor: '#FCF2F2',
     borderRadius: 10,
     borderWidth: 1,

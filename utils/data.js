@@ -387,7 +387,7 @@ const dataSource = [
   'Travel',
   'Coffee',
   'Yoga',
-  'Cook & Bake',
+  'Cooking',
   'DIY',
   'Game',
   'Fashion',
