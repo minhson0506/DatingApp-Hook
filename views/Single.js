@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState, useContext, useRef} from 'react';
 import {StyleSheet, View, SafeAreaView, Alert, FlatList} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
@@ -32,6 +32,7 @@ import LottieView from 'lottie-react-native';
 
 const Single = ({route, navigation}) => {
   const animation = React.createRef();
+  const listRef = useRef(null);
   const {file} = route.params;
   const {postFavourite, getFavouritesByFileId, getFavourites} = userFavourite();
   const {mediaArray} = useMedia(false, file.user_id);
@@ -195,6 +196,7 @@ const Single = ({route, navigation}) => {
             <Button disabled={true}></Button>
           </View>
           <FlatList
+            ref={listRef}
             ListHeaderComponent={
               <>
                 <View style={styles.avatar}>
@@ -287,6 +289,27 @@ const Single = ({route, navigation}) => {
                   }}
                 />
               </>
+            }
+            ListFooterComponent={
+              mediaData.length >= 4 ? (
+                <Button
+                  onPress={() => {
+                    listRef.current.scrollToOffset({offset: 0, animated: true});
+                  }}
+                  style={{
+                    width: '95%',
+                    alignSelf: 'center',
+                    marginBottom: 20,
+                    borderWidth: 1,
+                    borderColor: '#82008F',
+                    borderRadius: 5,
+                  }}
+                >
+                  Back to top
+                </Button>
+              ) : (
+                <></>
+              )
             }
             data={mediaData}
             keyExtractor={(item) => item.file_id.toString()}

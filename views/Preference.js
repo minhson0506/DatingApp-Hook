@@ -35,7 +35,7 @@ const Preference = ({navigation}) => {
   });
 
   const {putUser} = useUser();
-  const {user, token} = useContext(MainContext);
+  const {user, token, loading, setLoading} = useContext(MainContext);
   const additionData = JSON.parse(user.full_name);
 
   // slider values
@@ -174,6 +174,7 @@ const Preference = ({navigation}) => {
       const userData = await putUser(user, token);
       if (userData) {
         Alert.alert('Success', userData.message);
+        setLoading(!loading);
         navigation.navigate('Home');
       }
     } catch (error) {
