@@ -77,9 +77,10 @@ const Login = ({navigation}) => {
               <Text style={styles.appName}>hook</Text>
               <View style={styles.form}>
                 <ButtonGroup
+                  innerBorderStyle={{color: '#DA535E'}}
                   onPress={() => setFormToggle(!formToggle)}
                   selectedIndex={formToggle ? 0 : 1}
-                  buttons={['Register', 'Sign in']}
+                  buttons={['Sign in', 'Register']}
                   containerStyle={styles.buttons}
                   buttonContainerStyle={styles.button}
                   buttonStyle={{borderRadius: 50}}
