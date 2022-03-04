@@ -15,6 +15,7 @@ import ModifyUser from '../views/ModifyUser';
 import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';
+import SingleChat from '../views/SingleChat';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -106,6 +107,7 @@ const StackScreen = () => {
             name="Modify user"
             component={ModifyUser}
           ></Stack.Screen>
+          <Stack.Screen name="SingleChat" component={SingleChat}></Stack.Screen>
         </>
       ) : (
         <Stack.Screen

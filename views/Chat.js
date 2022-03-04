@@ -18,6 +18,7 @@ const Chat = ({navigation}) => {
   const {getFavouritesByFileId} = useFavourite();
   const {getFavourites} = useFavourite();
   const [message, setMessage] = useState(0);
+  const [singleMessage, setSingleMessage] = useState(0);
   const [hook, setHook] = useState(0);
 
   const fetchNewHooks = async () => {
@@ -140,6 +141,7 @@ const Chat = ({navigation}) => {
       // console.log('hook Id: ', hookUserId);
 
       let messageData = [];
+      let singleMessageData = [];
 
       for (const userId of hookUserId) {
         // first part get hook avatar info and user info by hooks user Id
@@ -185,13 +187,24 @@ const Chat = ({navigation}) => {
           ...userInfoScraping,
           ...allCm.slice(-1).pop(),
         };
+
+        const totalSingleMessageData = {
+          ...avatarScraping.pop(),
+          ...userInfoScraping,
+        };
+
         // console.log('total data', totalData);
         messageData = messageData.concat(totalData);
+        singleMessageData = singleMessageData.concat(totalSingleMessageData);
       }
       messageData.sort((a, b) => (a.comment_id > b.comment_id ? -1 : 1));
       // console.log('message info', messageData);
       messageData != [] ? setMessage(messageData) : setMessage(0);
       // console.log('Message History', messageData);
+
+      singleMessageData = [...new Set(singleMessageData)];
+      setSingleMessage(singleMessageData);
+      // console.log('data for navigation:', singleMessageData);
     } catch (error) {
       console.log('Fetch messages error', error);
     }
@@ -288,15 +301,17 @@ const Chat = ({navigation}) => {
               data={message}
               keyExtractor={(item) => item.user_id.toString()}
               renderItem={({item}) => (
-                <ListItem style={{flex: 1}}>
+                <ListItem
+                  style={{flex: 1}}
+                  onPress={() => {
+                    navigation.navigate('SingleChat', {item});
+                  }}
+                >
                   <View
                     style={{
                       flex: 1,
                       flexDirection: 'row',
                       alignItems: 'center',
-                      paddingBottom: '8%',
-                      borderBottomWidth: 1,
-                      borderBottomColor: '#C4C4C4',
                     }}
                   >
                     <Avatar
