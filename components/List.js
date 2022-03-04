@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 
 const List = ({navigation, myFilesOnly = false}) => {
+  const [didMount, setDidMount] = useState(false);
   const {user, loading} = useContext(MainContext);
   const {getUserById} = useUser();
   const {token} = useContext(MainContext);
@@ -166,6 +167,15 @@ const List = ({navigation, myFilesOnly = false}) => {
   useEffect(() => {
     filterData();
   }, [mediaArray, loading]);
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, []);
+
+  if (!didMount) {
+    return null;
+  }
 
   return (
     <FlatList
