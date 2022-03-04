@@ -106,6 +106,10 @@ const useMedia = (myFilesOnly, userId = null) => {
     return await doFetch(baseUrl + 'media/user', options);
   };
 
+  const getMediaByFileId = async (fileId) => {
+    return await doFetch(`${baseUrl}media/${fileId}`);
+  };
+
   return {
     mediaArray,
     postMedia,
@@ -114,6 +118,7 @@ const useMedia = (myFilesOnly, userId = null) => {
     putMedia,
     getMediaByUserId,
     getAllMediaByCurrentUserId,
+    getMediaByFileId,
   };
 };
 

@@ -34,12 +34,14 @@ import LottieView from 'lottie-react-native';
 const Single = ({route, navigation}) => {
   const animation = React.createRef();
   const {file} = route.params;
-  const {postFavourite} = userFavourite();
+  const {postFavourite, getFavouritesByFileId} = userFavourite();
   const {mediaArray} = useMedia(false, file.user_id);
   const {getUserById} = useUser();
+  const {getAllMediaByCurrentUserId} = useMedia();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
-  const {loading, setLoading} = useContext(MainContext);
+  const {user, loading, setLoading} = useContext(MainContext);
+  const [like, setLike] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
@@ -74,6 +76,25 @@ const Single = ({route, navigation}) => {
     }
   };
 
+  const checkLike = async () => {
+    try {
+      // get all favourite of this single user's file
+      const allLikes = await getFavouritesByFileId(file.file_id);
+      console.log('all like of this single user', allLikes);
+      for (let i = 0; i < allLikes.length; i++) {
+        if (allLikes[i].user_id === user.user_id) {
+          if (like === true) {
+            console.log('you liked this user');
+            navigation.navigate('Match', {file});
+            return;
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const likeUser = async () => {
     const token = await AsyncStorage.getItem('userToken');
     if (!token) {
@@ -83,15 +104,34 @@ const Single = ({route, navigation}) => {
       // console.log('file id', file.file_id);
       const response = await postFavourite(file.file_id, token);
       if (response) {
+        const userFiles = await getAllMediaByCurrentUserId(token);
+        // console.log('All file from current user: ', userFiles);
         setIsLiked(!isLiked);
         Alert.alert('You have liked this user!');
-        setLoading(!loading);
 
+        const userFilesId = userFiles.map((file) => file.file_id);
+        // console.log('all fileId from current user: ', userFilesId);
+
+        // check who likes any photo from current login user
+        // and then get their userId
+        let allLikesofCurrentUsers = [];
+        for (const id of userFilesId) {
+          allLikesofCurrentUsers = await getFavouritesByFileId(id);
+        }
+        console.log(
+          'all likes that current user receive',
+          allLikesofCurrentUsers
+        );
+        for (let i = 0; i < allLikesofCurrentUsers.length; i++) {
+          if (allLikesofCurrentUsers[i].user_id === file.user_id) {
+            setLike(true);
+            console.log('this user liked you');
+          }
+        }
         // console.log('users liked', response);
-        // navigation.goBack();
       }
     } catch (error) {
-      Alert.alert('You have already liked this user!');
+      Alert.alert('Fail', 'You have already liked this user!');
       console.error(error);
     }
   };
@@ -99,6 +139,10 @@ const Single = ({route, navigation}) => {
   useEffect(() => {
     fetchOwner();
   }, []);
+
+  useEffect(() => {
+    checkLike();
+  }, [like]);
 
   useEffect(() => {
     animation.current?.play(0, 210);
@@ -114,6 +158,7 @@ const Single = ({route, navigation}) => {
             <Button
               style={styles.back}
               onPress={() => {
+                setLoading(!loading);
                 navigation.goBack();
               }}
               icon={BackIcon}

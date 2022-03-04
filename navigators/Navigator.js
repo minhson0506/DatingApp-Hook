@@ -18,6 +18,7 @@ import Preference from '../views/Preference';
 import Interests from '../views/Interests';
 import Upload from '../views/Upload';
 import EditProfile from '../views/EditProfile';
+import Match from '../views/Match';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -186,6 +187,11 @@ const StackScreen = () => {
               component={Interests}
               options={{headerShown: false}}
             ></Stack.Screen>
+            <Stack.Screen
+              name="Match"
+              component={Match}
+              options={{headerShown: false}}
+            ></Stack.Screen>
           </>
         ) : (
           <>
@@ -227,6 +233,11 @@ const StackScreen = () => {
             <Stack.Screen
               name="Interests"
               component={Interests}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Match"
+              component={Match}
               options={{headerShown: false}}
             ></Stack.Screen>
           </>
