@@ -33,10 +33,10 @@ import LottieView from 'lottie-react-native';
 const Single = ({route, navigation}) => {
   const animation = React.createRef();
   const {file} = route.params;
-  const {postFavourite, getFavouritesByFileId} = userFavourite();
+  const {postFavourite, getFavouritesByFileId, getFavourites} = userFavourite();
   const {mediaArray} = useMedia(false, file.user_id);
   const {getUserById} = useUser();
-  const {getAllMediaByCurrentUserId} = useMedia();
+  const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
   const {user, loading, setLoading, token} = useContext(MainContext);
@@ -94,42 +94,60 @@ const Single = ({route, navigation}) => {
   };
 
   const likeUser = async () => {
-    if (!token) {
-      return;
-    }
-    try {
-      // console.log('file id', file.file_id);
-      const response = await postFavourite(file.file_id, token);
-      if (response) {
-        const userFiles = await getAllMediaByCurrentUserId(token);
-        // console.log('All file from current user: ', userFiles);
-        setIsLiked(!isLiked);
-        Alert.alert('You have liked this user!');
+    // console.log('file id', file.file_id);
+    // console.log('file', file);
 
-        const userFilesId = userFiles.map((file) => file.file_id);
-        // console.log('all fileId from current user: ', userFilesId);
+    let alreadyLiked = false;
 
-        // check who likes any photo from current login user
-        // and then get their userId
-        let allLikesofCurrentUsers = [];
-        for (const id of userFilesId) {
-          allLikesofCurrentUsers = await getFavouritesByFileId(id);
-        }
-        console.log(
-          'all likes that current user receive',
-          allLikesofCurrentUsers
-        );
-        for (let i = 0; i < allLikesofCurrentUsers.length; i++) {
-          if (allLikesofCurrentUsers[i].user_id === file.user_id) {
-            setLike(true);
-            console.log('this user liked you');
-          }
-        }
-        // console.log('users liked', response);
-      }
-    } catch (error) {
+    let files = await getMediaByUserId(file.user_id);
+    files = files.map((obj) => {
+      return obj.file_id;
+    });
+    // console.log('files', files);
+    const likes = await getFavourites(token);
+    likes.forEach((obj) => {
+      if (files.includes(obj.file_id)) alreadyLiked = true;
+    });
+    // console.log('already likes', alreadyLiked);
+
+    if (alreadyLiked) {
       Alert.alert('Fail', 'You have already liked this user!');
-      console.error(error);
+      return;
+    } else {
+      try {
+        // console.log('file id', file.file_id);
+        const response = await postFavourite(file.file_id, token);
+        if (response) {
+          const userFiles = await getAllMediaByCurrentUserId(token);
+          // console.log('All file from current user: ', userFiles);
+          setIsLiked(!isLiked);
+          Alert.alert('You have liked this user!');
+
+          const userFilesId = userFiles.map((file) => file.file_id);
+          // console.log('all fileId from current user: ', userFilesId);
+
+          // check who likes any photo from current login user
+          // and then get their userId
+          let allLikesofCurrentUsers = [];
+          for (const id of userFilesId) {
+            allLikesofCurrentUsers = await getFavouritesByFileId(id);
+          }
+          console.log(
+            'all likes that current user receive',
+            allLikesofCurrentUsers
+          );
+          for (let i = 0; i < allLikesofCurrentUsers.length; i++) {
+            if (allLikesofCurrentUsers[i].user_id === file.user_id) {
+              setLike(true);
+              console.log('this user liked you');
+            }
+          }
+          // console.log('users liked', response);
+        }
+      } catch (error) {
+        Alert.alert('Fail', 'You have already liked this user!');
+        console.error(error);
+      }
     }
   };
 

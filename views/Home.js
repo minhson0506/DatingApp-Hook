@@ -21,7 +21,7 @@ import {MainContext} from '../contexts/MainContext';
 import {Menu, MenuItem} from 'react-native-material-menu';
 
 const Home = ({navigation}) => {
-  const {loading, setLoading, user} = useContext(MainContext);
+  const {loading, setLoading, user, token} = useContext(MainContext);
   console.log('user', user);
   // menu state & functions
   const [visible, setVisible] = useState(false);
@@ -31,6 +31,8 @@ const Home = ({navigation}) => {
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
   });
+
+  console.log('token', token);
 
   if (!fontsLoaded) {
     return <AppLoading />;
