@@ -1,5 +1,12 @@
 /* eslint-disable camelcase */
-import {SafeAreaView, Text, StyleSheet, FlatList, View} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  FlatList,
+  View,
+  Alert,
+} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {PropTypes} from 'prop-types';
 import GlobalStyles from '../utils/GlobalStyles';
@@ -12,7 +19,6 @@ import {
   Poppins_600SemiBold,
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
-import AppLoading from 'expo-app-loading';
 
 const Interests = ({navigation}) => {
   const [fontsLoaded] = useFonts({
@@ -128,6 +134,7 @@ const Interests = ({navigation}) => {
             <Button
               style={styles.button}
               onPress={() => {
+                Alert.alert('Success', 'Update profile succesfully');
                 navigation.navigate('Profile');
               }}
             >

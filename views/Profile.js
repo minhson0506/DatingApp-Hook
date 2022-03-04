@@ -197,16 +197,6 @@ const Profile = ({navigation}) => {
             >
               How Hook works
             </MenuItem>
-            <MenuItem
-              pressColor={'#FDC592'}
-              textStyle={styles.textMenu}
-              onPress={() => {
-                hideMenu();
-                navigation.navigate('Interests');
-              }}
-            >
-              Interests
-            </MenuItem>
           </Menu>
           <Text style={styles.appName}>hook</Text>
           <EditIcon

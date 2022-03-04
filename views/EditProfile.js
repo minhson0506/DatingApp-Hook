@@ -175,13 +175,8 @@ const EditProfile = ({navigation}) => {
 
     user.full_name = JSON.stringify(additionData);
     try {
-      const userData = await putUser(user, token);
-      if (userData) {
-        Alert.alert('Success', userData.message);
-        // update info after navigate
-        setLoading(!loading);
-        navigation.navigate('Profile');
-      }
+      const response = await putUser(user, token);
+      response && setLoading(!loading);
     } catch (error) {
       console.error(error);
     }
@@ -308,11 +303,11 @@ const EditProfile = ({navigation}) => {
           <Button
             labelStyle={styles.button}
             onPress={() => {
-              navigation.navigate('Profile');
               modifyPreferences();
+              navigation.navigate('Interests');
             }}
           >
-            Done
+            next
           </Button>
         </View>
         <Divider style={{marginTop: 5}} />
