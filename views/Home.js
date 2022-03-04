@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, {useEffect, useContext, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,7 +11,6 @@ import GlobalStyles from '../utils/GlobalStyles';
 import List from '../components/List';
 import PropTypes from 'prop-types';
 import {StatusBar} from 'expo-status-bar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import MenuIcon from '../assets/menu.svg';
 import FilterIcon from '../assets/filter.svg';
 import {FAB} from 'react-native-paper';
@@ -28,19 +27,6 @@ const Home = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
-
-  const checkToken = async () => {
-    try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      console.log('token', userToken);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    checkToken();
-  }, []);
 
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,

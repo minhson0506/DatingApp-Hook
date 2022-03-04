@@ -9,7 +9,6 @@ import {
   Alert,
 } from 'react-native';
 import {MainContext} from '../contexts/MainContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Text, Divider} from 'react-native-elements';
@@ -44,7 +43,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {Menu, MenuItem} from 'react-native-material-menu';
 
 const Profile = ({navigation}) => {
-  const {user, update, setUpdate, loading} = useContext(MainContext);
+  const {user, update, setUpdate, loading, token} = useContext(MainContext);
   const isFocused = useIsFocused();
   const [avatar, setAvatar] = useState(
     'https://www.linkpicture.com/q/iPhone-8-2-1.png'
@@ -103,8 +102,7 @@ const Profile = ({navigation}) => {
         description: avatar.description,
       };
       try {
-        const userToken = await AsyncStorage.getItem('userToken');
-        await putMedia(avatar.file_id, userToken, data);
+        await putMedia(avatar.file_id, token, data);
       } catch (error) {
         console.error(error.message);
       }
@@ -133,11 +131,10 @@ const Profile = ({navigation}) => {
     });
     removeOldAvatar();
     try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const response = await postMedia(formData, userToken);
+      const response = await postMedia(formData, token);
       const tagResponse = await postTag(
         {file_id: response.file_id, tag: appId},
-        userToken
+        token
       );
       tagResponse &&
         Alert.alert('Upload', 'Updated avatar successfully', [

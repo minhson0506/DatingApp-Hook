@@ -21,7 +21,6 @@ import {
 import AppLoading from 'expo-app-loading';
 import {Divider} from 'react-native-elements';
 import {useUser} from '../hooks/ApiHooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {locationArray, countryArray, religionArray} from '../utils/data';
@@ -36,7 +35,7 @@ const Preference = ({navigation}) => {
   });
 
   const {putUser} = useUser();
-  const {user} = useContext(MainContext);
+  const {user, token} = useContext(MainContext);
   const additionData = JSON.parse(user.full_name);
 
   // slider values
@@ -172,8 +171,7 @@ const Preference = ({navigation}) => {
 
     user.full_name = JSON.stringify(additionData);
     try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const userData = await putUser(user, userToken);
+      const userData = await putUser(user, token);
       if (userData) {
         Alert.alert('Success', userData.message);
         navigation.navigate('Home');

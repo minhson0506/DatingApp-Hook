@@ -30,7 +30,6 @@ const Interests = ({navigation}) => {
   let result = [];
 
   const arrayLoading = async () => {
-    // const token = await AsyncStorage.getItem('userToken');
     const user = await getUserByToken(token);
     additionData = JSON.parse(user.full_name);
     let arrayInterest = additionData.interests.split(' ').join('').split(',');

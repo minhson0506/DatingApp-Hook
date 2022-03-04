@@ -4,7 +4,6 @@ import {StyleSheet, View, SafeAreaView, Alert, FlatList} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Text, Divider} from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackIcon from '../assets/back.svg';
 import GlobalStyles from '../utils/GlobalStyles';
 import {StatusBar} from 'expo-status-bar';
@@ -40,7 +39,7 @@ const Single = ({route, navigation}) => {
   const {getAllMediaByCurrentUserId} = useMedia();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
-  const {user, loading, setLoading} = useContext(MainContext);
+  const {user, loading, setLoading, token} = useContext(MainContext);
   const [like, setLike] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [fontsLoaded] = useFonts({
@@ -54,7 +53,6 @@ const Single = ({route, navigation}) => {
 
   const fetchOwner = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
       // console.log('token in single', token);
       // console.log('singlemedia', singleMedia);
       // console.log('user_id', singleMedia.description);
@@ -96,7 +94,6 @@ const Single = ({route, navigation}) => {
   };
 
   const likeUser = async () => {
-    const token = await AsyncStorage.getItem('userToken');
     if (!token) {
       return;
     }

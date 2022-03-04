@@ -11,7 +11,7 @@ import GlobalStyles from '../utils/GlobalStyles';
 
 const ModifyUser = ({navigation}) => {
   const {checkUsername, putUser} = useUser();
-  const {user, setUser, setIsLoggedIn} = useContext(MainContext);
+  const {user, setUser, setIsLoggedIn, token} = useContext(MainContext);
   const {
     control,
     handleSubmit,
@@ -44,8 +44,7 @@ const ModifyUser = ({navigation}) => {
       if (data.password === '') {
         delete data.password;
       }
-      const userToken = await AsyncStorage.getItem('userToken');
-      const userData = await putUser(data, userToken);
+      const userData = await putUser(data, token);
       if (userData) {
         Alert.alert('Success', userData.message);
         delete data.password;

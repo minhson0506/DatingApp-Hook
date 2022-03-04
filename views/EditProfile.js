@@ -21,7 +21,6 @@ import {
 import AppLoading from 'expo-app-loading';
 import {Divider, Input} from 'react-native-elements';
 import {useUser} from '../hooks/ApiHooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
@@ -41,7 +40,7 @@ const EditProfile = ({navigation}) => {
   });
 
   const {putUser} = useUser();
-  const {user, setLoading, loading} = useContext(MainContext);
+  const {user, setLoading, loading, token} = useContext(MainContext);
   const additionData = JSON.parse(user.full_name);
 
   // input values
@@ -176,8 +175,7 @@ const EditProfile = ({navigation}) => {
 
     user.full_name = JSON.stringify(additionData);
     try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const userData = await putUser(user, userToken);
+      const userData = await putUser(user, token);
       if (userData) {
         Alert.alert('Success', userData.message);
         // update info after navigate

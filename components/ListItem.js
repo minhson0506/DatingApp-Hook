@@ -9,7 +9,6 @@ import {
   Text,
 } from 'react-native-elements';
 import {Alert, ScrollView, StyleSheet, View} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import AgeIcon from '../assets/age.svg';
 import InterestIcon from '../assets/heart.svg';
@@ -33,11 +32,10 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   // const [owner, setOwner] = useState({username: 'fetching...'});
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const {putMedia} = useMedia();
-  const {setUpdate, update} = useContext(MainContext);
+  const {setUpdate, update, token} = useContext(MainContext);
 
   const fetchOwner = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
       // console.log('singlemedia', singleMedia);
       // console.log('user_id', singleMedia.description);
       const userData = await getUserById(singleMedia.user_id, token);
@@ -61,8 +59,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     };
     // console.log('data', data);
     try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const response = await putMedia(singleMedia.file_id, userToken, data);
+      const response = await putMedia(singleMedia.file_id, token, data);
       // console.log('response for delete', response);
       if (response) {
         Alert.alert('Delete', 'Deleted successfully', [
