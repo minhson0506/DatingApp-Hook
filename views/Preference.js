@@ -283,7 +283,7 @@ const Preference = ({navigation}) => {
             Done
           </Button>
         </View>
-        <Divider style={{marginBottom: 5, marginTop: 5}} />
+        <Divider style={{marginTop: 5}} />
         <ScrollView>
           <Text style={styles.header}>Basic Preferences</Text>
           <Divider style={{marginBottom: 5, marginTop: 5}} />
@@ -325,7 +325,7 @@ const Preference = ({navigation}) => {
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
           <Text style={styles.header}>Other Preferences</Text>
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Age range</Text>
           <View style={styles.slider}>
             <MultiSlider
@@ -346,7 +346,7 @@ const Preference = ({navigation}) => {
               selectedStyle={{backgroundColor: '#FF707B'}}
             />
           </View>
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Maximum distance (km)</Text>
           <View style={styles.slider}>
             <MultiSlider
@@ -400,7 +400,7 @@ const Preference = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
 
           <Text style={styles.title}>Height (cm)</Text>
           <View style={styles.slider}>
@@ -425,8 +425,8 @@ const Preference = ({navigation}) => {
 
           <Text style={styles.title}>Family Plan</Text>
           <DropDownPicker
-            zIndex={2000}
-            zIndexInverse={5000}
+            zIndex={6000}
+            zIndexInverse={2000}
             containerStyle={styles.picker}
             open={openFamily}
             value={family}
@@ -444,7 +444,7 @@ const Preference = ({navigation}) => {
 
           <Text style={styles.title}>Drinking</Text>
           <DropDownPicker
-            zIndex={1000}
+            zIndex={5000}
             zIndexInverse={6000}
             containerStyle={styles.picker}
             open={openDrinking}
@@ -459,10 +459,12 @@ const Preference = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 30, marginTop: 30}} />
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
 
           <Text style={styles.title}>Smoking</Text>
           <DropDownPicker
+            zIndex={4000}
+            zIndexInverse={5000}
             containerStyle={styles.picker}
             open={openSmoking}
             value={smoking}
@@ -476,10 +478,12 @@ const Preference = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 30, marginTop: 30}} />
+          <Divider style={{marginBottom: 5, marginTop: 5}} />
 
           <Text style={styles.title}>Pet</Text>
           <DropDownPicker
+            zIndex={3000}
+            zIndexInverse={4000}
             open={openPet}
             value={pet}
             items={petItem}
@@ -493,7 +497,7 @@ const Preference = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <View style={{marginBottom: 40}}></View>
+          <View style={{marginBottom: 20}}></View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -516,7 +520,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
     color: '#7C7878',
     marginLeft: 20,
-    marginTop: 20,
+    marginTop: '10%',
   },
   title: {
     fontSize: 16,

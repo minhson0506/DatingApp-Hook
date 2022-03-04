@@ -80,7 +80,7 @@ const Login = ({navigation}) => {
                   innerBorderStyle={{color: '#DA535E'}}
                   onPress={() => setFormToggle(!formToggle)}
                   selectedIndex={formToggle ? 0 : 1}
-                  buttons={['Sign in', 'Register']}
+                  buttons={['Register', 'Sign in']}
                   containerStyle={styles.buttons}
                   buttonContainerStyle={styles.button}
                   buttonStyle={{borderRadius: 50}}

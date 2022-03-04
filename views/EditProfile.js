@@ -315,7 +315,7 @@ const EditProfile = ({navigation}) => {
             Done
           </Button>
         </View>
-        <Divider style={{marginBottom: 5, marginTop: 5}} />
+        <Divider style={{marginTop: 5}} />
         <ScrollView>
           <Text style={styles.header}>My Vital</Text>
           <Divider style={{marginBottom: 5, marginTop: 5}} />
@@ -348,7 +348,7 @@ const EditProfile = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Age</Text>
           <View style={styles.slider}>
             <MultiSlider
@@ -363,7 +363,7 @@ const EditProfile = ({navigation}) => {
               selectedStyle={{backgroundColor: '#FF707B'}}
             />
           </View>
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Height (cm)</Text>
           <View style={styles.slider}>
             <MultiSlider
@@ -434,7 +434,7 @@ const EditProfile = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Pet</Text>
           <DropDownPicker
             open={openPet}
@@ -450,9 +450,11 @@ const EditProfile = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
+          <Divider style={{marginTop: 5}} />
+
           <Text style={styles.header}>My virture</Text>
 
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Work</Text>
           <Input
             value={work}
@@ -463,6 +465,8 @@ const EditProfile = ({navigation}) => {
             inputStyle={styles.inputStyle}
             inputContainerStyle={{borderBottomWidth: 0}}
           />
+          <Divider style={{marginBottom: 5}} />
+
           <Text style={styles.title}>Job Title</Text>
           <Input
             value={job}
@@ -582,7 +586,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
     color: '#7C7878',
     marginLeft: 20,
-    marginTop: 20,
+    marginTop: '10%',
   },
   title: {
     fontSize: 16,
