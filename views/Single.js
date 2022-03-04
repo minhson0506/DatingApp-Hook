@@ -42,6 +42,7 @@ const Single = ({route, navigation}) => {
   const {user, loading, setLoading, token} = useContext(MainContext);
   const [like, setLike] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [owner, setOwner] = useState();
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_400Regular,
@@ -57,6 +58,7 @@ const Single = ({route, navigation}) => {
       // console.log('singlemedia', singleMedia);
       // console.log('user_id', singleMedia.description);
       const userData = await getUserById(file.user_id, token);
+      setOwner(userData.username);
       // console.log('user data', userData);
       const allData = await JSON.parse(userData.full_name);
       // console.log('addition data in listitem.js', allData);
@@ -77,10 +79,19 @@ const Single = ({route, navigation}) => {
   const checkLike = async () => {
     try {
       // get all favourite of this single user's file
-      const allLikes = await getFavouritesByFileId(file.file_id);
-      console.log('all like of this single user', allLikes);
-      for (let i = 0; i < allLikes.length; i++) {
-        if (allLikes[i].user_id === user.user_id) {
+      // const allLikes = await getFavouritesByFileId(file.file_id);
+      const allMediaOfSingleUser = await getMediaByUserId(file.user_id);
+      // console.log('all media of this single user', allMediaOfSingleUser);
+      const userFilesId = allMediaOfSingleUser.map((file) => file.file_id);
+      // console.log('all file id', userFilesId);
+      let allLikesofSingleUser = [];
+      for (const id of userFilesId) {
+        const response = await getFavouritesByFileId(id);
+        allLikesofSingleUser = allLikesofSingleUser.concat(response);
+      }
+      // console.log('all likes that single user receive', allLikesofSingleUser);
+      for (let i = 0; i < allLikesofSingleUser.length; i++) {
+        if (allLikesofSingleUser[i].user_id === user.user_id) {
           if (like === true) {
             console.log('you liked this user');
             navigation.navigate('Match', {file});
@@ -111,7 +122,7 @@ const Single = ({route, navigation}) => {
     // console.log('already likes', alreadyLiked);
 
     if (alreadyLiked) {
-      Alert.alert('Fail', 'You have already liked this user!');
+      Alert.alert('Fail', `You have already liked ${owner}!`);
       return;
     } else {
       try {
@@ -121,7 +132,7 @@ const Single = ({route, navigation}) => {
           const userFiles = await getAllMediaByCurrentUserId(token);
           // console.log('All file from current user: ', userFiles);
           setIsLiked(!isLiked);
-          Alert.alert('You have liked this user!');
+          Alert.alert(`You liked ${owner} !`);
 
           const userFilesId = userFiles.map((file) => file.file_id);
           // console.log('all fileId from current user: ', userFilesId);
@@ -130,22 +141,23 @@ const Single = ({route, navigation}) => {
           // and then get their userId
           let allLikesofCurrentUsers = [];
           for (const id of userFilesId) {
-            allLikesofCurrentUsers = await getFavouritesByFileId(id);
+            const response = await getFavouritesByFileId(id);
+            allLikesofCurrentUsers = allLikesofCurrentUsers.concat(response);
           }
-          console.log(
-            'all likes that current user receive',
-            allLikesofCurrentUsers
-          );
+          // console.log(
+          //   'all likes that current user receive',
+          //   allLikesofCurrentUsers
+          // );
           for (let i = 0; i < allLikesofCurrentUsers.length; i++) {
             if (allLikesofCurrentUsers[i].user_id === file.user_id) {
               setLike(true);
-              console.log('this user liked you');
+              // console.log('this user liked you');
             }
           }
           // console.log('users liked', response);
         }
       } catch (error) {
-        Alert.alert('Fail', 'You have already liked this user!');
+        Alert.alert('Fail', `You have already liked ${owner}!`);
         console.error(error);
       }
     }
