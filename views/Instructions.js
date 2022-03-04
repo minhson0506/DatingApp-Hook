@@ -292,15 +292,16 @@ const Instructions = ({navigation}) => {
               others can find you!
             </Text>
             <Button
+              uppercase={false}
               onPress={() => {
                 instruction
                   ? navigation.navigate('Main', {screen: 'Profile'})
                   : navigation.goBack();
               }}
               style={styles.ScrollUpButton}
-              labelStyle={{color: 'white', textAlign: 'center', fontSize: 15}}
+              labelStyle={{textAlign: 'center', fontSize: 16}}
             >
-              Ok I got this!
+              OK I got this!
             </Button>
           </View>
           {/* </ScrollView> */}
@@ -342,11 +343,11 @@ const styles = StyleSheet.create({
   },
   ScrollUpButton: {
     alignSelf: 'center',
-    width: 180,
-    height: 40,
-    backgroundColor: '#EB6432',
+    width: '40%',
     borderRadius: 10,
     marginTop: '50%',
+    borderWidth: 1,
+    borderColor: '#82008F',
   },
   textButton: {
     fontFamily: 'Poppins_500Medium',
