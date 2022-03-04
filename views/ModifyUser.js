@@ -214,7 +214,6 @@ const ModifyUser = ({navigation}) => {
       <Button
         style={styles.ScrollUpButton}
         labelStyle={{
-          color: 'white',
           fontSize: 15,
         }}
         onPress={handleSubmit(onSubmit)}
@@ -240,7 +239,6 @@ const ModifyUser = ({navigation}) => {
 const styles = StyleSheet.create({
   button: {
     textTransform: 'lowercase',
-    color: '#EB6833',
     fontSize: 16,
     fontFamily: 'Poppins_500Medium',
   },
@@ -262,8 +260,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 100,
     height: 40,
-    backgroundColor: '#FF707B',
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#82008F',
     justifyContent: 'center',
   },
 });

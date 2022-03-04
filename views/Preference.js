@@ -507,7 +507,6 @@ const Preference = ({navigation}) => {
 const styles = StyleSheet.create({
   button: {
     textTransform: 'lowercase',
-    color: '#EB6833',
     fontSize: 16,
     fontFamily: 'Poppins_500Medium',
   },
