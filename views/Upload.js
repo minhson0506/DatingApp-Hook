@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import React, {useContext, useState, useCallback} from 'react';
+import React, {useContext, useState, useCallback, useEffect} from 'react';
 import GlobalStyles from '../utils/GlobalStyles';
 import PropTypes from 'prop-types';
 import {Button} from 'react-native-paper';
@@ -29,8 +29,12 @@ import {useForm, Controller} from 'react-hook-form';
 import {useFocusEffect} from '@react-navigation/native';
 import {appId} from '../utils/variables';
 import backIcon from '../assets/back.svg';
+import LottieView from 'lottie-react-native';
 
 const Upload = ({navigation}) => {
+  const animation = React.createRef();
+  const [upload, setUpload] = useState(false);
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
@@ -94,13 +98,15 @@ const Upload = ({navigation}) => {
         {file_id: response.file_id, tag: appId},
         userToken
       );
+      setUpload(!upload);
+      // TODO: make Alert after loading is done with animation
       tagResponse &&
         Alert.alert('Upload', 'Uploaded successfully', [
           {
             text: 'OK',
             onPress: () => {
               setUpdate(update + 1);
-              navigation.navigate('Upload');
+              // navigation.navigate('Upload');
             },
           },
         ]);
@@ -121,6 +127,10 @@ const Upload = ({navigation}) => {
       return () => reset();
     }, [])
   );
+
+  useEffect(() => {
+    animation.current?.play(0, 520);
+  }, [upload]);
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -146,6 +156,18 @@ const Upload = ({navigation}) => {
 
         <ScrollView>
           <Text style={styles.header}>Upload your pictures or video</Text>
+          <LottieView
+            style={{width: '80%', alignSelf: 'center'}}
+            ref={animation}
+            source={require('../assets/animation/load2.json')}
+            autoPlay={false}
+            loop={false}
+            speed={2}
+            resizeMode="cover"
+            onAnimationFinish={() => {
+              console.log('animation finished');
+            }}
+          />
           <View style={styles.box}>
             <Card containerStyle={styles.card}>
               {type === 'image' ? (
@@ -165,6 +187,7 @@ const Upload = ({navigation}) => {
                   }}
                 />
               )}
+
               <Controller
                 control={control}
                 render={({field: {onChange, onBlur, value}}) => (
@@ -184,6 +207,7 @@ const Upload = ({navigation}) => {
                 style={{flexDirection: 'row', justifyContent: 'space-evenly'}}
               >
                 <Button onPress={reset}>Reset</Button>
+
                 <Button
                   // style={{marginLRight: 20}}
                   disabled={!imageSelected}
@@ -217,6 +241,7 @@ const styles = StyleSheet.create({
     color: '#7C7878',
     textAlign: 'center',
     marginTop: 20,
+    marginBottom: 20,
   },
   box: {
     justifyContent: 'center',

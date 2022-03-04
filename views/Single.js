@@ -29,8 +29,10 @@ import {useMedia} from '../hooks/ApiHooks';
 import ListItem from '../components/ListItem';
 import LikeIcon from '../assets/like.svg';
 import {MainContext} from '../contexts/MainContext';
+import LottieView from 'lottie-react-native';
 
 const Single = ({route, navigation}) => {
+  const animation = React.createRef();
   const {file} = route.params;
   const {postFavourite, getFavouritesByFileId} = userFavourite();
   const {mediaArray} = useMedia(false, file.user_id);
@@ -38,8 +40,9 @@ const Single = ({route, navigation}) => {
   const {getAllMediaByCurrentUserId} = useMedia();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
-  const {user} = useContext(MainContext);
+  const {user, loading, setLoading} = useContext(MainContext);
   const [like, setLike] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_400Regular,
@@ -83,6 +86,7 @@ const Single = ({route, navigation}) => {
           if (like === true) {
             console.log('you liked this user');
             navigation.navigate('Match', {file});
+            return;
           }
         }
       }
@@ -102,6 +106,9 @@ const Single = ({route, navigation}) => {
       if (response) {
         const userFiles = await getAllMediaByCurrentUserId(token);
         // console.log('All file from current user: ', userFiles);
+        setIsLiked(!isLiked);
+        Alert.alert('You have liked this user!');
+
         const userFilesId = userFiles.map((file) => file.file_id);
         // console.log('all fileId from current user: ', userFilesId);
 
@@ -122,7 +129,6 @@ const Single = ({route, navigation}) => {
           }
         }
         // console.log('users liked', response);
-        // navigation.goBack();
       }
     } catch (error) {
       Alert.alert('Fail', 'You have already liked this user!');
@@ -138,6 +144,10 @@ const Single = ({route, navigation}) => {
     checkLike();
   }, [like]);
 
+  useEffect(() => {
+    animation.current?.play(0, 210);
+  }, [isLiked]);
+
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
@@ -148,6 +158,7 @@ const Single = ({route, navigation}) => {
             <Button
               style={styles.back}
               onPress={() => {
+                setLoading(!loading);
                 navigation.goBack();
               }}
               icon={BackIcon}
@@ -234,6 +245,17 @@ const Single = ({route, navigation}) => {
                     <Text style={styles.text}>{interests}</Text>
                   </View>
                 </Card>
+                <LottieView
+                  ref={animation}
+                  // style={{marginTop: 100, marginLeft: 40}}
+                  resizeMode="cover"
+                  source={require('../assets/animation/heart.json')}
+                  autoPlay={false}
+                  loop={false}
+                  onAnimationFinish={() => {
+                    console.log('animation finished');
+                  }}
+                />
               </>
             }
             data={mediaData}
@@ -246,6 +268,7 @@ const Single = ({route, navigation}) => {
               ></ListItem>
             )}
           ></FlatList>
+
           <FAB style={styles.fab} medium icon={LikeIcon} onPress={likeUser} />
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
