@@ -88,76 +88,71 @@ const SingleChat = ({route, navigation}) => {
     <>
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
         {/* header: avatar, hook username and interest */}
+
         <View
           style={{
-            flex: 1,
+            marginLeft: '5%',
+            flexDirection: 'row',
+            alignItems: 'center',
           }}
         >
-          <View
-            style={{
-              marginLeft: '5%',
-              flexDirection: 'row',
-              alignItems: 'center',
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.navigate('Chat');
             }}
           >
-            <TouchableWithoutFeedback
-              onPress={() => {
-                navigation.navigate('Chat');
-              }}
-            >
-              <Image
-                style={styles.leftButton}
-                source={require('../assets/backButton.png')}
-              />
-            </TouchableWithoutFeedback>
-            <Avatar
-              style={styles.avatar}
-              avatarStyle={{
-                borderWidth: 2,
-                borderColor: 'white',
-                borderRadius: 60,
-                borderStyle: 'solid',
-              }}
-              source={{uri: uploadsUrl + item.filename}}
+            <Image
+              style={styles.leftButton}
+              source={require('../assets/backButton.png')}
             />
-            <View style={{flexDirection: 'column', marginLeft: '3%'}}>
-              <Text style={styles.username}>{item.username}</Text>
-              <Text style={styles.interests}>{additionData.interests}</Text>
-            </View>
-            <TouchableWithoutFeedback>
-              <Image
-                style={styles.rightButton}
-                source={require('../assets/moreButton.png')}
-              />
-            </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+          <Avatar
+            style={styles.avatar}
+            avatarStyle={{
+              borderWidth: 2,
+              borderColor: 'white',
+              borderRadius: 60,
+              borderStyle: 'solid',
+            }}
+            source={{uri: uploadsUrl + item.filename}}
+          />
+          <View style={{flexDirection: 'column', marginLeft: '3%'}}>
+            <Text style={styles.username}>{item.username}</Text>
+            <Text style={styles.interests}>{additionData.interests}</Text>
           </View>
-
-          {/* message content */}
-          <FlatList
-            pagingEnabled={true}
-            contentContainerStyle={{flexGrow: 1}}
-            data={allMessage}
-            keyExtractor={(item) => item.comment_id.toString()}
-            renderItem={({item}) => (
-              <ListItem style={{flex: 1}}>
-                <Text>{item.comment}</Text>
-              </ListItem>
-            )}
-          ></FlatList>
-
-          {/* input */}
-          <View style={{bottom: 20, flexDirection: 'row'}}>
-            <Input
-              value={newComment}
-              autoCapitalize="none"
-              placeholder="Type your message..."
-              onChangeText={(value) => setNewComment(value)}
+          <TouchableWithoutFeedback>
+            <Image
+              style={styles.rightButton}
+              source={require('../assets/moreButton.png')}
             />
-            <Button
-              mode="contained"
-              onPress={() => console.log('Pressed')}
-            ></Button>
-          </View>
+          </TouchableWithoutFeedback>
+        </View>
+
+        {/* message content */}
+        <FlatList
+          // pagingEnabled={true}
+          // contentContainerStyle={{flexGrow: 1}}
+          data={allMessage}
+          keyExtractor={(item) => item.comment_id.toString()}
+          renderItem={({item}) => (
+            <ListItem style={{flex: 1}}>
+              <Text>{item.comment}</Text>
+            </ListItem>
+          )}
+        ></FlatList>
+
+        {/* input */}
+        <View style={{marginBottom: 20, flexDirection: 'row'}}>
+          <Input
+            containerStyle={{width: '80%'}}
+            value={newComment}
+            autoCapitalize="none"
+            placeholder="Type your message..."
+            onChangeText={(value) => setNewComment(value)}
+          />
+          <Button labelStyle={{color: 'black'}} onPress={sendMessage}>
+            Send
+          </Button>
         </View>
       </SafeAreaView>
       <StatusBar style="auto"></StatusBar>

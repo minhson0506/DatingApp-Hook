@@ -249,7 +249,11 @@ const Chat = ({navigation}) => {
               data={hook}
               keyExtractor={(item) => item.user_id.toString()}
               renderItem={({item}) => (
-                <ListItem>
+                <ListItem
+                  onPress={() => {
+                    navigation.navigate('SingleChat', {item});
+                  }}
+                >
                   <View
                     style={{
                       flex: 1,
