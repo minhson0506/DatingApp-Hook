@@ -92,7 +92,6 @@ const RegisterForm = ({setFormToggle}) => {
       setInstruction(true);
       // console.log('register onSubmit', userData);
       if (userData) {
-        setFormToggle(true);
         Alert.alert('Success', 'User created successfully!');
         delete data.full_name;
         delete data.email;

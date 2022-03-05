@@ -165,7 +165,7 @@ const Search = ({navigation}) => {
 
     // console.log('input', text);
     userData = userData.filter((obj) => {
-      return obj.username.includes(text);
+      return obj.username.includes(text.toLowerCase());
     });
     userData = userData.map((obj) => {
       return obj.user_id;
