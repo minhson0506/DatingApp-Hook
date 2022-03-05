@@ -14,7 +14,7 @@ import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import {StatusBar} from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useUser, useMedia, userComment} from '../hooks/ApiHooks';
+import {useMedia, userComment} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {MainContext} from '../contexts/MainContext';
 
@@ -23,7 +23,6 @@ const SingleChat = ({route, navigation}) => {
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [allMessage, setAllMessage] = useState(0);
   const [newComment, setNewComment] = useState('');
-  const {getUserById, getUserByToken} = useUser();
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
   const {getCommentByFileId, postComment} = userComment();
   // console.log('item', item);
@@ -31,7 +30,7 @@ const SingleChat = ({route, navigation}) => {
   const {loadMessage, setLoadMessage, user} = useContext(MainContext);
   const [currentUserId] = useState(user.user_id);
   const [hookUserId] = useState(item.user_id);
-  const [time, setTime] = useState(Date.now());
+  const [seconds, setSeconds] = useState(0);
 
   const fetchAllMessage = async () => {
     try {
@@ -41,8 +40,8 @@ const SingleChat = ({route, navigation}) => {
       // setHookUserId(item.user_id);
       // const response = (await getUserByToken(token)).user_id;
       // setCurrentUserId(response);
-      console.log('my hook user id', hookUserId);
-      console.log('my user id:', currentUserId);
+      // console.log('my hook user id', hookUserId);
+      // console.log('my user id:', currentUserId);
 
       // get messages from hook to current user
       const userFiles = await getAllMediaByCurrentUserId(token);
@@ -87,10 +86,10 @@ const SingleChat = ({route, navigation}) => {
       const token = await AsyncStorage.getItem('userToken');
       console.log('data', item.file_id, newComment, token);
       if (token) {
-        const response = await postComment(item.file_id, newComment, token);
+        await postComment(item.file_id, newComment, token);
         setUpdateComment(!updateComment);
         setLoadMessage(!loadMessage);
-        console.log('Response for post comment', response);
+        // console.log('Response for post comment', response);
       }
     } catch (error) {
       console.error(error);
@@ -98,12 +97,16 @@ const SingleChat = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => setTime(Date.now()), 1000);
-    fetchAllMessage();
-    return () => {
-      clearInterval(interval);
-    };
-  }, [updateComment]);
+    const interval = setInterval(() => {
+      if (seconds === 100) {
+        setSeconds(0);
+      } else {
+        setSeconds(seconds + 1);
+      }
+      fetchAllMessage();
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -151,8 +154,6 @@ const SingleChat = ({route, navigation}) => {
 
         {/* message content */}
         <FlatList
-          // pagingEnabled={true}
-          // contentContainerStyle={{flexGrow: 1}}
           data={allMessage}
           keyExtractor={(item) => item.comment_id.toString()}
           renderItem={({item}) => (
