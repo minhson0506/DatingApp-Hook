@@ -96,6 +96,7 @@ const Chat = ({navigation}) => {
         avatarScraping = avatarScraping.filter(
           (obj) => obj.title.toLowerCase() === 'avatar'
         );
+        // console.log('ava', avatarScraping.pop().file_id);
         const totalData = {
           ...userScraping,
           ...avatarScraping.pop(),
@@ -256,6 +257,7 @@ const Chat = ({navigation}) => {
                 <ListItem
                   onPress={() => {
                     navigation.navigate('SingleChat', {item});
+                    console.log('info', item);
                   }}
                 >
                   <View

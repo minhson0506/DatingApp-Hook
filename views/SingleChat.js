@@ -26,7 +26,7 @@ const SingleChat = ({route, navigation}) => {
   const [newComment, setNewComment] = useState('');
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
   const {getCommentByFileId, postComment} = userComment();
-  // console.log('item', item);
+  console.log('item', item);
   const [updateComment, setUpdateComment] = useState(false);
   const {loadMessage, setLoadMessage, user} = useContext(MainContext);
   const [currentUserId, setCurrentUserId] = useState(user.user_id);
@@ -88,9 +88,14 @@ const SingleChat = ({route, navigation}) => {
     // send message to hook's avatar file
     try {
       const token = await AsyncStorage.getItem('userToken');
-      console.log('data', item.file_id, newComment, token);
+      // console.log('data', item.file_id, newComment, token);
+      const hookUserId = item.user_id;
+      const hookFile = await getMediaByUserId(hookUserId);
+      const hookAvatarFile = hookFile.filter(
+        (obj) => obj.title.toLowerCase() === 'avatar'
+      );
       if (token) {
-        await postComment(item.file_id, newComment, token);
+        await postComment(hookAvatarFile.pop().file_id, newComment, token);
         setUpdateComment(!updateComment);
         setLoadMessage(!loadMessage);
         // console.log('Response for post comment', response);
