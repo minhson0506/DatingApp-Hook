@@ -107,7 +107,11 @@ const StackScreen = () => {
             name="Modify user"
             component={ModifyUser}
           ></Stack.Screen>
-          <Stack.Screen name="SingleChat" component={SingleChat}></Stack.Screen>
+          <Stack.Screen
+            name="SingleChat"
+            component={SingleChat}
+            options={{headerShown: false}}
+          ></Stack.Screen>
         </>
       ) : (
         <Stack.Screen

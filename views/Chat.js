@@ -18,13 +18,13 @@ const Chat = ({navigation}) => {
   const {getFavouritesByFileId} = useFavourite();
   const {getFavourites} = useFavourite();
   const [message, setMessage] = useState(0);
-  const [singleMessage, setSingleMessage] = useState(0);
   const [hook, setHook] = useState(0);
 
   const fetchNewHooks = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
 
+      // user likes
       // get fileId of all files current users liked
       const userLike = await getFavourites(token);
       // console.log('what files current user liked: ', userLike);
@@ -37,10 +37,11 @@ const Chat = ({navigation}) => {
         const fileInfo = await getMediaByFileId(fileId);
         hookUserId.push(fileInfo.user_id);
       }
-      // remove duplicate
+      // remove duplicate userId
       hookUserId = [...new Set(hookUserId)];
-      // console.log('Hook users id', hookUserId);
+      // console.log('who you like', hookUserId);
 
+      // hooks like
       // get fileIds of all files from current login user
       const userFiles = await getAllMediaByCurrentUserId(token);
       // console.log('All file from current user: ', userFiles);
@@ -55,6 +56,7 @@ const Chat = ({navigation}) => {
         const likeScraping = await getFavouritesByFileId(id);
         likeData = likeData.concat(likeScraping);
       }
+      // console.log('like data: ', likeData);
 
       // sort the data in order by favouriteId, most recent -> least recent
       likeData.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
@@ -63,17 +65,21 @@ const Chat = ({navigation}) => {
       // console.log('like data: ', likeData);
 
       // with filtering
-      // if only one side liked then remove the hook id
+      // remove duplicate like
       likeData = likeData.filter((el) => {
         const duplicate = seen.has(el.user_id);
         seen.add(el.user_id);
         return !duplicate;
       });
-      for (let i = 0; i < likeData.length; ++i) {
-        if (hookUserId.includes(likeData[i].user_id) === false) {
-          likeData.splice(i, 1);
-        }
-      }
+      // for (let i = 0; i < likeData.length; ++i) {
+      //   if (hookUserId.includes(likeData[i].user_id) === false) {
+      //     likeData.splice(i, 1);
+      //   }
+      // }
+      likeData = likeData.filter(
+        (obj) => hookUserId.includes(obj.user_id) === true
+      );
+      // console.log('like data after data cleaning: ', likeData);
 
       // take five hooks
       likeData = likeData.slice(0, 5);
@@ -203,7 +209,7 @@ const Chat = ({navigation}) => {
       // console.log('Message History', messageData);
 
       singleMessageData = [...new Set(singleMessageData)];
-      setSingleMessage(singleMessageData);
+      // setSingleMessage(singleMessageData);
       // console.log('data for navigation:', singleMessageData);
     } catch (error) {
       console.log('Fetch messages error', error);
