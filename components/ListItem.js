@@ -27,7 +27,12 @@ import {Video} from 'expo-av';
 import {MainContext} from '../contexts/MainContext';
 import {Button} from 'react-native-paper';
 
-const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
+const ListItem = ({
+  navigation,
+  singleMedia,
+  myFilesOnly,
+  disableDelete = false,
+}) => {
   const [like, setLike] = useState(false);
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
   const {postFavourite, getFavouritesByFileId, getFavourites} = userFavourite();
@@ -218,7 +223,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                   containerStyle={styles.avatarProfile}
                   avatarStyle={{borderRadius: 10}}
                   source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
-                  onLongPress={deleteImage}
+                  onLongPress={() => {
+                    if (!disableDelete) deleteImage();
+                  }}
                 ></Avatar>
               ) : (
                 <Video
@@ -379,6 +386,7 @@ ListItem.propTypes = {
   singleMedia: PropTypes.object.isRequired,
   navigation: PropTypes.object.isRequired,
   myFilesOnly: PropTypes.bool,
+  disableDelete: PropTypes.bool,
 };
 
 export default ListItem;

@@ -318,6 +318,7 @@ const Single = ({route, navigation}) => {
                 navigation={navigation}
                 singleMedia={item}
                 myFilesOnly={true}
+                disableDelete={true}
               ></ListItem>
             )}
           ></FlatList>
