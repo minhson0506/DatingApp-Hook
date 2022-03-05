@@ -23,7 +23,7 @@ const useMedia = (myFilesOnly, userId = null) => {
   const [mediaArray, setMediaArray] = useState([]);
   const {update, user} = useContext(MainContext);
   const [loading, setLoading] = useState(false);
-  const loadMedia = async (start = 0, limit = 10) => {
+  const loadMedia = async () => {
     setLoading(true);
     try {
       let json = await useTag().getFileByTag(appId);
@@ -53,7 +53,7 @@ const useMedia = (myFilesOnly, userId = null) => {
   // Call loadMedia() only once when the component is loaded
   // Or when update state is changed
   useEffect(() => {
-    loadMedia(0, 10);
+    loadMedia();
   }, [update]);
 
   const postMedia = async (formData, token) => {

@@ -190,7 +190,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   };
 
   const dislike = () => {
-    Alert.alert('DisLike', `You disliked ${owner} :(`);
+    Alert.alert('Dislike', `You disliked ${owner} :(`);
   };
 
   // console.log('type of', typeof additionData.interests);

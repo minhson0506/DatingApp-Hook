@@ -87,7 +87,7 @@ const RegisterForm = ({setFormToggle}) => {
         books: 'none',
       };
       data.full_name = JSON.stringify(additionData);
-      data.email = `${data.username}@additionData.fi`;
+      data.email = `${data.username}@a.fi`;
       const userData = await postUser(data);
       setInstruction(true);
       // console.log('register onSubmit', userData);

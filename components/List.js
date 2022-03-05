@@ -56,7 +56,7 @@ const List = ({navigation, myFilesOnly = false}) => {
 
       // console.log('current user', myAdditionData);
       // filter by gender
-      if (myAdditionData.gender !== 'nonbinary') {
+      if (myAdditionData.interested !== 'nonbinary') {
         userData = userData.filter((obj) => {
           // console.log('gender', obj.full_name.gender);
           return obj.full_name.gender === myAdditionData.interested;
