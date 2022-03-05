@@ -131,6 +131,8 @@ const Chat = ({navigation}) => {
           hookUserId.push(fileInfo.user_id);
         }
       }
+      // console.log('who message you', hookUserId);
+
       // what if current user is the one who start first?
       // all files current users like
       const userLikeFile = await getComments(token);
@@ -170,7 +172,6 @@ const Chat = ({navigation}) => {
           allCm = allCm.concat(await getCommentByFileId(id));
         }
         allCm = allCm.filter((obj) => obj.user_id === userId);
-        // likeData.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
 
         // get all files from the hook users
         const hookFile = await getMediaByUserId(userId);
@@ -188,7 +189,8 @@ const Chat = ({navigation}) => {
         });
         // console.log('current user message to hook', myCm);
         allCm = allCm.concat(myCm);
-        // console.log(allCm);
+        allCm.sort((a, b) => (a.comment_id > b.comment_id ? 1 : -1));
+        console.log(allCm.slice(-1));
 
         const totalData = {
           ...avatarScraping.pop(),
