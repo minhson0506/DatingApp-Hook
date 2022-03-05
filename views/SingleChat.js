@@ -16,6 +16,7 @@ import {StatusBar} from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser, useMedia, userComment} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
+import {MainContext} from '../contexts/MainContext';
 
 const SingleChat = ({route, navigation}) => {
   const {item} = route.params;
@@ -25,16 +26,22 @@ const SingleChat = ({route, navigation}) => {
   const {getUserById, getUserByToken} = useUser();
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
   const {getCommentByFileId, postComment} = userComment();
+  // console.log('item', item);
+  const [updateComment, setUpdateComment] = useState(false);
+  const {loadMessage, setLoadMessage} = useContext(MainContext);
+  const [currentUserId, setCurrentUserId] = useState();
+  const [hookUserId, setHookUserId] = useState();
 
   const fetchAllMessage = async () => {
     try {
       const allData = await JSON.parse(item.full_name);
       const token = await AsyncStorage.getItem('userToken');
       let messageHistory = [];
-      const hookUserId = item.user_id;
-      const currentUserId = (await getUserByToken(token)).user_id;
-      // console.log('my hook user id', hookUserId);
-      // console.log('my user id:', currentUserId);
+      setHookUserId(item.user_id);
+      const response = (await getUserByToken(token)).user_id;
+      setCurrentUserId(response);
+      console.log('my hook user id', hookUserId);
+      console.log('my user id:', currentUserId);
 
       // get messages from hook to current user
       const userFiles = await getAllMediaByCurrentUserId(token);
@@ -73,16 +80,25 @@ const SingleChat = ({route, navigation}) => {
     }
   };
 
-  const sendMessage = async (cm) => {
+  const sendMessage = async () => {
     // send message to hook's avatar file
-    const hookUserId = item.user_id;
-    const hookFile = await getMediaByUserId(hookUserId);
-    console.log(hookFile);
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      console.log('data', item.file_id, newComment, token);
+      if (token) {
+        const response = await postComment(item.file_id, newComment, token);
+        setUpdateComment(!updateComment);
+        setLoadMessage(!loadMessage);
+        console.log('Response for post comment', response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
     fetchAllMessage();
-  }, []);
+  }, [updateComment]);
 
   return (
     <>
@@ -136,7 +152,15 @@ const SingleChat = ({route, navigation}) => {
           keyExtractor={(item) => item.comment_id.toString()}
           renderItem={({item}) => (
             <ListItem style={{flex: 1}}>
-              <Text>{item.comment}</Text>
+              <Text
+                style={
+                  item.user_id === currentUserId
+                    ? styles.currentUser
+                    : styles.hookUser
+                }
+              >
+                {item.comment}
+              </Text>
             </ListItem>
           )}
         ></FlatList>
@@ -150,7 +174,13 @@ const SingleChat = ({route, navigation}) => {
             placeholder="Type your message..."
             onChangeText={(value) => setNewComment(value)}
           />
-          <Button labelStyle={{color: 'black'}} onPress={sendMessage}>
+          <Button
+            labelStyle={{color: 'black'}}
+            onPress={() => {
+              sendMessage();
+              setNewComment('');
+            }}
+          >
             Send
           </Button>
         </View>
@@ -184,6 +214,12 @@ const styles = StyleSheet.create({
     width: 30,
     position: 'absolute',
     right: 20,
+  },
+  currentUser: {
+    color: 'red',
+  },
+  hookUser: {
+    color: 'black',
   },
 });
 

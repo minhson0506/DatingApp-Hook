@@ -1,5 +1,5 @@
 import {View, StyleSheet, Text, FlatList} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
@@ -9,6 +9,7 @@ import {Avatar, ListItem} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser, userComment, useMedia, useFavourite} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
+import {MainContext} from '../contexts/MainContext';
 
 const Chat = ({navigation}) => {
   const {getUserById, getUserByToken} = useUser();
@@ -19,6 +20,7 @@ const Chat = ({navigation}) => {
   const {getFavourites} = useFavourite();
   const [message, setMessage] = useState(0);
   const [hook, setHook] = useState(0);
+  const {loadMessage} = useContext(MainContext);
 
   const fetchNewHooks = async () => {
     try {
@@ -219,7 +221,7 @@ const Chat = ({navigation}) => {
   useEffect(() => {
     fetchNewHooks();
     fetchMessage();
-  }, []);
+  }, [loadMessage]);
 
   return (
     <>

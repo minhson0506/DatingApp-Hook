@@ -159,7 +159,7 @@ const useUser = () => {
     return await doFetch(baseUrl + 'users', options);
   };
 
-  //require admin
+  // require admin
   const deleteUser = async (userId, token) => {
     const options = {
       method: 'DELETE',
@@ -202,20 +202,16 @@ const useTag = () => {
 };
 
 const userComment = () => {
-  const deleteComment = async (commentId, token) => {
-    const options = {
-      method: 'DELETE',
-      headers: {'x-access-token': token},
-    };
-    return await doFetch(baseUrl + 'comments/' + commentId, options);
-  };
-
-  const postComment = async (data, token) => {
+  const postComment = async (fileId, newComment, token) => {
     const options = {
       method: 'POST',
-      headers: {'x-access-token': token},
-      body: JSON.stringify(data),
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({file_id: fileId, comment: newComment}),
     };
+    console.log('data in api hook', options);
     return await doFetch(baseUrl + 'comments', options);
   };
 
