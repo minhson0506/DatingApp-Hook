@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, userComment} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {MainContext} from '../contexts/MainContext';
+import {AutoScrollFlatList} from 'react-native-autoscroll-flatlist';
 
 const SingleChat = ({route, navigation}) => {
   const {item} = route.params;
@@ -106,7 +107,7 @@ const SingleChat = ({route, navigation}) => {
       fetchAllMessage();
     }, 100);
     return () => clearInterval(interval);
-  }, []);
+  }, [loadMessage]);
 
   return (
     <>
@@ -153,7 +154,7 @@ const SingleChat = ({route, navigation}) => {
         </View>
 
         {/* message content */}
-        <FlatList
+        {/* <FlatList
           data={allMessage}
           keyExtractor={(item) => item.comment_id.toString()}
           renderItem={({item}) => (
@@ -169,7 +170,23 @@ const SingleChat = ({route, navigation}) => {
               </Text>
             </ListItem>
           )}
-        ></FlatList>
+        ></FlatList> */}
+        <AutoScrollFlatList
+          data={allMessage}
+          renderItem={({item}) => (
+            <ListItem style={{flex: 1}}>
+              <Text
+                style={
+                  item.user_id === currentUserId
+                    ? styles.currentUser
+                    : styles.hookUser
+                }
+              >
+                {item.comment}
+              </Text>
+            </ListItem>
+          )}
+        />
 
         {/* input */}
         <View style={{marginBottom: 20, flexDirection: 'row'}}>
