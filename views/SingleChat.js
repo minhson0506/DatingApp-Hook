@@ -28,18 +28,18 @@ const SingleChat = ({route, navigation}) => {
   const {getCommentByFileId, postComment} = userComment();
   // console.log('item', item);
   const [updateComment, setUpdateComment] = useState(false);
-  const {loadMessage, setLoadMessage} = useContext(MainContext);
-  const [currentUserId, setCurrentUserId] = useState();
-  const [hookUserId, setHookUserId] = useState();
+  const {loadMessage, setLoadMessage, user} = useContext(MainContext);
+  const [currentUserId, setCurrentUserId] = useState(user.user_id);
+  const [hookUserId, setHookUserId] = useState(item.user_id);
 
   const fetchAllMessage = async () => {
     try {
       const allData = await JSON.parse(item.full_name);
       const token = await AsyncStorage.getItem('userToken');
       let messageHistory = [];
-      setHookUserId(item.user_id);
-      const response = (await getUserByToken(token)).user_id;
-      setCurrentUserId(response);
+      // setHookUserId(item.user_id);
+      // const response = (await getUserByToken(token)).user_id;
+      // setCurrentUserId(response);
       console.log('my hook user id', hookUserId);
       console.log('my user id:', currentUserId);
 
