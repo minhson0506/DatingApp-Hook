@@ -198,6 +198,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   useEffect(() => {
     fetchOwner();
   }, []);
+
   useEffect(() => {
     checkLike();
   }, [like]);
@@ -213,19 +214,50 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   } else {
     return (
       <ScrollView>
-        <RNEListItem.Swipeable
-          onPress={() => {
-            {
-              !myFilesOnly &&
+        {myFilesOnly ? (
+          <RNEListItem>
+            <View style={styles.cardProfile}>
+              {singleMedia.media_type === 'image' ? (
+                <Avatar
+                  containerStyle={styles.avatarProfile}
+                  avatarStyle={{borderRadius: 10}}
+                  source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+                  onLongPress={deleteImage}
+                ></Avatar>
+              ) : (
+                <Video
+                  ref={videoRef}
+                  style={styles.avatarProfile}
+                  source={{uri: uploadsUrl + singleMedia.filename}}
+                  useNativeControls
+                  resizeMode="contain"
+                ></Video>
+              )}
+              {singleMedia.description === '' ? (
+                <></>
+              ) : (
+                <Card style={styles.descriptionBox}>
+                  <Text style={styles.textDescription}>
+                    {singleMedia.description}
+                  </Text>
+                </Card>
+              )}
+            </View>
+          </RNEListItem>
+        ) : (
+          <RNEListItem.Swipeable
+            onPress={() => {
+              {
                 navigation.navigate('Single', {file: singleMedia});
+              }
+            }}
+            leftContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
+            rightContent={
+              <Button icon={DislikeIcon} onPress={dislike}></Button>
             }
-          }}
-          leftContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
-          rightContent={<Button icon={DislikeIcon} onPress={dislike}></Button>}
-          leftStyle={{justifyContent: 'center'}}
-          rightStyle={{justifyContent: 'center'}}
-        >
-          {!myFilesOnly && (
+            leftStyle={{justifyContent: 'center'}}
+            rightStyle={{justifyContent: 'center'}}
+          >
             <Card style={styles.card}>
               <View
                 style={{
@@ -271,37 +303,8 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                 </Text>
               </View>
             </Card>
-          )}
-          {myFilesOnly && (
-            <View style={styles.cardProfile}>
-              {singleMedia.media_type === 'image' ? (
-                <Avatar
-                  containerStyle={styles.avatarProfile}
-                  avatarStyle={{borderRadius: 10}}
-                  source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
-                  onLongPress={deleteImage}
-                ></Avatar>
-              ) : (
-                <Video
-                  ref={videoRef}
-                  style={styles.avatarProfile}
-                  source={{uri: uploadsUrl + singleMedia.filename}}
-                  useNativeControls
-                  resizeMode="contain"
-                ></Video>
-              )}
-              {singleMedia.description === '' ? (
-                <></>
-              ) : (
-                <Card style={styles.descriptionBox}>
-                  <Text style={styles.textDescription}>
-                    {singleMedia.description}
-                  </Text>
-                </Card>
-              )}
-            </View>
-          )}
-        </RNEListItem.Swipeable>
+          </RNEListItem.Swipeable>
+        )}
       </ScrollView>
     );
   }

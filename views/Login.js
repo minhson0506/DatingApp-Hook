@@ -38,8 +38,8 @@ const Login = ({navigation}) => {
       const userData = await getUserByToken(userToken);
       // console.log('checkToken', userData);
       setUser(userData);
-      setIsLoggedIn(true);
       setToken(userToken);
+      setIsLoggedIn(true);
     } catch (err) {
       console.error(err);
     }

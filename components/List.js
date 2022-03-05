@@ -6,10 +6,9 @@ import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 
 const List = ({navigation, myFilesOnly = false}) => {
-  const [didMount, setDidMount] = useState(false);
-  const {user, loading} = useContext(MainContext);
+  const [didMount, setDidMount] = useState(true);
+  const {user, loading, token} = useContext(MainContext);
   const {getUserById} = useUser();
-  const {token} = useContext(MainContext);
   // console.log('token', token);
   // const {userArray} = useUser(token);
   // console.log('users', userArray);
