@@ -22,9 +22,9 @@ const doFetch = async (url, options = {}) => {
 const useMedia = (myFilesOnly, userId = null) => {
   const [mediaArray, setMediaArray] = useState([]);
   const {update, user} = useContext(MainContext);
-  const [loading, setLoading] = useState(false);
+  const [load, setLoad] = useState(false);
   const loadMedia = async () => {
-    setLoading(true);
+    setLoad(true);
     try {
       let json = await useTag().getFileByTag(appId);
       if (myFilesOnly) {
@@ -45,7 +45,7 @@ const useMedia = (myFilesOnly, userId = null) => {
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
+      setLoad(false);
     }
     // console.log(mediaArray);
   };
@@ -113,7 +113,7 @@ const useMedia = (myFilesOnly, userId = null) => {
   return {
     mediaArray,
     postMedia,
-    loading,
+    load,
     deleteMedia,
     putMedia,
     getMediaByUserId,

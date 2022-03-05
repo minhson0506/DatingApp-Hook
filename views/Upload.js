@@ -33,6 +33,7 @@ import LottieView from 'lottie-react-native';
 const Upload = ({navigation}) => {
   const animation = React.createRef();
   const [upload, setUpload] = useState(false);
+  const {loading, setLoading} = useContext(MainContext);
 
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
@@ -60,7 +61,7 @@ const Upload = ({navigation}) => {
 
   const [type, setType] = useState('image');
 
-  const {postMedia, loading} = useMedia();
+  const {postMedia, load} = useMedia();
   const {postTag} = useTag();
   const {update, setUpdate, token} = useContext(MainContext);
 
@@ -105,6 +106,7 @@ const Upload = ({navigation}) => {
             onPress: () => {
               setUpdate(update + 1);
               // navigation.navigate('Upload');
+              setLoading(!loading);
             },
           },
         ]);
@@ -209,7 +211,7 @@ const Upload = ({navigation}) => {
                 <Button
                   // style={{marginLRight: 20}}
                   disabled={!imageSelected}
-                  loading={loading}
+                  loading={load}
                   onPress={handleSubmit(onSubmit)}
                 >
                   Upload
