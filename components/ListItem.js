@@ -13,8 +13,8 @@ import {useUser, userFavourite, useMedia} from '../hooks/ApiHooks';
 import AgeIcon from '../assets/age.svg';
 import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
-import DislikeIcon from '../assets/dislike.svg';
-import LikeIcon from '../assets/like.svg';
+import InfoIcon from '../assets/info.svg';
+import LikeIcon from '../assets/up-arrow.svg';
 import {Card} from 'react-native-paper';
 import {
   useFonts,
@@ -189,10 +189,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     }
   };
 
-  const dislike = () => {
-    Alert.alert('Dislike', `You disliked ${owner} :(`);
-  };
-
   // console.log('type of', typeof additionData.interests);
   // console.log('type of', additionData.interests[0]);
   useEffect(() => {
@@ -246,14 +242,14 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           </RNEListItem>
         ) : (
           <RNEListItem.Swipeable
-            onPress={() => {
-              {
-                navigation.navigate('Single', {file: singleMedia});
-              }
-            }}
-            leftContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
-            rightContent={
-              <Button icon={DislikeIcon} onPress={dislike}></Button>
+            rightContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
+            leftContent={
+              <Button
+                icon={InfoIcon}
+                onPress={() => {
+                  navigation.navigate('Single', {file: singleMedia});
+                }}
+              ></Button>
             }
             leftStyle={{justifyContent: 'center'}}
             rightStyle={{justifyContent: 'center'}}
