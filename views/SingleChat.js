@@ -29,8 +29,9 @@ const SingleChat = ({route, navigation}) => {
   // console.log('item', item);
   const [updateComment, setUpdateComment] = useState(false);
   const {loadMessage, setLoadMessage, user} = useContext(MainContext);
-  const [currentUserId, setCurrentUserId] = useState(user.user_id);
-  const [hookUserId, setHookUserId] = useState(item.user_id);
+  const [currentUserId] = useState(user.user_id);
+  const [hookUserId] = useState(item.user_id);
+  const [time, setTime] = useState(Date.now());
 
   const fetchAllMessage = async () => {
     try {
@@ -97,7 +98,11 @@ const SingleChat = ({route, navigation}) => {
   };
 
   useEffect(() => {
+    const interval = setInterval(() => setTime(Date.now()), 1000);
     fetchAllMessage();
+    return () => {
+      clearInterval(interval);
+    };
   }, [updateComment]);
 
   return (
