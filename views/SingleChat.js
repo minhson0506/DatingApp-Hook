@@ -14,7 +14,7 @@ import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import {StatusBar} from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMedia, userComment} from '../hooks/ApiHooks';
+import {useMedia, userComment, useUser} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {MainContext} from '../contexts/MainContext';
 import {AutoScrollFlatList} from 'react-native-autoscroll-flatlist';
@@ -29,14 +29,17 @@ const SingleChat = ({route, navigation}) => {
   // console.log('item', item);
   const [updateComment, setUpdateComment] = useState(false);
   const {loadMessage, setLoadMessage, user} = useContext(MainContext);
-  const [currentUserId] = useState(user.user_id);
+  const [currentUserId, setCurrentUserId] = useState(user.user_id);
   const [hookUserId] = useState(item.user_id);
   const [seconds, setSeconds] = useState(0);
+  const {getUserByToken} = useUser();
 
   const fetchAllMessage = async () => {
     try {
       const allData = await JSON.parse(item.full_name);
       const token = await AsyncStorage.getItem('userToken');
+      const myId = (await getUserByToken(token)).user_id;
+      setCurrentUserId(myId);
       let messageHistory = [];
       // setHookUserId(item.user_id);
       // const response = (await getUserByToken(token)).user_id;
@@ -173,6 +176,7 @@ const SingleChat = ({route, navigation}) => {
         ></FlatList> */}
         <AutoScrollFlatList
           data={allMessage}
+          keyExtractor={(item) => item.comment_id.toString()}
           renderItem={({item}) => (
             <ListItem style={{flex: 1}}>
               <Text
