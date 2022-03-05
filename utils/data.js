@@ -380,7 +380,7 @@ const dataSource = [
   'Music',
   'Pets',
   'Photography',
-  'Films',
+  'Movies',
   'Shopping',
   'Food',
   'Workout',
