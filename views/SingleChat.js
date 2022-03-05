@@ -4,9 +4,11 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Image,
+  FlatList,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-import {Avatar} from 'react-native-elements';
+import {Avatar, Input, ListItem} from 'react-native-elements';
+import {Button} from 'react-native-paper';
 import {PropTypes} from 'prop-types';
 import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
@@ -14,15 +16,15 @@ import {StatusBar} from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser, useMedia, userComment} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
-import { set } from 'react-hook-form';
 
 const SingleChat = ({route, navigation}) => {
   const {item} = route.params;
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [allMessage, setAllMessage] = useState(0);
+  const [newComment, setNewComment] = useState('');
   const {getUserById, getUserByToken} = useUser();
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
-  const {getCommentByFileId} = userComment();
+  const {getCommentByFileId, postComment} = userComment();
 
   const fetchAllMessage = async () => {
     try {
@@ -64,11 +66,18 @@ const SingleChat = ({route, navigation}) => {
 
       messageHistory.sort((a, b) => (a.comment_id > b.comment_id ? 1 : -1));
       setAllMessage(messageHistory);
-      console.log('message history', messageHistory);
+      // console.log('message history', messageHistory);
       setAdditionData(allData);
     } catch (error) {
       console.log('Fetch all messages error', error);
     }
+  };
+
+  const sendMessage = async (cm) => {
+    // send message to hook's avatar file
+    const hookUserId = item.user_id;
+    const hookFile = await getMediaByUserId(hookUserId);
+    console.log(hookFile);
   };
 
   useEffect(() => {
@@ -121,6 +130,33 @@ const SingleChat = ({route, navigation}) => {
                 source={require('../assets/moreButton.png')}
               />
             </TouchableWithoutFeedback>
+          </View>
+
+          {/* message content */}
+          <FlatList
+            pagingEnabled={true}
+            contentContainerStyle={{flexGrow: 1}}
+            data={allMessage}
+            keyExtractor={(item) => item.comment_id.toString()}
+            renderItem={({item}) => (
+              <ListItem style={{flex: 1}}>
+                <Text>{item.comment}</Text>
+              </ListItem>
+            )}
+          ></FlatList>
+
+          {/* input */}
+          <View style={{bottom: 20, flexDirection: 'row'}}>
+            <Input
+              value={newComment}
+              autoCapitalize="none"
+              placeholder="Type your message..."
+              onChangeText={(value) => setNewComment(value)}
+            />
+            <Button
+              mode="contained"
+              onPress={() => console.log('Pressed')}
+            ></Button>
           </View>
         </View>
       </SafeAreaView>
