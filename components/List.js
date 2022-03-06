@@ -6,10 +6,9 @@ import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 
 const List = ({navigation, myFilesOnly = false}) => {
-  const [didMount, setDidMount] = useState(false);
-  const {user, loading} = useContext(MainContext);
+  const [didMount, setDidMount] = useState(true);
+  const {user, loading, token} = useContext(MainContext);
   const {getUserById} = useUser();
-  const {token} = useContext(MainContext);
   // console.log('token', token);
   // const {userArray} = useUser(token);
   // console.log('users', userArray);
@@ -56,7 +55,7 @@ const List = ({navigation, myFilesOnly = false}) => {
 
       // console.log('current user', myAdditionData);
       // filter by gender
-      if (myAdditionData.gender !== 'nonbinary') {
+      if (myAdditionData.interested !== 'nonbinary') {
         userData = userData.filter((obj) => {
           // console.log('gender', obj.full_name.gender);
           return obj.full_name.gender === myAdditionData.interested;

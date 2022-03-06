@@ -38,8 +38,8 @@ const Login = ({navigation}) => {
       const userData = await getUserByToken(userToken);
       // console.log('checkToken', userData);
       setUser(userData);
-      setIsLoggedIn(true);
       setToken(userToken);
+      setIsLoggedIn(true);
     } catch (err) {
       console.error(err);
     }
@@ -90,7 +90,7 @@ const Login = ({navigation}) => {
                 />
                 {formToggle ? (
                   <Card containerStyle={{borderRadius: 5, marginTop: 25}}>
-                    <RegisterForm setFormToggle={setFormToggle} />
+                    <RegisterForm />
                   </Card>
                 ) : (
                   <Card style={{borderRadius: 5, marginTop: 25}}>

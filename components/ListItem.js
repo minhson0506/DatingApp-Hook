@@ -9,11 +9,12 @@ import {
   Text,
 } from 'react-native-elements';
 import {Alert, ScrollView, StyleSheet, View} from 'react-native';
-import {useUser} from '../hooks/ApiHooks';
+import {useUser, userFavourite, useMedia} from '../hooks/ApiHooks';
 import AgeIcon from '../assets/age.svg';
 import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
-import DislikeIcon from '../assets/dislike.svg';
+import InfoIcon from '../assets/info.svg';
+import LikeIcon from '../assets/up-arrow.svg';
 import {Card} from 'react-native-paper';
 import {
   useFonts,
@@ -23,16 +24,26 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 import {Video} from 'expo-av';
-import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
+import {Button} from 'react-native-paper';
 
-const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
+const ListItem = ({
+  navigation,
+  singleMedia,
+  myFilesOnly,
+  disableDelete = false,
+}) => {
+  const [like, setLike] = useState(false);
+  const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
+  const {postFavourite, getFavouritesByFileId, getFavourites} = userFavourite();
+
   const {getUserById} = useUser();
   const videoRef = useRef(null);
   // const [owner, setOwner] = useState({username: 'fetching...'});
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const {putMedia} = useMedia();
-  const {setUpdate, update, token} = useContext(MainContext);
+  const {setUpdate, update, token, user} = useContext(MainContext);
+  const [owner, setOwner] = useState();
 
   const fetchOwner = async () => {
     try {
@@ -40,7 +51,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       // console.log('user_id', singleMedia.description);
       const userData = await getUserById(singleMedia.user_id, token);
       // console.log('user data', userData);
-      // setOwner(userData);
+      setOwner(userData.username);
       const allData = await JSON.parse(userData.full_name);
       // console.log('addition data in listitem.js', allData);
       setAdditionData(allData);
@@ -98,11 +109,100 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     );
   };
 
+  const checkLike = async () => {
+    try {
+      // get all favourite of this single user's file
+      // const allLikes = await getFavouritesByFileId(file.file_id);
+      const allMediaOfSingleUser = await getMediaByUserId(singleMedia.user_id);
+      // console.log('all media of this single user', allMediaOfSingleUser);
+      const userFilesId = allMediaOfSingleUser.map(
+        (singleMedia) => singleMedia.file_id
+      );
+      // console.log('all file id', userFilesId);
+      let allLikesofSingleUser = [];
+      for (const id of userFilesId) {
+        const response = await getFavouritesByFileId(id);
+        allLikesofSingleUser = allLikesofSingleUser.concat(response);
+      }
+      // console.log('all likes that single user receive', allLikesofSingleUser);
+      for (let i = 0; i < allLikesofSingleUser.length; i++) {
+        if (allLikesofSingleUser[i].user_id === user.user_id) {
+          if (like === true) {
+            console.log('you liked this user');
+            navigation.navigate('Match', {file: singleMedia});
+            return;
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const likeUser = async () => {
+    let alreadyLiked = false;
+
+    let files = await getMediaByUserId(singleMedia.user_id);
+    files = files.map((obj) => {
+      return obj.file_id;
+    });
+    // console.log('files', files);
+    const likes = await getFavourites(token);
+    likes.forEach((obj) => {
+      if (files.includes(obj.file_id)) alreadyLiked = true;
+    });
+    // console.log('already likes', alreadyLiked);
+
+    if (alreadyLiked) {
+      Alert.alert('Fail', `You have already liked ${owner}!`);
+      return;
+    } else {
+      try {
+        // console.log('file id', file.file_id);
+        const response = await postFavourite(singleMedia.file_id, token);
+        if (response) {
+          const userFiles = await getAllMediaByCurrentUserId(token);
+          // console.log('All file from current user: ', userFiles);
+          Alert.alert(`You liked ${owner} !`);
+
+          const userFilesId = userFiles.map((file) => file.file_id);
+          // console.log('all fileId from current user: ', userFilesId);
+
+          // check who likes any photo from current login user
+          // and then get their userId
+          let allLikesofCurrentUsers = [];
+          for (const id of userFilesId) {
+            const response = await getFavouritesByFileId(id);
+            allLikesofCurrentUsers = allLikesofCurrentUsers.concat(response);
+          }
+          // console.log(
+          //   'all likes that current user receive',
+          //   allLikesofCurrentUsers
+          // );
+          for (let i = 0; i < allLikesofCurrentUsers.length; i++) {
+            if (allLikesofCurrentUsers[i].user_id === singleMedia.user_id) {
+              setLike(true);
+              // console.log('this user liked you');
+            }
+          }
+          // console.log('users liked', response);
+        }
+      } catch (error) {
+        Alert.alert('Fail', `You have already liked ${owner}!`);
+        console.error(error);
+      }
+    }
+  };
+
   // console.log('type of', typeof additionData.interests);
   // console.log('type of', additionData.interests[0]);
   useEffect(() => {
     fetchOwner();
   }, []);
+
+  useEffect(() => {
+    checkLike();
+  }, [like]);
 
   const [fontsLoaded] = useFonts({
     Poppins_600SemiBold,
@@ -115,15 +215,52 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   } else {
     return (
       <ScrollView>
-        <RNEListItem
-          onPress={() => {
-            {
-              !myFilesOnly &&
-                navigation.navigate('Single', {file: singleMedia});
+        {myFilesOnly ? (
+          <RNEListItem>
+            <View style={styles.cardProfile}>
+              {singleMedia.media_type === 'image' ? (
+                <Avatar
+                  containerStyle={styles.avatarProfile}
+                  avatarStyle={{borderRadius: 10}}
+                  source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+                  onLongPress={() => {
+                    if (!disableDelete) deleteImage();
+                  }}
+                ></Avatar>
+              ) : (
+                <Video
+                  ref={videoRef}
+                  style={styles.avatarProfile}
+                  source={{uri: uploadsUrl + singleMedia.filename}}
+                  useNativeControls
+                  resizeMode="contain"
+                ></Video>
+              )}
+              {singleMedia.description === '' ? (
+                <></>
+              ) : (
+                <Card style={styles.descriptionBox}>
+                  <Text style={styles.textDescription}>
+                    {singleMedia.description}
+                  </Text>
+                </Card>
+              )}
+            </View>
+          </RNEListItem>
+        ) : (
+          <RNEListItem.Swipeable
+            rightContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
+            leftContent={
+              <Button
+                icon={InfoIcon}
+                onPress={() => {
+                  navigation.navigate('Single', {file: singleMedia});
+                }}
+              ></Button>
             }
-          }}
-        >
-          {!myFilesOnly && (
+            leftStyle={{justifyContent: 'center'}}
+            rightStyle={{justifyContent: 'center'}}
+          >
             <Card style={styles.card}>
               <View
                 style={{
@@ -132,7 +269,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                 }}
               >
                 <Text style={styles.name}>{additionData.fullname}</Text>
-                <DislikeIcon style={styles.x}></DislikeIcon>
               </View>
               <Avatar
                 containerStyle={styles.avatar}
@@ -170,37 +306,8 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                 </Text>
               </View>
             </Card>
-          )}
-          {myFilesOnly && (
-            <View style={styles.cardProfile}>
-              {singleMedia.media_type === 'image' ? (
-                <Avatar
-                  containerStyle={styles.avatarProfile}
-                  avatarStyle={{borderRadius: 10}}
-                  source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
-                  onLongPress={deleteImage}
-                ></Avatar>
-              ) : (
-                <Video
-                  ref={videoRef}
-                  style={styles.avatarProfile}
-                  source={{uri: uploadsUrl + singleMedia.filename}}
-                  useNativeControls
-                  resizeMode="contain"
-                ></Video>
-              )}
-              {singleMedia.description === '' ? (
-                <></>
-              ) : (
-                <Card style={styles.descriptionBox}>
-                  <Text style={styles.textDescription}>
-                    {singleMedia.description}
-                  </Text>
-                </Card>
-              )}
-            </View>
-          )}
-        </RNEListItem>
+          </RNEListItem.Swipeable>
+        )}
       </ScrollView>
     );
   }
@@ -279,6 +386,7 @@ ListItem.propTypes = {
   singleMedia: PropTypes.object.isRequired,
   navigation: PropTypes.object.isRequired,
   myFilesOnly: PropTypes.bool,
+  disableDelete: PropTypes.bool,
 };
 
 export default ListItem;

@@ -22,9 +22,9 @@ const doFetch = async (url, options = {}) => {
 const useMedia = (myFilesOnly, userId = null) => {
   const [mediaArray, setMediaArray] = useState([]);
   const {update, user} = useContext(MainContext);
-  const [loading, setLoading] = useState(false);
-  const loadMedia = async (start = 0, limit = 10) => {
-    setLoading(true);
+  const [load, setLoad] = useState(false);
+  const loadMedia = async () => {
+    setLoad(true);
     try {
       let json = await useTag().getFileByTag(appId);
       if (myFilesOnly) {
@@ -45,7 +45,7 @@ const useMedia = (myFilesOnly, userId = null) => {
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
+      setLoad(false);
     }
     // console.log(mediaArray);
   };
@@ -53,7 +53,7 @@ const useMedia = (myFilesOnly, userId = null) => {
   // Call loadMedia() only once when the component is loaded
   // Or when update state is changed
   useEffect(() => {
-    loadMedia(0, 10);
+    loadMedia();
   }, [update]);
 
   const postMedia = async (formData, token) => {
@@ -113,7 +113,7 @@ const useMedia = (myFilesOnly, userId = null) => {
   return {
     mediaArray,
     postMedia,
-    loading,
+    load,
     deleteMedia,
     putMedia,
     getMediaByUserId,

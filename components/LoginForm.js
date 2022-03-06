@@ -62,6 +62,7 @@ const LoginForm = () => {
         Alert.alert('Fail', 'That user doesnot exits in our app');
       }
     } catch (error) {
+      Alert.alert('Fail', 'You put wrong information');
       console.error(error);
     }
   };
