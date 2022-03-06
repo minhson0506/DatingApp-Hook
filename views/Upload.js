@@ -98,18 +98,22 @@ const Upload = ({navigation}) => {
         token
       );
       setUpload(!upload);
+      setLoading(!loading);
+      setUpdate(update + 1);
       // TODO: make Alert after loading is done with animation
-      tagResponse &&
-        Alert.alert('Upload', 'Uploaded successfully', [
-          {
-            text: 'OK',
-            onPress: () => {
-              setUpdate(update + 1);
-              // navigation.navigate('Upload');
-              setLoading(!loading);
+      setTimeout(() => {
+        tagResponse &&
+          Alert.alert('Upload', 'Uploaded successfully', [
+            {
+              text: 'OK',
+              // onPress: () => {
+              //   setUpdate(update + 1);
+              //   // navigation.navigate('Upload');
+              //   // setLoading(!loading);
+              // },
             },
-          },
-        ]);
+          ]);
+      }, 5000);
     } catch (error) {
       console.error(error);
     }
