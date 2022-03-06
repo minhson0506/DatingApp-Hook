@@ -66,9 +66,7 @@ const Profile = ({navigation}) => {
   );
 
   const loadData = () => {
-    const {mediaArrayNew} = useMedia(true);
-
-    mediaData = mediaArrayNew.filter(
+    mediaData = mediaArray.filter(
       (obj) => obj.title.toLowerCase() !== 'avatar'
     );
     mediaData = mediaData.filter(
@@ -89,12 +87,8 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     fetchAvatar();
-  }, [mediaArray, isFocused, loading]);
-
-  useEffect(() => {
     loadData();
-  }, [loading]);
-  // console.log('Profile', user);
+  }, [mediaArray, isFocused, loading]);
 
   const additionData = JSON.parse(user.full_name);
   // console.log('addition data full name', additionData.fullname);
