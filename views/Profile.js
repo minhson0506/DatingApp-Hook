@@ -52,7 +52,7 @@ const Profile = ({navigation}) => {
   );
 
   const listRef = useRef(null);
-  let {mediaArray} = useMedia(true);
+  const {mediaArray} = useMedia(true);
   const {postMedia, putMedia} = useMedia();
   const {postTag} = useTag();
 
@@ -66,12 +66,9 @@ const Profile = ({navigation}) => {
   );
 
   const loadData = () => {
-    mediaArray = useMedia(true);
+    const {mediaArrayNew} = useMedia(true);
 
-    mediaData = mediaArray.filter(
-      (obj) => obj.title.toLowerCase() !== 'avatar'
-    );
-    mediaData = mediaArray.filter(
+    mediaData = mediaArrayNew.filter(
       (obj) => obj.title.toLowerCase() !== 'avatar'
     );
     mediaData = mediaData.filter(
