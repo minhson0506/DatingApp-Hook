@@ -364,7 +364,7 @@ const Chat = ({navigation}) => {
                 },
               ]}
             >
-              No any hook yet
+              No hook yet!
             </Text>
           </View>
         )}
@@ -437,7 +437,7 @@ const Chat = ({navigation}) => {
                   },
                 ]}
               >
-                No any message yet
+                No message yet!
               </Text>
             </View>
           )}

@@ -1,12 +1,5 @@
 /* eslint-disable camelcase */
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Image,
-  Alert,
-} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {Avatar, Input, ListItem} from 'react-native-elements';
 import {Button} from 'react-native-paper';
@@ -38,7 +31,6 @@ const SingleChat = ({route, navigation}) => {
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
   const {getCommentByFileId, postComment} = userComment();
   // console.log('item', item);
-  const [updateComment, setUpdateComment] = useState(false);
   const {loadMessage, setLoadMessage, user} = useContext(MainContext);
   const [currentUserId, setCurrentUserId] = useState(user.user_id);
   const [hookUserId] = useState(item.user_id);
@@ -108,7 +100,6 @@ const SingleChat = ({route, navigation}) => {
       if (token) {
         if (newComment !== '') {
           await postComment(hookAvatarFile.pop().file_id, newComment, token);
-          setUpdateComment(!updateComment);
           setLoadMessage(!loadMessage);
           // console.log('Response for post comment', response);
         } else {
@@ -120,20 +111,20 @@ const SingleChat = ({route, navigation}) => {
     }
   };
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (seconds === 100) {
-  //       setSeconds(0);
-  //     } else {
-  //       setSeconds(seconds + 1);
-  //     }
-  //     fetchAllMessage();
-  //   }, 100);
-  //   return () => clearInterval(interval);
-  // }, [loadMessage]);
   useEffect(() => {
-    fetchAllMessage();
-  }, []);
+    const interval = setInterval(() => {
+      if (seconds === 100) {
+        setSeconds(0);
+      } else {
+        setSeconds(seconds + 1);
+      }
+      fetchAllMessage();
+    }, 100);
+    return () => clearInterval(interval);
+  }, [loadMessage]);
+  // useEffect(() => {
+  //   fetchAllMessage();
+  // }, []);
 
   const [fontsLoaded] = useFonts({
     Poppins_600SemiBold,
