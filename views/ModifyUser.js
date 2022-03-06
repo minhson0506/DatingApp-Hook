@@ -1,5 +1,12 @@
 import React, {useContext} from 'react';
-import {Alert, View, SafeAreaView, Text, StyleSheet} from 'react-native';
+import {
+  Alert,
+  View,
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useUser} from '../hooks/ApiHooks';
 import {Input, Divider} from 'react-native-elements';
@@ -79,159 +86,161 @@ const ModifyUser = ({navigation}) => {
         </Button>
       </View>
       <Divider style={{marginBottom: 5, marginTop: 5}} />
-      <Text style={styles.header}>Username & email</Text>
-      <Divider style={{marginBottom: 5, marginTop: 10}} />
-      <Controller
-        control={control}
-        rules={{
-          required: {value: true, message: 'This is required.'},
-          minLength: {
-            value: 3,
-            message: 'Username has to be at least 3 characters.',
-          },
-          validate: async (value) => {
-            try {
-              const available = await checkUsername(value);
-              if (available || user.username === value) {
-                return true;
-              } else {
-                return 'Username is already taken.';
+      <ScrollView>
+        <Text style={styles.header}>Username & email</Text>
+        <Divider style={{marginBottom: 5, marginTop: 10}} />
+        <Controller
+          control={control}
+          rules={{
+            required: {value: true, message: 'This is required.'},
+            minLength: {
+              value: 3,
+              message: 'Username has to be at least 3 characters.',
+            },
+            validate: async (value) => {
+              try {
+                const available = await checkUsername(value);
+                if (available || user.username === value) {
+                  return true;
+                } else {
+                  return 'Username is already taken.';
+                }
+              } catch (error) {
+                throw new Error(error.message);
               }
-            } catch (error) {
-              throw new Error(error.message);
-            }
-          },
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            placeholder="username"
-            errorMessage={errors.username && errors.username.message}
-            containerStyle={{marginLeft: 10, marginTop: 10}}
-            inputStyle={styles.inputStyle}
-            inputContainerStyle={{borderBottomWidth: 0}}
-          />
-        )}
-        name="username"
-      />
-      <Divider style={{marginBottom: 5}} />
+            },
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              placeholder="username"
+              errorMessage={errors.username && errors.username.message}
+              containerStyle={{marginLeft: 10, marginTop: 10}}
+              inputStyle={styles.inputStyle}
+              inputContainerStyle={{borderBottomWidth: 0}}
+            />
+          )}
+          name="username"
+        />
+        <Divider style={{marginBottom: 5}} />
 
-      <Controller
-        control={control}
-        rules={{
-          required: {value: true, message: 'This is required.'},
-          pattern: {
-            value: /\S+@\S+\.\S+$/,
-            message: 'Has to be valid email.',
-          },
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            placeholder="email"
-            errorMessage={errors.email && errors.email.message}
-            containerStyle={{marginLeft: 10, marginTop: 10}}
-            inputStyle={styles.inputStyle}
-            inputContainerStyle={{borderBottomWidth: 0}}
-          />
-        )}
-        name="email"
-      />
-      <Divider style={{marginBottom: '15%'}} />
-      <Text style={styles.header}>Change Password</Text>
-      <Divider style={{marginBottom: 5, marginTop: 10}} />
+        <Controller
+          control={control}
+          rules={{
+            required: {value: true, message: 'This is required.'},
+            pattern: {
+              value: /\S+@\S+\.\S+$/,
+              message: 'Has to be valid email.',
+            },
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              placeholder="email"
+              errorMessage={errors.email && errors.email.message}
+              containerStyle={{marginLeft: 10, marginTop: 10}}
+              inputStyle={styles.inputStyle}
+              inputContainerStyle={{borderBottomWidth: 0}}
+            />
+          )}
+          name="email"
+        />
+        <Divider style={{marginBottom: '15%'}} />
+        <Text style={styles.header}>Change Password</Text>
+        <Divider style={{marginBottom: 5, marginTop: 10}} />
 
-      <Controller
-        control={control}
-        rules={{
-          minLength: {
-            value: 5,
-            message: 'Password has to be at least 5 characters.',
-          },
-          /*
+        <Controller
+          control={control}
+          rules={{
+            minLength: {
+              value: 5,
+              message: 'Password has to be at least 5 characters.',
+            },
+            /*
           pattern: {
             value: /(?=.*[\p{Lu}])(?=.*[0-9]).{8,}/u,
             message: 'Min 8, Uppercase, Number',
           },
           */
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            secureTextEntry={true}
-            placeholder="password"
-            errorMessage={errors.password && errors.password.message}
-            containerStyle={{marginLeft: 10, marginTop: 10}}
-            inputStyle={styles.inputStyle}
-            inputContainerStyle={{borderBottomWidth: 0}}
-          />
-        )}
-        name="password"
-      />
-      <Divider style={{marginBottom: 5}} />
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              secureTextEntry={true}
+              placeholder="password"
+              errorMessage={errors.password && errors.password.message}
+              containerStyle={{marginLeft: 10, marginTop: 10}}
+              inputStyle={styles.inputStyle}
+              inputContainerStyle={{borderBottomWidth: 0}}
+            />
+          )}
+          name="password"
+        />
+        <Divider style={{marginBottom: 5}} />
 
-      <Controller
-        control={control}
-        rules={{
-          validate: (value) => {
-            const {password} = getValues();
-            if (value === password) {
-              return true;
-            } else {
-              return 'Passwords do not match.';
-            }
-          },
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            secureTextEntry={true}
-            placeholder="confirm password"
-            errorMessage={
-              errors.confirmPassword && errors.confirmPassword.message
-            }
-            containerStyle={{marginLeft: 10, marginTop: 10}}
-            inputStyle={styles.inputStyle}
-            inputContainerStyle={{borderBottomWidth: 0}}
-          />
-        )}
-        name="confirmPassword"
-      />
-      <Divider style={{marginBottom: '10%'}} />
+        <Controller
+          control={control}
+          rules={{
+            validate: (value) => {
+              const {password} = getValues();
+              if (value === password) {
+                return true;
+              } else {
+                return 'Passwords do not match.';
+              }
+            },
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              secureTextEntry={true}
+              placeholder="confirm password"
+              errorMessage={
+                errors.confirmPassword && errors.confirmPassword.message
+              }
+              containerStyle={{marginLeft: 10, marginTop: 10}}
+              inputStyle={styles.inputStyle}
+              inputContainerStyle={{borderBottomWidth: 0}}
+            />
+          )}
+          name="confirmPassword"
+        />
+        <Divider style={{marginBottom: '10%'}} />
 
-      <Button
-        style={styles.ScrollUpButton}
-        labelStyle={{
-          fontSize: 15,
-        }}
-        onPress={handleSubmit(onSubmit)}
-      >
-        Save
-      </Button>
+        <Button
+          style={styles.ScrollUpButton}
+          labelStyle={{
+            fontSize: 15,
+          }}
+          onPress={handleSubmit(onSubmit)}
+        >
+          Save
+        </Button>
 
-      <Divider style={{marginBottom: 5, marginTop: '15%'}} />
-      <Button
-        labelStyle={{
-          color: 'black',
-          fontSize: 15,
-        }}
-        onPress={logOut}
-      >
-        Log out
-      </Button>
-      <Divider style={{marginBottom: 5, marginTop: 10}} />
+        <Divider style={{marginBottom: 5, marginTop: '15%'}} />
+        <Button
+          labelStyle={{
+            color: 'black',
+            fontSize: 15,
+          }}
+          onPress={logOut}
+        >
+          Log out
+        </Button>
+        <Divider style={{marginBottom: 5, marginTop: 10}} />
+      </ScrollView>
     </SafeAreaView>
   );
 };

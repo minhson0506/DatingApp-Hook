@@ -1,5 +1,14 @@
 /* eslint-disable camelcase */
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  Keyboard,
+  Platform,
+} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {Avatar, Input, ListItem} from 'react-native-elements';
 import {Button} from 'react-native-paper';
@@ -139,122 +148,134 @@ const SingleChat = ({route, navigation}) => {
       <>
         <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
           {/* header: avatar, hook username and interest */}
-
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginTop: 10,
-            }}
+          <TouchableOpacity
+            style={{flex: 1}}
+            activeOpacity={1}
+            onPress={() => Keyboard.dismiss()}
           >
-            <BackIcon
-              style={styles.back}
-              onPress={() => {
-                navigation.navigate('Chat');
-              }}
-            ></BackIcon>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginRight: '20%',
-              }}
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : ''}
+              enabled
+              style={styles.container}
+              // fix keyboard avoid view
             >
-              <Avatar
-                style={styles.avatar}
-                avatarStyle={{
-                  borderRadius: 60,
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginTop: 10,
                 }}
-                source={{uri: uploadsUrl + item.filename}}
-              />
-              <View style={{flexDirection: 'column', marginLeft: 10}}>
-                <Text style={styles.username}>{item.username}</Text>
-                <Text style={styles.interests}>
-                  {typeof additionData.interests !== 'undefined'
-                    ? additionData.interests.split(',')[0] +
-                      ', ' +
-                      additionData.interests.split(',')[1]
-                    : ''}
-                </Text>
-              </View>
-            </View>
-            <OptionIcon style={{marginRight: 15}}></OptionIcon>
-          </View>
-
-          {/* message content */}
-          <AutoScrollFlatList
-            style={{marginBottom: 20, marginTop: 20}}
-            data={allMessage}
-            keyExtractor={(item) => item.comment_id.toString()}
-            renderItem={({item}) => (
-              <ListItem
-                containerStyle={{
-                  padding: 5,
-                  marginLeft: 5,
-                  marginRight: 5,
-                }}
-                style={
-                  item.user_id === currentUserId
-                    ? styles.currentList
-                    : styles.none
-                }
               >
+                <BackIcon
+                  style={styles.back}
+                  onPress={() => {
+                    navigation.navigate('Chat');
+                  }}
+                ></BackIcon>
                 <View
-                  style={
-                    item.user_id === currentUserId
-                      ? styles.current
-                      : styles.hook
-                  }
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginRight: '20%',
+                  }}
                 >
-                  <Text
+                  <Avatar
+                    style={styles.avatar}
+                    avatarStyle={{
+                      borderRadius: 60,
+                    }}
+                    source={{uri: uploadsUrl + item.filename}}
+                  />
+                  <View style={{flexDirection: 'column', marginLeft: 10}}>
+                    <Text style={styles.username}>{item.username}</Text>
+                    <Text style={styles.interests}>
+                      {typeof additionData.interests !== 'undefined'
+                        ? additionData.interests.split(',')[0] +
+                          ', ' +
+                          additionData.interests.split(',')[1]
+                        : ''}
+                    </Text>
+                  </View>
+                </View>
+                <OptionIcon style={{marginRight: 15}}></OptionIcon>
+              </View>
+
+              {/* message content */}
+              <AutoScrollFlatList
+                style={{marginBottom: 20, marginTop: 20}}
+                data={allMessage}
+                keyExtractor={(item) => item.comment_id.toString()}
+                renderItem={({item}) => (
+                  <ListItem
+                    containerStyle={{
+                      padding: 5,
+                      marginLeft: 5,
+                      marginRight: 5,
+                    }}
                     style={
                       item.user_id === currentUserId
-                        ? styles.currentUser
-                        : styles.hookUser
+                        ? styles.currentList
+                        : styles.none
                     }
                   >
-                    {item.comment}
-                  </Text>
-                </View>
-              </ListItem>
-            )}
-          />
+                    <View
+                      style={
+                        item.user_id === currentUserId
+                          ? styles.current
+                          : styles.hook
+                      }
+                    >
+                      <Text
+                        style={
+                          item.user_id === currentUserId
+                            ? styles.currentUser
+                            : styles.hookUser
+                        }
+                      >
+                        {item.comment}
+                      </Text>
+                    </View>
+                  </ListItem>
+                )}
+              />
 
-          {/* input */}
-          <View
-            style={{
-              marginBottom: 20,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <Input
-              containerStyle={{
-                width: '80%',
-                height: 50,
-                borderColor: '#EDE0DA',
-                borderWidth: 1,
-                borderRadius: 10,
-                marginLeft: 15,
-              }}
-              inputStyle={styles.inputStyle}
-              inputContainerStyle={{
-                borderBottomWidth: 0,
-              }}
-              value={newComment}
-              autoCapitalize="none"
-              placeholder="Type your message..."
-              onChangeText={(value) => setNewComment(value)}
-            />
-            <Button
-              icon={SendIcon}
-              onPress={() => {
-                sendMessage();
-                setNewComment('');
-              }}
-            ></Button>
-          </View>
+              {/* input */}
+              <View
+                style={{
+                  marginBottom: 20,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                <Input
+                  containerStyle={{
+                    width: '80%',
+                    height: 50,
+                    borderColor: '#EDE0DA',
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    marginLeft: 15,
+                  }}
+                  inputStyle={styles.inputStyle}
+                  inputContainerStyle={{
+                    borderBottomWidth: 0,
+                  }}
+                  value={newComment}
+                  autoCapitalize="none"
+                  placeholder="Type your message..."
+                  onChangeText={(value) => setNewComment(value)}
+                />
+                <Button
+                  icon={SendIcon}
+                  onPress={() => {
+                    sendMessage();
+                    setNewComment('');
+                  }}
+                ></Button>
+              </View>
+            </KeyboardAvoidingView>
+          </TouchableOpacity>
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
       </>
@@ -263,6 +284,9 @@ const SingleChat = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   back: {
     marginLeft: 20,
   },

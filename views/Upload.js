@@ -6,6 +6,10 @@ import {
   View,
   SafeAreaView,
   Alert,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  Keyboard,
+  Platform,
 } from 'react-native';
 import React, {useContext, useState, useCallback, useEffect} from 'react';
 import GlobalStyles from '../utils/GlobalStyles';
@@ -141,89 +145,104 @@ const Upload = ({navigation}) => {
   } else {
     return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
+        <TouchableOpacity
+          style={{flex: 1}}
+          activeOpacity={1}
+          onPress={() => Keyboard.dismiss()}
         >
-          <Button
-            labelStyle={styles.button}
-            onPress={() => navigation.navigate('Profile')}
-            icon={backIcon}
-            underlayColor="white"
-          ></Button>
-          <Text style={styles.appName}>Upload</Text>
-          <Button disabled={true}></Button>
-        </View>
-        <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : ''}
+            enabled
+            style={styles.container}
+            // fix keyboard avoid view
+          >
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Button
+                labelStyle={styles.button}
+                onPress={() => navigation.navigate('Profile')}
+                icon={backIcon}
+                underlayColor="white"
+              ></Button>
+              <Text style={styles.appName}>Upload</Text>
+              <Button disabled={true}></Button>
+            </View>
+            <Divider style={{marginBottom: 5, marginTop: 5}} />
 
-        <ScrollView>
-          <Text style={styles.header}>Upload your pictures or video</Text>
-          <LottieView
-            style={{width: '80%', alignSelf: 'center'}}
-            ref={animation}
-            source={require('../assets/animation/load2.json')}
-            autoPlay={false}
-            loop={false}
-            speed={2}
-            resizeMode="cover"
-            onAnimationFinish={() => {
-              console.log('animation finished');
-            }}
-          />
-          <View style={styles.box}>
-            <Card containerStyle={styles.card}>
-              {type === 'image' ? (
-                <Card.Image
-                  source={{uri: image}}
-                  style={styles.image}
-                  onPress={pickImage}
-                ></Card.Image>
-              ) : (
-                <Video
-                  source={{uri: image}}
-                  style={styles.image}
-                  useNativeControls={true}
-                  resizeMode="cover"
-                  onError={(err) => {
-                    console.error('video', err);
-                  }}
-                />
-              )}
-
-              <Controller
-                control={control}
-                render={({field: {onChange, onBlur, value}}) => (
-                  <Input
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    autoCapitalize="none"
-                    placeholder="Caption this"
-                    style={{textAlign: 'center'}}
-                    errorMessage={errors.description}
-                  />
-                )}
-                name="description"
+            <ScrollView>
+              <Text style={styles.header}>Upload your pictures or video</Text>
+              <LottieView
+                style={{width: '80%', alignSelf: 'center'}}
+                ref={animation}
+                source={require('../assets/animation/load2.json')}
+                autoPlay={false}
+                loop={false}
+                resizeMode="cover"
+                onAnimationFinish={() => {
+                  console.log('animation finished');
+                }}
               />
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-evenly'}}
-              >
-                <Button onPress={reset}>Reset</Button>
+              <View style={styles.box}>
+                <Card containerStyle={styles.card}>
+                  {type === 'image' ? (
+                    <Card.Image
+                      source={{uri: image}}
+                      style={styles.image}
+                      onPress={pickImage}
+                    ></Card.Image>
+                  ) : (
+                    <Video
+                      source={{uri: image}}
+                      style={styles.image}
+                      useNativeControls={true}
+                      resizeMode="cover"
+                      onError={(err) => {
+                        console.error('video', err);
+                      }}
+                    />
+                  )}
 
-                <Button
-                  // style={{marginLRight: 20}}
-                  disabled={!imageSelected}
-                  loading={load}
-                  onPress={handleSubmit(onSubmit)}
-                >
-                  Upload
-                </Button>
+                  <Controller
+                    control={control}
+                    render={({field: {onChange, onBlur, value}}) => (
+                      <Input
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        autoCapitalize="none"
+                        placeholder="Caption this"
+                        style={{textAlign: 'center'}}
+                        errorMessage={errors.description}
+                      />
+                    )}
+                    name="description"
+                  />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                    }}
+                  >
+                    <Button onPress={reset}>Reset</Button>
+
+                    <Button
+                      // style={{marginLRight: 20}}
+                      disabled={!imageSelected}
+                      loading={load}
+                      onPress={handleSubmit(onSubmit)}
+                    >
+                      Upload
+                    </Button>
+                  </View>
+                </Card>
               </View>
-            </Card>
-          </View>
-        </ScrollView>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }

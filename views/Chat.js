@@ -295,7 +295,7 @@ const Chat = ({navigation}) => {
             </MenuItem>
           </Menu>
           <Text style={styles.appName}>hook</Text>
-          <Button disabled={true}></Button>
+          <Text style={{color: 'white'}}>Text</Text>
         </View>
 
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
