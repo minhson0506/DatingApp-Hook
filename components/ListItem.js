@@ -9,7 +9,7 @@ import {
   Text,
 } from 'react-native-elements';
 import {Alert, ScrollView, StyleSheet, View} from 'react-native';
-import {useUser, userFavourite, useMedia} from '../hooks/ApiHooks';
+import {useUser, useFavourite, useMedia} from '../hooks/ApiHooks';
 import AgeIcon from '../assets/age.svg';
 import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
@@ -35,7 +35,7 @@ const ListItem = ({
 }) => {
   const [like, setLike] = useState(false);
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
-  const {postFavourite, getFavouritesByFileId, getFavourites} = userFavourite();
+  const {postFavourite, getFavouritesByFileId, getFavourites} = useFavourite();
 
   const {getUserById} = useUser();
   const videoRef = useRef(null);

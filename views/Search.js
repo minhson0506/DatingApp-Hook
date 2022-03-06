@@ -2,7 +2,7 @@
 import {View, Text, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {PropTypes} from 'prop-types';
-import {useMedia, userFavourite, useUser} from '../hooks/ApiHooks';
+import {useMedia, useFavourite, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, ListItem} from 'react-native-elements';
@@ -35,7 +35,7 @@ const Search = ({navigation}) => {
   const [media, setMedia] = useState([]);
   const [searchArray, setSearchArray] = useState([]);
   const {user, loading, setLoading, token} = useContext(MainContext);
-  const {getFavouritesByFileId} = userFavourite();
+  const {getFavouritesByFileId} = useFavourite();
   const {getUserById} = useUser();
   const [searchState, setSearch] = useState(true);
 

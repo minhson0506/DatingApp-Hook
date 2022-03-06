@@ -110,6 +110,10 @@ const useMedia = (myFilesOnly, userId = null) => {
     return await doFetch(`${baseUrl}media/${fileId}`);
   };
 
+  // const getFavouritesByFileId = async (fileId) => {
+  //   return await doFetch(`${baseUrl}favourites/file/${fileId}`);
+  // };
+
   return {
     mediaArray,
     postMedia,
@@ -155,6 +159,15 @@ const useUser = () => {
     return userData;
   };
 
+  // const getAllUsers = async (token) => {
+  //   const options = {
+  //     method: 'GET',
+  //     headers: {'x-access-token': token},
+  //   };
+  //   const userData = await doFetch(baseUrl + 'users', options);
+  //   return userData;
+  // };
+
   const postUser = async (data) => {
     const options = {
       method: 'POST',
@@ -199,6 +212,7 @@ const useUser = () => {
   return {
     // userArray,
     getUserByToken,
+    // getAllUsers,
     postUser,
     putUser,
     checkUsername,
@@ -226,20 +240,16 @@ const useTag = () => {
 };
 
 const userComment = () => {
-  const deleteComment = async (commentId, token) => {
-    const options = {
-      method: 'DELETE',
-      headers: {'x-access-token': token},
-    };
-    return await doFetch(baseUrl + 'comments/' + commentId, options);
-  };
-
-  const postComment = async (data, token) => {
+  const postComment = async (fileId, newComment, token) => {
     const options = {
       method: 'POST',
-      headers: {'x-access-token': token},
-      body: JSON.stringify(data),
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({file_id: fileId, comment: newComment}),
     };
+    console.log('data in api hook', options);
     return await doFetch(baseUrl + 'comments', options);
   };
 
@@ -263,11 +273,10 @@ const userComment = () => {
     postComment,
     getComments,
     getCommentByFileId,
-    deleteComment,
   };
 };
 
-const userFavourite = () => {
+const useFavourite = () => {
   const postFavourite = async (data, token) => {
     const options = {
       method: 'POST',
@@ -288,6 +297,13 @@ const userFavourite = () => {
     return await doFetch(baseUrl + 'favourites/files/' + fileId, options);
   };
 
+  // const getFavouritesByFileId = async (fileId) => {
+  //   const options = {
+  //     method: 'GET',
+  //   };
+  //   return await doFetch(baseUrl + 'favourites/file/' + fileId, options);
+  // };
+
   const getFavouritesByFileId = async (fileId) => {
     return await doFetch(`${baseUrl}favourites/file/${fileId}`);
   };
@@ -303,4 +319,4 @@ const userFavourite = () => {
   return {postFavourite, deleteFavourite, getFavourites, getFavouritesByFileId};
 };
 
-export {useMedia, useLogin, useUser, useTag, userComment, userFavourite};
+export {useMedia, useLogin, useUser, useTag, userComment, useFavourite};

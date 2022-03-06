@@ -7,6 +7,7 @@ const MainProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [update, setUpdate] = useState(0);
+  const [loadMessage, setLoadMessage] = useState(false);
   const [instruction, setInstruction] = useState(false);
   const [updateInfo, setUpdateInfo] = useState(0);
   const [token, setToken] = useState('fetching...');
@@ -21,6 +22,8 @@ const MainProvider = (props) => {
         setUser,
         update,
         setUpdate,
+        loadMessage,
+        setLoadMessage,
         instruction,
         setInstruction,
         updateInfo,

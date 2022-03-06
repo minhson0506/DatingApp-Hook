@@ -4,7 +4,7 @@ import React, {useEffect, useState, useContext} from 'react';
 import {Avatar, ListItem, Image} from 'react-native-elements';
 import {uploadsUrl} from '../utils/variables';
 import PropTypes from 'prop-types';
-import {useUser, useMedia, userFavourite} from '../hooks/ApiHooks';
+import {useUser, useMedia, useFavourite} from '../hooks/ApiHooks';
 import {Button} from 'react-native-paper';
 import {LinearGradient} from 'expo-linear-gradient';
 import UpIcon from '../assets/heart.svg';
@@ -30,7 +30,7 @@ const Like = ({navigation}) => {
   const [hook, setHook] = useState([]);
   const {getUserById} = useUser();
   const {getMediaByUserId, getAllMediaByCurrentUserId} = useMedia();
-  const {getFavouritesByFileId} = userFavourite();
+  const {getFavouritesByFileId} = useFavourite();
   const {loading, token} = useContext(MainContext);
 
   const fetchNewLikes = async () => {

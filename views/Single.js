@@ -13,7 +13,7 @@ import {
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
-import {useUser, userFavourite} from '../hooks/ApiHooks';
+import {useUser, useFavourite} from '../hooks/ApiHooks';
 import AgeIcon from '../assets/age.svg';
 import InterestIcon from '../assets/heart.svg';
 import LocationIcon from '../assets/location.svg';
@@ -34,7 +34,7 @@ const Single = ({route, navigation}) => {
   const animation = React.createRef();
   const listRef = useRef(null);
   const {file} = route.params;
-  const {postFavourite, getFavouritesByFileId, getFavourites} = userFavourite();
+  const {postFavourite, getFavouritesByFileId, getFavourites} = useFavourite();
   const {mediaArray} = useMedia(false, file.user_id);
   const {getUserById} = useUser();
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();

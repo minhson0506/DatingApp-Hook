@@ -12,6 +12,7 @@ import ModifyUser from '../views/ModifyUser';
 import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';
+import SingleChat from '../views/SingleChat';
 import FirstLand from '../views/FirstLand';
 import Instructions from '../views/Instructions';
 import Preference from '../views/Preference';
@@ -252,6 +253,11 @@ const StackScreen = () => {
           <Stack.Screen
             name="Login"
             component={Login}
+            options={{headerShown: false}}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="SingleChat"
+            component={SingleChat}
             options={{headerShown: false}}
           ></Stack.Screen>
         </>
