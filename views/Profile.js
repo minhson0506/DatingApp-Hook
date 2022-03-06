@@ -45,13 +45,14 @@ import {Button} from 'react-native-paper';
 
 const Profile = ({navigation}) => {
   const {user, update, setUpdate, loading, token} = useContext(MainContext);
+  console.log('user in profile', user);
   const isFocused = useIsFocused();
   const [avatar, setAvatar] = useState(
     'https://www.linkpicture.com/q/iPhone-8-2-1.png'
   );
 
   const listRef = useRef(null);
-  const {mediaArray} = useMedia(true);
+  let {mediaArray} = useMedia(true);
   const {postMedia, putMedia} = useMedia();
   const {postTag} = useTag();
 
@@ -60,12 +61,25 @@ const Profile = ({navigation}) => {
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
 
-  // filter for file except avatar
   let mediaData = mediaArray.filter(
     (obj) => obj.title.toLowerCase() !== 'avatar'
   );
-  mediaData = mediaData.filter((obj) => obj.title.toLowerCase() !== 'deleted');
-  console.log('mediaData', mediaData);
+
+  const loadData = () => {
+    mediaArray = useMedia(true);
+
+    mediaData = mediaArray.filter(
+      (obj) => obj.title.toLowerCase() !== 'avatar'
+    );
+    mediaData = mediaArray.filter(
+      (obj) => obj.title.toLowerCase() !== 'avatar'
+    );
+    mediaData = mediaData.filter(
+      (obj) => obj.title.toLowerCase() !== 'deleted'
+    );
+    // console.log('mediaData', mediaData);
+  };
+  // filter for file except avatar
 
   const fetchAvatar = () => {
     // console.log('myfileonly in profile', myFilesOnly);
@@ -80,6 +94,9 @@ const Profile = ({navigation}) => {
     fetchAvatar();
   }, [mediaArray, isFocused, loading]);
 
+  useEffect(() => {
+    loadData();
+  }, [loading]);
   // console.log('Profile', user);
 
   const additionData = JSON.parse(user.full_name);

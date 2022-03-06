@@ -9,31 +9,17 @@ const List = ({navigation, myFilesOnly = false}) => {
   const [didMount, setDidMount] = useState(true);
   const {user, loading, token} = useContext(MainContext);
   const {getUserById} = useUser();
-  // console.log('token', token);
-  // const {userArray} = useUser(token);
-  // console.log('users', userArray);
   const {mediaArray} = useMedia(myFilesOnly);
   const [media, setMedia] = useState([]);
-  // console.log('media begin', mediaArray);
-  // const [mediaArray, setMediaArray] = useMedia(myFilesOnly);
-  // const [media, setMedia] = useState([]);
   const myAdditionData = JSON.parse(user.full_name);
-  // console.log('inter of user', myAdditionData.interested);
-  // const numberDisplay = 5;
 
   const filterData = async () => {
-    // console.log('my file only', myFilesOnly);
-    // setMedia(mediaArray);
-    // console.log('interested', myAdditionData.interested);
     if (!myFilesOnly) {
-      // console.log('media Data original', mediaArray);
-
       // filter avatar media
       let array = mediaArray.filter(
         (obj) => obj.title.toLowerCase() === 'avatar'
       );
 
-      // console.log('media data after filter avatar', array);
       // filter current user
       array = array.filter((obj) => obj.user_id !== user.user_id);
       // console.log(

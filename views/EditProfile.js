@@ -1,12 +1,5 @@
 /* eslint-disable camelcase */
-import {
-  ScrollView,
-  Text,
-  StyleSheet,
-  View,
-  SafeAreaView,
-  Alert,
-} from 'react-native';
+import {ScrollView, Text, StyleSheet, View, SafeAreaView} from 'react-native';
 import React, {useContext, useState, useCallback, useEffect} from 'react';
 import GlobalStyles from '../utils/GlobalStyles';
 import PropTypes from 'prop-types';
