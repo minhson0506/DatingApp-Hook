@@ -16,8 +16,11 @@ import {Searchbar, Button} from 'react-native-paper';
 import MenuIcon from '../assets/menu.svg';
 import GlobalStyles from '../utils/GlobalStyles';
 import {Menu, MenuItem} from 'react-native-material-menu';
+import LottieView from 'lottie-react-native';
 
 const Search = ({navigation}) => {
+  const animation = React.createRef();
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_400Regular,
@@ -237,8 +240,10 @@ const Search = ({navigation}) => {
           <Button disabled={true}></Button>
         </View>
         <Searchbar
+          iconColor="#82008F"
           style={styles.searchBar}
-          placeholder="Search"
+          inputStyle={{color: '#EB6432'}}
+          placeholder="Looking for someone?"
           onChangeText={(text) => setText(text)}
           value={text}
         />
@@ -250,7 +255,7 @@ const Search = ({navigation}) => {
           }}
         >
           <Button
-            uppercase={false}
+            contentStyle={{width: 95}}
             labelStyle={styles.labelButton}
             style={styles.buttons}
             onPress={() => {
@@ -261,7 +266,6 @@ const Search = ({navigation}) => {
             Search
           </Button>
           <Button
-            uppercase={false}
             labelStyle={styles.labelButton}
             style={styles.buttons}
             onPress={() => {
@@ -313,41 +317,62 @@ const Search = ({navigation}) => {
             ></FlatList>
           </>
         ) : (
-          <FlatList
-            columnWrapperStyle={{flex: 1, justifyContent: 'space-around'}}
-            numColumns={2}
-            showsHorizontalScrollIndicator={false}
-            horizontal={false}
-            data={searchArray}
-            keyExtractor={(item) => item.file_id.toString()}
-            renderItem={({item}) => (
-              <ListItem
-                onPress={() => {
-                  navigation.navigate('Single', {file: item});
-                }}
-              >
-                {item ? (
-                  <View
-                    style={{
-                      flexDirection: 'column',
-                      alignItems: 'center',
+          <>
+            {searchArray.length == 0 ? (
+              <>
+                <Text style={styles.notFoundText}>
+                  Sorry we could not find that person for you.
+                </Text>
+                <LottieView
+                  style={{width: '80%', alignSelf: 'center'}}
+                  ref={animation}
+                  source={require('../assets/animation/empty.json')}
+                  autoPlay
+                  loop={true}
+                  resizeMode="cover"
+                  onAnimationFinish={() => {
+                    console.log('animation finished');
+                  }}
+                />
+              </>
+            ) : (
+              <FlatList
+                columnWrapperStyle={{flex: 1, justifyContent: 'space-around'}}
+                numColumns={2}
+                showsHorizontalScrollIndicator={false}
+                horizontal={false}
+                data={searchArray}
+                keyExtractor={(item) => item.file_id.toString()}
+                renderItem={({item}) => (
+                  <ListItem
+                    onPress={() => {
+                      navigation.navigate('Single', {file: item});
                     }}
                   >
-                    <Avatar
-                      style={styles.avatar}
-                      avatarStyle={{
-                        borderRadius: 10,
-                      }}
-                      source={{uri: uploadsUrl + item.filename}}
-                    />
-                    <Text style={styles.username}>{item.description}</Text>
-                  </View>
-                ) : (
-                  <></>
+                    {item ? (
+                      <View
+                        style={{
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Avatar
+                          style={styles.avatar}
+                          avatarStyle={{
+                            borderRadius: 10,
+                          }}
+                          source={{uri: uploadsUrl + item.filename}}
+                        />
+                        <Text style={styles.username}>{item.description}</Text>
+                      </View>
+                    ) : (
+                      <></>
+                    )}
+                  </ListItem>
                 )}
-              </ListItem>
+              ></FlatList>
             )}
-          ></FlatList>
+          </>
         )}
       </SafeAreaView>
     );
@@ -396,6 +421,7 @@ const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     borderRadius: 10,
+    fontFamily: 'Poppins_500Medium',
   },
   buttons: {
     width: 90,
@@ -405,7 +431,14 @@ const styles = StyleSheet.create({
     borderColor: '#82008F',
   },
   labelButton: {
-    fontSize: 15,
+    fontSize: 13,
+  },
+  notFoundText: {
+    alignSelf: 'center',
+    marginTop: '15%',
+    marginBottom: '5%',
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 16,
   },
 });
 

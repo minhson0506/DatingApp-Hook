@@ -21,7 +21,6 @@ import {
 import AppLoading from 'expo-app-loading';
 import {Divider, Input} from 'react-native-elements';
 import {useUser} from '../hooks/ApiHooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
@@ -41,7 +40,7 @@ const EditProfile = ({navigation}) => {
   });
 
   const {putUser} = useUser();
-  const {user, setLoading, loading} = useContext(MainContext);
+  const {user, setLoading, loading, token} = useContext(MainContext);
   const additionData = JSON.parse(user.full_name);
 
   // input values
@@ -176,14 +175,8 @@ const EditProfile = ({navigation}) => {
 
     user.full_name = JSON.stringify(additionData);
     try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const userData = await putUser(user, userToken);
-      if (userData) {
-        Alert.alert('Success', userData.message);
-        // update info after navigate
-        setLoading(!loading);
-        navigation.navigate('Profile');
-      }
+      const response = await putUser(user, token);
+      response && setLoading(!loading);
     } catch (error) {
       console.error(error);
     }
@@ -310,14 +303,14 @@ const EditProfile = ({navigation}) => {
           <Button
             labelStyle={styles.button}
             onPress={() => {
-              navigation.navigate('Profile');
               modifyPreferences();
+              navigation.navigate('Interests');
             }}
           >
-            Done
+            next
           </Button>
         </View>
-        <Divider style={{marginBottom: 5, marginTop: 5}} />
+        <Divider style={{marginTop: 5}} />
         <ScrollView>
           <Text style={styles.header}>My Vital</Text>
           <Divider style={{marginBottom: 5, marginTop: 5}} />
@@ -350,7 +343,7 @@ const EditProfile = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Age</Text>
           <View style={styles.slider}>
             <MultiSlider
@@ -365,7 +358,7 @@ const EditProfile = ({navigation}) => {
               selectedStyle={{backgroundColor: '#FF707B'}}
             />
           </View>
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Height (cm)</Text>
           <View style={styles.slider}>
             <MultiSlider
@@ -436,7 +429,7 @@ const EditProfile = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Pet</Text>
           <DropDownPicker
             open={openPet}
@@ -452,9 +445,11 @@ const EditProfile = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
+          <Divider style={{marginTop: 5}} />
+
           <Text style={styles.header}>My virture</Text>
 
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
+          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Work</Text>
           <Input
             value={work}
@@ -465,6 +460,8 @@ const EditProfile = ({navigation}) => {
             inputStyle={styles.inputStyle}
             inputContainerStyle={{borderBottomWidth: 0}}
           />
+          <Divider style={{marginBottom: 5}} />
+
           <Text style={styles.title}>Job Title</Text>
           <Input
             value={job}
@@ -571,7 +568,6 @@ const EditProfile = ({navigation}) => {
 const styles = StyleSheet.create({
   button: {
     textTransform: 'lowercase',
-    color: '#EB6833',
     fontSize: 16,
     fontFamily: 'Poppins_500Medium',
   },
@@ -584,7 +580,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
     color: '#7C7878',
     marginLeft: 20,
-    marginTop: 20,
+    marginTop: '10%',
   },
   title: {
     fontSize: 16,

@@ -2,7 +2,6 @@
 import {View, Text, FlatList, StyleSheet} from 'react-native';
 import React, {useEffect, useState, useContext} from 'react';
 import {Avatar, ListItem, Image} from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {uploadsUrl} from '../utils/variables';
 import PropTypes from 'prop-types';
 import {useUser, useMedia, userFavourite} from '../hooks/ApiHooks';
@@ -32,12 +31,10 @@ const Like = ({navigation}) => {
   const {getUserById} = useUser();
   const {getMediaByUserId, getAllMediaByCurrentUserId} = useMedia();
   const {getFavouritesByFileId} = userFavourite();
-  const {loading} = useContext(MainContext);
+  const {loading, token} = useContext(MainContext);
 
   const fetchNewLikes = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
-
       // cannot get Media Array ...
       const userFiles = await getAllMediaByCurrentUserId(token);
       const userFilesId = [];

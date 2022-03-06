@@ -1,5 +1,12 @@
 /* eslint-disable camelcase */
-import {SafeAreaView, Text, StyleSheet, FlatList} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  FlatList,
+  View,
+  Alert,
+} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {PropTypes} from 'prop-types';
 import GlobalStyles from '../utils/GlobalStyles';
@@ -12,8 +19,6 @@ import {
   Poppins_600SemiBold,
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
-import AppLoading from 'expo-app-loading';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Interests = ({navigation}) => {
   const [fontsLoaded] = useFonts({
@@ -24,20 +29,15 @@ const Interests = ({navigation}) => {
   const {user, token, loading, setLoading} = useContext(MainContext);
   let additionData = JSON.parse(user.full_name);
   const [media, setMedia] = useState([]);
-  // const [arrayState, setArrayState] = useState(
-  //   additionData.interests.split(',')
-  // );
   let result = [];
 
   const arrayLoading = async () => {
-    // const token = await AsyncStorage.getItem('userToken');
     const user = await getUserByToken(token);
     additionData = JSON.parse(user.full_name);
     let arrayInterest = additionData.interests.split(' ').join('').split(',');
     arrayInterest = arrayInterest.map((obj) => obj.toLowerCase());
-    console.log('array interests', arrayInterest);
+    // console.log('array interests', arrayInterest);
     let number = 0;
-    // for (let i = 1; i < dataSource.length; i++) {
     result = dataSource.map((value) => {
       const obj = {
         id: number++,
@@ -47,9 +47,8 @@ const Interests = ({navigation}) => {
       // console.log('check true false', arrayInterest.includes(value));
       return obj;
     });
-    // setArrayState(arrayInterest);
     setMedia(result);
-    console.log('datasouce', result);
+    // console.log('datasouce', result);
   };
 
   const onPressHandler = async (id) => {
@@ -67,13 +66,12 @@ const Interests = ({navigation}) => {
       .toString();
     additionData.interests = interests;
     user.full_name = JSON.stringify(additionData);
-    console.log('user data new', user);
+    // console.log('user data new', user);
     delete user.user_id;
     try {
       await putUser(user, token);
       console.log('modify ok');
       setMedia(array);
-      // setArrayState(arrayState);
       setLoading(!loading);
     } catch (error) {
       console.log(error);
@@ -85,7 +83,7 @@ const Interests = ({navigation}) => {
   }, [loading]);
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <View />;
   } else {
     return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
@@ -136,6 +134,7 @@ const Interests = ({navigation}) => {
             <Button
               style={styles.button}
               onPress={() => {
+                Alert.alert('Success', 'Update profile succesfully');
                 navigation.navigate('Profile');
               }}
             >

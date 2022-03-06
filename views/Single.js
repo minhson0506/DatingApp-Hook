@@ -1,10 +1,9 @@
 /* eslint-disable camelcase */
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState, useContext, useRef} from 'react';
 import {StyleSheet, View, SafeAreaView, Alert, FlatList} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {Avatar, Text, Divider} from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackIcon from '../assets/back.svg';
 import GlobalStyles from '../utils/GlobalStyles';
 import {StatusBar} from 'expo-status-bar';
@@ -33,16 +32,18 @@ import LottieView from 'lottie-react-native';
 
 const Single = ({route, navigation}) => {
   const animation = React.createRef();
+  const listRef = useRef(null);
   const {file} = route.params;
-  const {postFavourite, getFavouritesByFileId} = userFavourite();
+  const {postFavourite, getFavouritesByFileId, getFavourites} = userFavourite();
   const {mediaArray} = useMedia(false, file.user_id);
   const {getUserById} = useUser();
-  const {getAllMediaByCurrentUserId} = useMedia();
+  const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
-  const {user, loading, setLoading} = useContext(MainContext);
+  const {user, loading, setLoading, token} = useContext(MainContext);
   const [like, setLike] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [owner, setOwner] = useState();
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_400Regular,
@@ -54,11 +55,11 @@ const Single = ({route, navigation}) => {
 
   const fetchOwner = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
       // console.log('token in single', token);
       // console.log('singlemedia', singleMedia);
       // console.log('user_id', singleMedia.description);
       const userData = await getUserById(file.user_id, token);
+      setOwner(userData.username);
       // console.log('user data', userData);
       const allData = await JSON.parse(userData.full_name);
       // console.log('addition data in listitem.js', allData);
@@ -66,8 +67,9 @@ const Single = ({route, navigation}) => {
       let string = '';
       allData.interests.split(',').forEach((hobby) => {
         string = string + hobby.charAt(0).toUpperCase() + hobby.slice(1);
-        string += ' ';
+        string += ',  ';
       });
+      string = string.slice(0, -3);
       setInterests(string);
     } catch (error) {
       Alert.alert([{text: 'Load owner failed'}]);
@@ -79,10 +81,19 @@ const Single = ({route, navigation}) => {
   const checkLike = async () => {
     try {
       // get all favourite of this single user's file
-      const allLikes = await getFavouritesByFileId(file.file_id);
-      console.log('all like of this single user', allLikes);
-      for (let i = 0; i < allLikes.length; i++) {
-        if (allLikes[i].user_id === user.user_id) {
+      // const allLikes = await getFavouritesByFileId(file.file_id);
+      const allMediaOfSingleUser = await getMediaByUserId(file.user_id);
+      // console.log('all media of this single user', allMediaOfSingleUser);
+      const userFilesId = allMediaOfSingleUser.map((file) => file.file_id);
+      // console.log('all file id', userFilesId);
+      let allLikesofSingleUser = [];
+      for (const id of userFilesId) {
+        const response = await getFavouritesByFileId(id);
+        allLikesofSingleUser = allLikesofSingleUser.concat(response);
+      }
+      // console.log('all likes that single user receive', allLikesofSingleUser);
+      for (let i = 0; i < allLikesofSingleUser.length; i++) {
+        if (allLikesofSingleUser[i].user_id === user.user_id) {
           if (like === true) {
             console.log('you liked this user');
             navigation.navigate('Match', {file});
@@ -96,43 +107,61 @@ const Single = ({route, navigation}) => {
   };
 
   const likeUser = async () => {
-    const token = await AsyncStorage.getItem('userToken');
-    if (!token) {
+    // console.log('file id', file.file_id);
+    // console.log('file', file);
+
+    let alreadyLiked = false;
+
+    let files = await getMediaByUserId(file.user_id);
+    files = files.map((obj) => {
+      return obj.file_id;
+    });
+    // console.log('files', files);
+    const likes = await getFavourites(token);
+    likes.forEach((obj) => {
+      if (files.includes(obj.file_id)) alreadyLiked = true;
+    });
+    // console.log('already likes', alreadyLiked);
+
+    if (alreadyLiked) {
+      Alert.alert('Fail', `You have already liked ${owner}!`);
       return;
-    }
-    try {
-      // console.log('file id', file.file_id);
-      const response = await postFavourite(file.file_id, token);
-      if (response) {
-        const userFiles = await getAllMediaByCurrentUserId(token);
-        // console.log('All file from current user: ', userFiles);
-        setIsLiked(!isLiked);
-        Alert.alert('You have liked this user!');
+    } else {
+      try {
+        // console.log('file id', file.file_id);
+        const response = await postFavourite(file.file_id, token);
+        if (response) {
+          const userFiles = await getAllMediaByCurrentUserId(token);
+          // console.log('All file from current user: ', userFiles);
+          setIsLiked(!isLiked);
+          Alert.alert(`You liked ${owner} !`);
 
-        const userFilesId = userFiles.map((file) => file.file_id);
-        // console.log('all fileId from current user: ', userFilesId);
+          const userFilesId = userFiles.map((file) => file.file_id);
+          // console.log('all fileId from current user: ', userFilesId);
 
-        // check who likes any photo from current login user
-        // and then get their userId
-        let allLikesofCurrentUsers = [];
-        for (const id of userFilesId) {
-          allLikesofCurrentUsers = await getFavouritesByFileId(id);
-        }
-        console.log(
-          'all likes that current user receive',
-          allLikesofCurrentUsers
-        );
-        for (let i = 0; i < allLikesofCurrentUsers.length; i++) {
-          if (allLikesofCurrentUsers[i].user_id === file.user_id) {
-            setLike(true);
-            console.log('this user liked you');
+          // check who likes any photo from current login user
+          // and then get their userId
+          let allLikesofCurrentUsers = [];
+          for (const id of userFilesId) {
+            const response = await getFavouritesByFileId(id);
+            allLikesofCurrentUsers = allLikesofCurrentUsers.concat(response);
           }
+          // console.log(
+          //   'all likes that current user receive',
+          //   allLikesofCurrentUsers
+          // );
+          for (let i = 0; i < allLikesofCurrentUsers.length; i++) {
+            if (allLikesofCurrentUsers[i].user_id === file.user_id) {
+              setLike(true);
+              // console.log('this user liked you');
+            }
+          }
+          // console.log('users liked', response);
         }
-        // console.log('users liked', response);
+      } catch (error) {
+        Alert.alert('Fail', `You have already liked ${owner}!`);
+        console.error(error);
       }
-    } catch (error) {
-      Alert.alert('Fail', 'You have already liked this user!');
-      console.error(error);
     }
   };
 
@@ -167,6 +196,7 @@ const Single = ({route, navigation}) => {
             <Button disabled={true}></Button>
           </View>
           <FlatList
+            ref={listRef}
             ListHeaderComponent={
               <>
                 <View style={styles.avatar}>
@@ -242,7 +272,9 @@ const Single = ({route, navigation}) => {
                     }}
                   >
                     <InterestIcon style={styles.icons}></InterestIcon>
-                    <Text style={styles.text}>{interests}</Text>
+                    <Text style={[styles.text, styles.interests]}>
+                      {interests}
+                    </Text>
                   </View>
                 </Card>
                 <LottieView
@@ -257,6 +289,27 @@ const Single = ({route, navigation}) => {
                   }}
                 />
               </>
+            }
+            ListFooterComponent={
+              mediaData.length >= 4 ? (
+                <Button
+                  onPress={() => {
+                    listRef.current.scrollToOffset({offset: 0, animated: true});
+                  }}
+                  style={{
+                    width: '95%',
+                    alignSelf: 'center',
+                    marginBottom: 20,
+                    borderWidth: 1,
+                    borderColor: '#82008F',
+                    borderRadius: 5,
+                  }}
+                >
+                  Back to top
+                </Button>
+              ) : (
+                <></>
+              )
             }
             data={mediaData}
             keyExtractor={(item) => item.file_id.toString()}
@@ -315,6 +368,10 @@ const styles = StyleSheet.create({
     marginRight: 30,
     fontFamily: 'Poppins_400Regular',
   },
+  interests: {
+    flexShrink: 1,
+    flexWrap: 'wrap',
+  },
   icons: {
     marginTop: 17,
     marginRight: 10,
@@ -323,9 +380,8 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    height: 200,
     marginBottom: 20,
-    padding: 0,
+    paddingBottom: 10,
     borderColor: '#FCF2F2',
     borderRadius: 10,
     borderWidth: 1,

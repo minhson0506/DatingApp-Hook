@@ -23,7 +23,6 @@ const List = ({navigation, myFilesOnly = false}) => {
   // const numberDisplay = 5;
 
   const filterData = async () => {
-    setMedia(mediaArray);
     // console.log('my file only', myFilesOnly);
     // setMedia(mediaArray);
     // console.log('interested', myAdditionData.interested);
@@ -161,7 +160,7 @@ const List = ({navigation, myFilesOnly = false}) => {
       // set data to display
       setMedia(array);
       // console.log('media after filter', media);
-    }
+    } else setMedia(mediaArray);
   };
 
   useEffect(() => {

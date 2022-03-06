@@ -1,14 +1,14 @@
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import {StatusBar} from 'expo-status-bar';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Avatar, ListItem} from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser, useTag, userComment} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
+import {MainContext} from '../contexts/MainContext';
 
 const Chat = ({navigation}) => {
   const {getUserById} = useUser();
@@ -17,10 +17,10 @@ const Chat = ({navigation}) => {
   const [username, setUsername] = useState({username: 'fetching...'});
   const [avatar, setAvatar] = useState('http://placekitten.com/180');
   const [message, setMessage] = useState({message: 'Not any message'});
+  const {token} = useContext(MainContext);
 
   const fetchMatchedUser = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
       const userData = await getUserById(527, token);
       setUsername(userData);
     } catch (error) {
@@ -45,13 +45,12 @@ const Chat = ({navigation}) => {
 
   const fetchMessage = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
       const userMessage = await getCommentByFileId(95, token);
       setMessage(userMessage[userMessage.length - 1]);
       // messages
-      for (const m of userMessage) {
-        console.log(m.comment);
-      }
+      // for (const m of userMessage) {
+      //   console.log(m.comment);
+      // }
       // console.log(userMessage[userMessage.length - 1].comment);
     } catch (error) {
       console.error(error.message);

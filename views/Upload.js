@@ -20,7 +20,6 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 import {Card, Input, Divider} from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
 import {Video} from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
@@ -63,7 +62,7 @@ const Upload = ({navigation}) => {
 
   const {postMedia, loading} = useMedia();
   const {postTag} = useTag();
-  const {update, setUpdate} = useContext(MainContext);
+  const {update, setUpdate, token} = useContext(MainContext);
 
   // pick image function
   const pickImage = async (id) => {
@@ -92,11 +91,10 @@ const Upload = ({navigation}) => {
       type: type + '/' + fileExtension,
     });
     try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const response = await postMedia(formData, userToken);
+      const response = await postMedia(formData, token);
       const tagResponse = await postTag(
         {file_id: response.file_id, tag: appId},
-        userToken
+        token
       );
       setUpload(!upload);
       // TODO: make Alert after loading is done with animation

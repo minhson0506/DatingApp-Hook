@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import {LinearGradient} from 'expo-linear-gradient';
 import {Button} from 'react-native-paper';
 import {useUser, useMedia} from '../hooks/ApiHooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   useFonts,
   Poppins_700Bold,
@@ -20,7 +19,7 @@ import {MainContext} from '../contexts/MainContext';
 
 const Match = ({route, navigation}) => {
   const {file} = route.params;
-  const {loading, setLoading} = useContext(MainContext);
+  const {loading, setLoading, token} = useContext(MainContext);
   const {getUserById} = useUser();
   const {getMediaByUserId} = useMedia();
   const [name, setName] = useState();
@@ -40,7 +39,6 @@ const Match = ({route, navigation}) => {
 
   const fetchOwner = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
       const userData = await getUserById(file.user_id, token);
       setName(userData.username);
       const userMedia = await getMediaByUserId(file.user_id);

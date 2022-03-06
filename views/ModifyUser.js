@@ -11,7 +11,7 @@ import GlobalStyles from '../utils/GlobalStyles';
 
 const ModifyUser = ({navigation}) => {
   const {checkUsername, putUser} = useUser();
-  const {user, setUser, setIsLoggedIn} = useContext(MainContext);
+  const {user, setUser, setIsLoggedIn, token} = useContext(MainContext);
   const {
     control,
     handleSubmit,
@@ -44,8 +44,7 @@ const ModifyUser = ({navigation}) => {
       if (data.password === '') {
         delete data.password;
       }
-      const userToken = await AsyncStorage.getItem('userToken');
-      const userData = await putUser(data, userToken);
+      const userData = await putUser(data, token);
       if (userData) {
         Alert.alert('Success', userData.message);
         delete data.password;
@@ -215,7 +214,6 @@ const ModifyUser = ({navigation}) => {
       <Button
         style={styles.ScrollUpButton}
         labelStyle={{
-          color: 'white',
           fontSize: 15,
         }}
         onPress={handleSubmit(onSubmit)}
@@ -241,7 +239,6 @@ const ModifyUser = ({navigation}) => {
 const styles = StyleSheet.create({
   button: {
     textTransform: 'lowercase',
-    color: '#EB6833',
     fontSize: 16,
     fontFamily: 'Poppins_500Medium',
   },
@@ -263,8 +260,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 100,
     height: 40,
-    backgroundColor: '#FF707B',
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#82008F',
     justifyContent: 'center',
   },
 });
