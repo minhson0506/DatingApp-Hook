@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import {View, Text, SafeAreaView, StyleSheet, FlatList} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {PropTypes} from 'prop-types';
 import {useMedia, useFavourite, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
@@ -17,6 +17,7 @@ import MenuIcon from '../assets/menu.svg';
 import GlobalStyles from '../utils/GlobalStyles';
 import {Menu, MenuItem} from 'react-native-material-menu';
 import LottieView from 'lottie-react-native';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Search = ({navigation}) => {
   const animation = React.createRef();
@@ -165,7 +166,7 @@ const Search = ({navigation}) => {
 
     // console.log('input', text);
     userData = userData.filter((obj) => {
-      return obj.username.includes(text.toLowerCase());
+      return obj.username.toLowerCase().includes(text.toLowerCase());
     });
     userData = userData.map((obj) => {
       return obj.user_id;
@@ -189,6 +190,16 @@ const Search = ({navigation}) => {
   useEffect(() => {
     fetchData();
   }, [mediaArray, loading]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setText('');
+        setLoading(!loading);
+        setSearch(true);
+      };
+    }, [])
+  );
 
   if (!fontsLoaded) {
     return <AppLoading />;
