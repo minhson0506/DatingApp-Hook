@@ -25,7 +25,7 @@ import {Card, FAB} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
 import SmokeIcon from '../assets/smoking.svg';
 import PetIcon from '../assets/pet.svg';
-import BabyIcon from '../assets/baby2.svg';
+import WorkIcon from '../assets/job.svg';
 import UploadIcon from '../assets/upload.svg';
 
 import ListItem from '../components/ListItem';
@@ -273,23 +273,48 @@ const Profile = ({navigation}) => {
                     orientation="vertical"
                     style={{marginTop: 12, marginRight: 5}}
                   />
-                  <BabyIcon height={22} style={styles.icons}></BabyIcon>
-                  <Text style={styles.text}>{additionData.family_plan}</Text>
+                  <NatIcon style={styles.icons}></NatIcon>
+                  <Text style={styles.text}>{additionData.nationality}</Text>
                 </View>
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-around',
+                    justifyContent: 'center',
                   }}
                 >
-                  <SchoolIcon style={styles.icons}></SchoolIcon>
-                  <Text style={styles.text}>{additionData.school}</Text>
-                  <Divider
-                    orientation="vertical"
-                    style={{marginTop: 12, marginRight: 10}}
-                  />
-                  <NatIcon style={styles.icons}></NatIcon>
-                  <Text style={styles.text}>{additionData.nationality}</Text>
+                  {additionData.school.toLowerCase() === 'none' ? (
+                    <>
+                      <SchoolIcon style={styles.icons}></SchoolIcon>
+                      <Text style={styles.text}>
+                        {additionData.education_level}
+                      </Text>
+                    </>
+                  ) : additionData.education_level.toLowerCase() === 'none' ? (
+                    <>
+                      <SchoolIcon style={styles.icons}></SchoolIcon>
+                      <Text style={styles.text}>{additionData.school}</Text>
+                    </>
+                  ) : (
+                    <>
+                      <SchoolIcon style={styles.icons}></SchoolIcon>
+                      <Text style={styles.text}>
+                        {additionData.education_level +
+                          ', ' +
+                          additionData.school}
+                      </Text>
+                    </>
+                  )}
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <WorkIcon height={22} style={styles.icons}></WorkIcon>
+                  <Text style={styles.text}>
+                    {additionData.job + ' at ' + additionData.work}
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -403,7 +428,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
   },
   interests: {
-    flexShrink: 1,
     flexWrap: 'wrap',
   },
   icons: {

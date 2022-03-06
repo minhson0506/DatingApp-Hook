@@ -58,8 +58,6 @@ const Preference = ({navigation}) => {
   if (additionData.preference_distance === 'none') {
     additionData.preference_distance = 50;
   }
-  const [distance, setDistance] = useState(additionData.preference_distance);
-  const setSliderDistance = (distance) => setDistance(distance[0]);
   const setSliderHeight = (height) => setHeight(height);
   const setSliderAge = (ageRange) => setAgeRange(ageRange);
 
@@ -68,7 +66,6 @@ const Preference = ({navigation}) => {
   const [openLocation, setOpenLocation] = useState(false);
   const [openNationality, setOpenNationality] = useState(false);
   const [openReligion, setOpenReligion] = useState(false);
-  const [openFamily, setOpenFamily] = useState(false);
   const [openDrinking, setOpenDrinking] = useState(false);
   const [openSmoking, setOpenSmoking] = useState(false);
   const [openPet, setOpenPet] = useState(false);
@@ -80,8 +77,6 @@ const Preference = ({navigation}) => {
     additionData.preference_nationality
   );
   const [religion, setReligion] = useState(additionData.preference_religion);
-  // TODO: add preference family plan to database
-  const [family, setFamily] = useState(null);
   const [drinking, setDrinking] = useState(additionData.preference_drinking);
   const [smoking, setSmoking] = useState(additionData.preference_smoking);
   const [pet, setPet] = useState(additionData.preference_pet);
@@ -95,11 +90,6 @@ const Preference = ({navigation}) => {
   const [locationItems, setLocationItems] = useState([]);
   const [nationalityItem, setNationalityItems] = useState([]);
   const [religionItem, setReligionItems] = useState([]);
-  const [familyItem, setFamilyItems] = useState([
-    {label: 'Want kid', value: 'Want kid'},
-    {label: 'Dont want kid', value: 'Dont want kid'},
-    {label: 'None', value: 'None'},
-  ]);
   const [drinkingItem, setDrinkingItems] = useState([
     {label: 'Yassss', value: 'Yes'},
     {label: 'Nope', value: 'No'},
@@ -148,9 +138,6 @@ const Preference = ({navigation}) => {
     if (gender) additionData.interested = gender;
     else additionData.interested = 'none';
 
-    if (distance) additionData.preference_distance = distance;
-    else additionData.preference_distance = 'none';
-
     if (height) {
       additionData.preference_height = `${height[0]}-${height[1]}`;
     } else {
@@ -187,7 +174,6 @@ const Preference = ({navigation}) => {
     setOpenLocation(false);
     setOpenNationality(false);
     setOpenReligion(false);
-    setOpenFamily(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
@@ -197,7 +183,6 @@ const Preference = ({navigation}) => {
     setOpenGender(false);
     setOpenNationality(false);
     setOpenReligion(false);
-    setOpenFamily(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
@@ -206,7 +191,6 @@ const Preference = ({navigation}) => {
     setOpenGender(false);
     setOpenLocation(false);
     setOpenReligion(false);
-    setOpenFamily(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
@@ -214,17 +198,7 @@ const Preference = ({navigation}) => {
   const onReligionOpen = useCallback(() => {
     setOpenGender(false);
     setOpenLocation(false);
-    setOpenFamily(false);
     setOpenNationality(false);
-    setOpenDrinking(false);
-    setOpenSmoking(false);
-    setOpenPet(false);
-  }, []);
-  const onFamilyOpen = useCallback(() => {
-    setOpenGender(false);
-    setOpenLocation(false);
-    setOpenNationality(false);
-    setOpenReligion(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
@@ -234,7 +208,6 @@ const Preference = ({navigation}) => {
     setOpenLocation(false);
     setOpenNationality(false);
     setOpenReligion(false);
-    setOpenFamily(false);
     setOpenSmoking(false);
     setOpenPet(false);
   }, []);
@@ -244,7 +217,6 @@ const Preference = ({navigation}) => {
     setOpenNationality(false);
     setOpenReligion(false);
     setOpenDrinking(false);
-    setOpenFamily(false);
     setOpenPet(false);
   }, []);
   const onPetOpen = useCallback(() => {
@@ -254,7 +226,6 @@ const Preference = ({navigation}) => {
     setOpenReligion(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
-    setOpenFamily(false);
   }, []);
 
   // scroll for slider
@@ -290,8 +261,8 @@ const Preference = ({navigation}) => {
           <Divider style={{marginBottom: 5, marginTop: 5}} />
           <Text style={styles.title}>I{"'"}m interested in</Text>
           <DropDownPicker
-            zIndex={6000}
-            zIndexInverse={1000}
+            zIndex={10}
+            zIndexInverse={1}
             open={openGender}
             onOpen={onGenderOpen}
             value={gender}
@@ -309,8 +280,8 @@ const Preference = ({navigation}) => {
           <Text style={styles.title}>Preferred Location</Text>
           <DropDownPicker
             searchable={true}
-            zIndex={5000}
-            zIndexInverse={2000}
+            zIndex={9}
+            zIndexInverse={2}
             open={openLocation}
             value={location}
             items={locationItems}
@@ -348,27 +319,12 @@ const Preference = ({navigation}) => {
             />
           </View>
           <Divider style={{marginTop: 5}} />
-          <Text style={styles.title}>Maximum distance (km)</Text>
-          <View style={styles.slider}>
-            <MultiSlider
-              enableLabel={true}
-              isMarkersSeparated={false}
-              values={distance ? [distance] : [50]}
-              max={101}
-              onValuesChange={setSliderDistance}
-              onValuesChangeStart={disableScroll}
-              onValuesChangeFinish={enableScroll}
-              markerStyle={styles.marker}
-              selectedStyle={{backgroundColor: '#FF707B'}}
-            />
-          </View>
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
 
           <Text style={styles.title}>Nationality</Text>
           <DropDownPicker
             searchable={true}
-            zIndex={4000}
-            zIndexInverse={3000}
+            zIndex={8}
+            zIndexInverse={3}
             open={openNationality}
             value={nationality}
             items={nationalityItem}
@@ -386,8 +342,8 @@ const Preference = ({navigation}) => {
 
           <Text style={styles.title}>Religion</Text>
           <DropDownPicker
-            zIndex={3000}
-            zIndexInverse={4000}
+            zIndex={7}
+            zIndexInverse={100}
             open={openReligion}
             value={religion}
             items={religionItem}
@@ -424,29 +380,10 @@ const Preference = ({navigation}) => {
           </View>
           <Divider style={{marginBottom: 5, marginTop: 5}} />
 
-          <Text style={styles.title}>Family Plan</Text>
-          <DropDownPicker
-            zIndex={6000}
-            zIndexInverse={2000}
-            containerStyle={styles.picker}
-            open={openFamily}
-            value={family}
-            items={familyItem}
-            setOpen={setOpenFamily}
-            setValue={setFamily}
-            setItems={setFamilyItems}
-            onOpen={onFamilyOpen}
-            listMode="SCROLLVIEW"
-            textStyle={styles.textPicker}
-            selectedItemLabelStyle={{color: '#EB6833'}}
-            labelStyle={{color: '#EB6833'}}
-          />
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
-
           <Text style={styles.title}>Drinking</Text>
           <DropDownPicker
-            zIndex={5000}
-            zIndexInverse={6000}
+            zIndex={5}
+            zIndexInverse={6}
             containerStyle={styles.picker}
             open={openDrinking}
             value={drinking}
@@ -464,8 +401,8 @@ const Preference = ({navigation}) => {
 
           <Text style={styles.title}>Smoking</Text>
           <DropDownPicker
-            zIndex={4000}
-            zIndexInverse={5000}
+            zIndex={4}
+            zIndexInverse={7}
             containerStyle={styles.picker}
             open={openSmoking}
             value={smoking}
@@ -483,8 +420,8 @@ const Preference = ({navigation}) => {
 
           <Text style={styles.title}>Pet</Text>
           <DropDownPicker
-            zIndex={3000}
-            zIndexInverse={4000}
+            zIndex={3}
+            zIndexInverse={8}
             open={openPet}
             value={pet}
             items={petItem}
@@ -498,7 +435,7 @@ const Preference = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <View style={{marginBottom: 20}}></View>
+          <View style={{marginBottom: 40}}></View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -534,21 +471,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 15,
     marginTop: 10,
-    borderColor: '#EB6833',
   },
   textPicker: {
     fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
   },
   slider: {
-    marginLeft: 35,
+    alignSelf: 'center',
     marginTop: 35,
   },
   marker: {
     backgroundColor: '#EB6833',
     borderColor: '#FCF2F2',
-    height: 20,
-    width: 20,
+    height: 25,
+    width: 25,
   },
 });
 

@@ -23,7 +23,7 @@ import {Button, Card, FAB} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
 import SmokeIcon from '../assets/smoking.svg';
 import PetIcon from '../assets/pet.svg';
-import BabyIcon from '../assets/baby2.svg';
+import WorkIcon from '../assets/job.svg';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from '../components/ListItem';
 import LikeIcon from '../assets/like.svg';
@@ -187,7 +187,7 @@ const Single = ({route, navigation}) => {
             <Button
               style={styles.back}
               onPress={() => {
-                setLoading(!loading);
+                // setLoading(!loading);
                 navigation.goBack();
               }}
               icon={BackIcon}
@@ -216,6 +216,7 @@ const Single = ({route, navigation}) => {
                   >
                     <AgeIcon height={19} style={styles.icons}></AgeIcon>
                     <Text style={styles.text}>{additionData.age}</Text>
+
                     <Divider
                       orientation="vertical"
                       style={{marginTop: 12, marginRight: 5}}
@@ -247,23 +248,67 @@ const Single = ({route, navigation}) => {
                       orientation="vertical"
                       style={{marginTop: 12, marginRight: 5}}
                     />
-                    <BabyIcon height={22} style={styles.icons}></BabyIcon>
-                    <Text style={styles.text}>{additionData.family_plan}</Text>
+                    <NatIcon style={styles.icons}></NatIcon>
+                    <Text style={styles.text}>{additionData.nationality}</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {additionData.school === 'none' ||
+                    additionData.school === 'None' ? (
+                      <>
+                        <SchoolIcon style={styles.icons}></SchoolIcon>
+                        <Text style={styles.text}>
+                          {additionData.education_level}
+                        </Text>
+                      </>
+                    ) : additionData.education_level === 'none' ||
+                      additionData.education_level === 'None' ? (
+                      <>
+                        <SchoolIcon style={styles.icons}></SchoolIcon>
+                        <Text style={styles.text}>{additionData.school}</Text>
+                      </>
+                    ) : (
+                      <>
+                        <SchoolIcon style={styles.icons}></SchoolIcon>
+                        <Text style={styles.text}>
+                          {additionData.education_level +
+                            ', ' +
+                            additionData.school}
+                        </Text>
+                      </>
+                    )}
                   </View>
                   <View
                     style={{
                       flexDirection: 'row',
-                      justifyContent: 'space-around',
+                      justifyContent: 'center',
                     }}
                   >
-                    <SchoolIcon style={styles.icons}></SchoolIcon>
-                    <Text style={styles.text}>{additionData.school}</Text>
-                    <Divider
-                      orientation="vertical"
-                      style={{marginTop: 12, marginRight: 5}}
-                    />
-                    <NatIcon style={styles.icons}></NatIcon>
-                    <Text style={styles.text}>{additionData.nationality}</Text>
+                    {additionData.work === 'none' ||
+                    additionData.work === 'None' ? (
+                      <>
+                        <WorkIcon height={22} style={styles.icons}></WorkIcon>
+                        <Text style={styles.text}>{additionData.job}</Text>
+                      </>
+                    ) : additionData.job === 'none' ||
+                      additionData.job === 'None' ? (
+                      <>
+                        <WorkIcon height={22} style={styles.icons}></WorkIcon>
+                        <Text style={styles.text}>{additionData.work}</Text>
+                      </>
+                    ) : (
+                      <>
+                        <WorkIcon height={22} style={styles.icons}></WorkIcon>
+                        <Text style={styles.text}>
+                          {additionData.job + ' at ' + additionData.work}
+                        </Text>
+                      </>
+                    )}
                   </View>
                   <View
                     style={{
@@ -370,7 +415,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
   },
   interests: {
-    flexShrink: 1,
     flexWrap: 'wrap',
   },
   icons: {

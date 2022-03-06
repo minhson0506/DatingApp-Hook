@@ -16,7 +16,7 @@ import {
 import AppLoading from 'expo-app-loading';
 import ReloadIcon from '../assets/reload.svg';
 import LikeIcon from '../assets/up-arrow.svg';
-import QuizIcon from '../assets/quiz.svg';
+import UploadIcon from '../assets/upload.svg';
 import FilterIcon from '../assets/filter.svg';
 import MenuIcon from '../assets/menu.svg';
 import EditIcon from '../assets/editProfile.svg';
@@ -128,25 +128,13 @@ const Instructions = ({navigation}) => {
                   source={require('../assets/InstructionsUse/swipeL.png')}
                   style={{height: 80, width: 80}}
                 ></Image>
-                <Text style={styles.textButton}>Dislike</Text>
+                <Text style={styles.textButton}>Info</Text>
               </View>
 
-              <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <Image
-                  source={require('../assets/InstructionsUse/image.png')}
-                  style={{height: 120, width: 120}}
-                ></Image>
-                <Image
-                  source={require('../assets/InstructionsUse/fingerClick.png')}
-                  style={{height: 80, width: 80}}
-                ></Image>
-                <Text style={styles.textButton}>User details</Text>
-              </View>
+              <Image
+                source={require('../assets/InstructionsUse/image.png')}
+                style={{height: 120, width: 120}}
+              ></Image>
               <View
                 style={{
                   flexDirection: 'column',
@@ -177,6 +165,22 @@ const Instructions = ({navigation}) => {
                 }}
               >
                 <View style={styles.Button}>
+                  <LikeIcon
+                    height={30}
+                    width={30}
+                    style={{alignSelf: 'center', top: 12}}
+                  ></LikeIcon>
+                </View>
+                <Text style={styles.DescribeText2}>Like</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginBottom: 25,
+                  alignItems: 'center',
+                }}
+              >
+                <View style={styles.Button}>
                   <ReloadIcon
                     height={30}
                     width={30}
@@ -194,31 +198,14 @@ const Instructions = ({navigation}) => {
                 }}
               >
                 <View style={styles.Button}>
-                  <LikeIcon
+                  <MenuIcon
                     height={30}
                     width={30}
                     style={{alignSelf: 'center', top: 12}}
-                  ></LikeIcon>
-                </View>
-                <Text style={styles.DescribeText2}>Like</Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginBottom: 25,
-                  alignItems: 'center',
-                }}
-              >
-                <View style={styles.Button}>
-                  <QuizIcon
-                    height={30}
-                    width={30}
-                    style={{alignSelf: 'center', top: 12}}
-                  ></QuizIcon>
+                  ></MenuIcon>
                 </View>
                 <Text style={styles.DescribeText2}>
-                  Quiz with your chat bubby
+                  Menu{'\n'}Edit account info
                 </Text>
               </View>
 
@@ -249,15 +236,13 @@ const Instructions = ({navigation}) => {
                 }}
               >
                 <View style={styles.Button}>
-                  <MenuIcon
+                  <UploadIcon
                     height={30}
                     width={30}
                     style={{alignSelf: 'center', top: 12}}
-                  ></MenuIcon>
+                  ></UploadIcon>
                 </View>
-                <Text style={styles.DescribeText2}>
-                  Menu{'\n'}Edit account info
-                </Text>
+                <Text style={styles.DescribeText2}>Upload your pictures</Text>
               </View>
 
               <View
@@ -274,9 +259,7 @@ const Instructions = ({navigation}) => {
                     style={{alignSelf: 'center', top: 14, left: 4}}
                   ></EditIcon>
                 </View>
-                <Text style={styles.DescribeText2}>
-                  Edit your profile{'\n'}Upload pictures
-                </Text>
+                <Text style={styles.DescribeText2}>Edit your profile</Text>
               </View>
             </View>
           </View>

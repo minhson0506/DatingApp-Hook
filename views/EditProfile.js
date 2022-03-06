@@ -60,7 +60,6 @@ const EditProfile = ({navigation}) => {
   const [openNationality, setOpenNationality] = useState(false);
   const [openEducation, setOpenEducation] = useState(additionData.false);
   const [openReligion, setOpenReligion] = useState(false);
-  const [openFamily, setOpenFamily] = useState(false);
   const [openDrinking, setOpenDrinking] = useState(false);
   const [openSmoking, setOpenSmoking] = useState(false);
   const [openPet, setOpenPet] = useState(false);
@@ -71,7 +70,6 @@ const EditProfile = ({navigation}) => {
   const [nationality, setNationality] = useState(additionData.nationality);
   const [education, setEducation] = useState(additionData.education_level);
   const [religion, setReligion] = useState(additionData.religious_beliefs);
-  const [family, setFamily] = useState(additionData.family_plan);
   const [drinking, setDrinking] = useState(additionData.drinking);
   const [smoking, setSmoking] = useState(additionData.smoking);
   const [pet, setPet] = useState(additionData.pet);
@@ -86,10 +84,6 @@ const EditProfile = ({navigation}) => {
   const [nationalityItem, setNationalityItems] = useState([]);
   const [educationItem, setEducationItems] = useState([]);
   const [religionItem, setReligionItems] = useState([]);
-  const [familyItem, setFamilyItems] = useState([
-    {label: 'I want kid', value: 'Want kid'},
-    {label: 'I dont want kid', value: 'Dont want kid'},
-  ]);
   const [drinkingItem, setDrinkingItems] = useState([
     {label: 'Yassss', value: 'Yes'},
     {label: 'Nope', value: 'No'},
@@ -158,7 +152,6 @@ const EditProfile = ({navigation}) => {
     if (work) additionData.work = work;
     if (job) additionData.job = job;
     if (school) additionData.school = school;
-    if (family) additionData.family_plan = family;
     if (nationality) additionData.nationality = nationality;
     if (religion) additionData.religious_beliefs = religion;
     if (drinking) additionData.drinking = drinking;
@@ -180,7 +173,6 @@ const EditProfile = ({navigation}) => {
     setOpenLocation(false);
     setOpenNationality(false);
     setOpenReligion(false);
-    setOpenFamily(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
@@ -191,7 +183,6 @@ const EditProfile = ({navigation}) => {
     setOpenGender(false);
     setOpenNationality(false);
     setOpenReligion(false);
-    setOpenFamily(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
@@ -201,7 +192,6 @@ const EditProfile = ({navigation}) => {
     setOpenGender(false);
     setOpenLocation(false);
     setOpenReligion(false);
-    setOpenFamily(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
@@ -210,18 +200,7 @@ const EditProfile = ({navigation}) => {
   const onReligionOpen = useCallback(() => {
     setOpenGender(false);
     setOpenLocation(false);
-    setOpenFamily(false);
     setOpenNationality(false);
-    setOpenDrinking(false);
-    setOpenSmoking(false);
-    setOpenPet(false);
-    setOpenEducation(false);
-  }, []);
-  const onFamilyOpen = useCallback(() => {
-    setOpenGender(false);
-    setOpenLocation(false);
-    setOpenNationality(false);
-    setOpenReligion(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
     setOpenPet(false);
@@ -232,7 +211,6 @@ const EditProfile = ({navigation}) => {
     setOpenLocation(false);
     setOpenNationality(false);
     setOpenReligion(false);
-    setOpenFamily(false);
     setOpenSmoking(false);
     setOpenPet(false);
     setOpenEducation(false);
@@ -243,7 +221,6 @@ const EditProfile = ({navigation}) => {
     setOpenNationality(false);
     setOpenReligion(false);
     setOpenDrinking(false);
-    setOpenFamily(false);
     setOpenPet(false);
     setOpenEducation(false);
   }, []);
@@ -254,7 +231,6 @@ const EditProfile = ({navigation}) => {
     setOpenReligion(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
-    setOpenFamily(false);
     setOpenEducation(false);
   }, []);
   const onEducationOpen = useCallback(() => {
@@ -264,7 +240,6 @@ const EditProfile = ({navigation}) => {
     setOpenReligion(false);
     setOpenDrinking(false);
     setOpenSmoking(false);
-    setOpenFamily(false);
     setOpenPet(false);
   }, []);
 
@@ -320,9 +295,10 @@ const EditProfile = ({navigation}) => {
           <Divider style={{marginBottom: 5, marginTop: 5}} />
 
           <Text style={styles.title}>Gender</Text>
+
           <DropDownPicker
-            zIndex={6000}
-            zIndexInverse={1000}
+            zIndex={10}
+            zIndexInverse={1}
             open={openGender}
             onOpen={onGenderOpen}
             value={gender}
@@ -336,6 +312,7 @@ const EditProfile = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
+          {/* </View> */}
           <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Age</Text>
           <View style={styles.slider}>
@@ -370,8 +347,8 @@ const EditProfile = ({navigation}) => {
           <Text style={styles.title}>Location</Text>
           <DropDownPicker
             searchable={true}
-            zIndex={5000}
-            zIndexInverse={2000}
+            zIndex={9}
+            zIndexInverse={2}
             open={openLocation}
             value={location}
             items={locationItems}
@@ -389,8 +366,8 @@ const EditProfile = ({navigation}) => {
           <Text style={styles.title}>Nationality</Text>
           <DropDownPicker
             searchable={true}
-            zIndex={4000}
-            zIndexInverse={3000}
+            zIndex={8}
+            zIndexInverse={100}
             open={openNationality}
             value={nationality}
             items={nationalityItem}
@@ -405,26 +382,10 @@ const EditProfile = ({navigation}) => {
             labelStyle={{color: '#EB6833'}}
           />
           <Divider style={{marginBottom: 5, marginTop: 5}} />
-          <Text style={styles.title}>Family Plan</Text>
-          <DropDownPicker
-            zIndex={2000}
-            zIndexInverse={5000}
-            containerStyle={styles.picker}
-            open={openFamily}
-            value={family}
-            items={familyItem}
-            setOpen={setOpenFamily}
-            setValue={setFamily}
-            setItems={setFamilyItems}
-            onOpen={onFamilyOpen}
-            listMode="SCROLLVIEW"
-            textStyle={styles.textPicker}
-            selectedItemLabelStyle={{color: '#EB6833'}}
-            labelStyle={{color: '#EB6833'}}
-          />
-          <Divider style={{marginTop: 5}} />
           <Text style={styles.title}>Pet</Text>
           <DropDownPicker
+            zIndex={6}
+            zIndexInverse={5}
             open={openPet}
             value={pet}
             items={petItem}
@@ -469,6 +430,8 @@ const EditProfile = ({navigation}) => {
           <Divider style={{marginBottom: 5, marginTop: 5}} />
           <Text style={styles.title}>Educational Level</Text>
           <DropDownPicker
+            zIndex={5}
+            zIndexInverse={6}
             containerStyle={styles.picker}
             open={openEducation}
             value={education}
@@ -496,8 +459,8 @@ const EditProfile = ({navigation}) => {
           <Divider style={{marginBottom: 5, marginTop: 5}} />
           <Text style={styles.title}>Religion</Text>
           <DropDownPicker
-            zIndex={3000}
-            zIndexInverse={4000}
+            zIndex={4}
+            zIndexInverse={7}
             open={openReligion}
             value={religion}
             items={religionItem}
@@ -517,8 +480,8 @@ const EditProfile = ({navigation}) => {
 
           <Text style={styles.title}>Drinking</Text>
           <DropDownPicker
-            zIndex={1000}
-            zIndexInverse={6000}
+            zIndex={3}
+            zIndexInverse={8}
             containerStyle={styles.picker}
             open={openDrinking}
             value={drinking}
@@ -536,6 +499,8 @@ const EditProfile = ({navigation}) => {
 
           <Text style={styles.title}>Smoking</Text>
           <DropDownPicker
+            zIndex={2}
+            zIndexInverse={9}
             containerStyle={styles.picker}
             open={openSmoking}
             value={smoking}
@@ -549,8 +514,6 @@ const EditProfile = ({navigation}) => {
             selectedItemLabelStyle={{color: '#EB6833'}}
             labelStyle={{color: '#EB6833'}}
           />
-          <Divider style={{marginBottom: 5, marginTop: 5}} />
-
           <View style={{marginBottom: 40}}></View>
         </ScrollView>
       </SafeAreaView>
@@ -559,6 +522,11 @@ const EditProfile = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  viewContainer: {marginHorizontal: 16, zIndex: 1},
+  androidContainer: {
+    minHeight: 500,
+    marginBottom: -428,
+  },
   button: {
     textTransform: 'lowercase',
     fontSize: 16,
@@ -587,21 +555,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 15,
     marginTop: 10,
-    borderColor: '#EB6833',
+    // borderColor: '#EB6833',
   },
   textPicker: {
     fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
   },
   slider: {
-    marginLeft: 35,
+    alignSelf: 'center',
     marginTop: 35,
   },
   marker: {
     backgroundColor: '#EB6833',
     borderColor: '#FCF2F2',
-    height: 20,
-    width: 20,
+    height: 25,
+    width: 25,
   },
   inputStyle: {
     fontFamily: 'Poppins_500Medium',
