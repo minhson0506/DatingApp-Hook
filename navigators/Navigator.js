@@ -193,6 +193,11 @@ const StackScreen = () => {
               component={Match}
               options={{headerShown: false}}
             ></Stack.Screen>
+            <Stack.Screen
+              name="SingleChat"
+              component={SingleChat}
+              options={{headerShown: false}}
+            ></Stack.Screen>
           </>
         ) : (
           <>
@@ -239,6 +244,11 @@ const StackScreen = () => {
             <Stack.Screen
               name="Match"
               component={Match}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="SingleChat"
+              component={SingleChat}
               options={{headerShown: false}}
             ></Stack.Screen>
           </>

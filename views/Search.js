@@ -199,7 +199,6 @@ const Search = ({navigation}) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center',
           }}
         >
           <Menu

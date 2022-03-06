@@ -1,15 +1,26 @@
+/* eslint-disable camelcase */
 import {View, StyleSheet, Text, FlatList} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
-import {StatusBar} from 'expo-status-bar';
-import Icon from 'react-native-vector-icons/Ionicons';
-import {Avatar, ListItem} from 'react-native-elements';
+import {Avatar, ListItem, Divider} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser, userComment, useMedia, useFavourite} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {MainContext} from '../contexts/MainContext';
+import {Menu, MenuItem} from 'react-native-material-menu';
+import MenuIcon from '../assets/menu.svg';
+import {Button} from 'react-native-paper';
+import {
+  useFonts,
+  Poppins_700Bold,
+  Poppins_600SemiBold,
+  Poppins_400Regular,
+} from '@expo-google-fonts/poppins';
+import AppLoading from 'expo-app-loading';
+import HookIcon from '../assets/like.svg';
+import HeartIcon from '../assets/heart.svg';
 
 const Chat = ({navigation}) => {
   const {getUserById, getUserByToken} = useUser();
@@ -21,6 +32,17 @@ const Chat = ({navigation}) => {
   const [message, setMessage] = useState(0);
   const [hook, setHook] = useState(0);
   const {loadMessage} = useContext(MainContext);
+
+  const [fontsLoaded] = useFonts({
+    Poppins_700Bold,
+    Poppins_600SemiBold,
+    Poppins_400Regular,
+  });
+
+  // menu state & functions
+  const [visible, setVisible] = useState(false);
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
 
   const fetchNewHooks = async () => {
     try {
@@ -226,43 +248,83 @@ const Chat = ({navigation}) => {
     fetchMessage();
   }, [loadMessage]);
 
-  return (
-    <>
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
-        {/* title */}
-        <View>
-          <Icon style={styles.menu} name="menu" color="#EB6833" size={40} />
-          <Text style={styles.title}>hook</Text>
-        </View>
-
-        {/* showing five recent hooks */}
         <View
           style={{
-            marginBottom: '4%',
-            borderBottomWidth: 1,
-            borderBottomColor: '#C4C4C4',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            height: '8%',
           }}
         >
-          <Text style={styles.subTitle}>New hooks</Text>
-          {hook != 0 ? (
+          <Menu
+            style={styles.menuBox}
+            visible={visible}
+            anchor={
+              <MenuIcon
+                style={styles.menu}
+                onPress={() => {
+                  showMenu();
+                }}
+              ></MenuIcon>
+            }
+            onRequestClose={hideMenu}
+          >
+            <MenuItem
+              pressColor={'#FDC592'}
+              textStyle={styles.textMenu}
+              onPress={() => {
+                hideMenu();
+                navigation.navigate('Modify user');
+              }}
+            >
+              Account
+            </MenuItem>
+            <MenuItem
+              pressColor={'#FDC592'}
+              textStyle={styles.textMenu}
+              onPress={() => {
+                hideMenu();
+                navigation.navigate('Instructions');
+              }}
+            >
+              How Hook works
+            </MenuItem>
+          </Menu>
+          <Text style={styles.appName}>hook</Text>
+          <Button disabled={true}></Button>
+        </View>
+
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text style={styles.subTitle}>New Hooks</Text>
+          <HookIcon
+            height={15}
+            style={{marginTop: 10, marginLeft: 5}}
+          ></HookIcon>
+        </View>
+        {hook != 0 ? (
+          <View>
             <FlatList
+              contentContainerStyle={{marginLeft: 10}}
               horizontal={true}
-              contentContainerStyle={{flexGrow: 1}}
               showsHorizontalScrollIndicator={false}
-              style={{marginBottom: '6%'}}
-              pagingEnabled={true}
               data={hook}
               keyExtractor={(item) => item.user_id.toString()}
               renderItem={({item}) => (
                 <ListItem
+                  containerStyle={{
+                    justifyContent: 'space-evenly',
+                    padding: 10,
+                  }}
                   onPress={() => {
                     navigation.navigate('SingleChat', {item});
-                    console.log('info', item);
                   }}
                 >
                   <View
                     style={{
-                      flex: 1,
                       flexDirection: 'column',
                       alignItems: 'center',
                     }}
@@ -270,10 +332,9 @@ const Chat = ({navigation}) => {
                     <Avatar
                       style={styles.avatar}
                       avatarStyle={{
-                        borderWidth: 2,
-                        borderColor: 'white',
-                        borderRadius: 20,
-                        borderStyle: 'solid',
+                        borderWidth: 1,
+                        borderColor: '#EB6833',
+                        borderRadius: 10,
                       }}
                       source={{uri: uploadsUrl + item.filename}}
                     />
@@ -282,43 +343,48 @@ const Chat = ({navigation}) => {
                 </ListItem>
               )}
             ></FlatList>
-          ) : (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
+            <Divider style={{marginBottom: 10, marginTop: 5}}></Divider>
+          </View>
+        ) : (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text
+              style={[
+                styles.username,
+                {
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  marginVertical: '20%',
+                  color: '#555151',
+                },
+              ]}
             >
-              <Text
-                style={[
-                  styles.username,
-                  {
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    alignSelf: 'center',
-                    marginVertical: '20%',
-                    color: '#555151',
-                  },
-                ]}
-              >
-                No any hook yet
-              </Text>
-            </View>
-          )}
-        </View>
+              No any hook yet
+            </Text>
+          </View>
+        )}
 
-        {/* list of messages */}
-        <View style={{flex: 1}}>
-          <Text style={styles.subTitle}>Messages</Text>
+        <>
+          {/* list of messages */}
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={styles.subTitle}>Messages</Text>
+            <HeartIcon
+              height={15}
+              style={{marginTop: 10, marginLeft: 5}}
+            ></HeartIcon>
+          </View>
+
           {message != 0 ? (
             <FlatList
-              pagingEnabled={true}
-              contentContainerStyle={{flexGrow: 1}}
               data={message}
               keyExtractor={(item) => item.user_id.toString()}
               renderItem={({item}) => (
                 <ListItem
-                  style={{flex: 1}}
                   onPress={() => {
                     navigation.navigate('SingleChat', {item});
                   }}
@@ -331,16 +397,15 @@ const Chat = ({navigation}) => {
                     }}
                   >
                     <Avatar
-                      style={styles.avatar}
+                      style={{height: 90, width: 90}}
                       avatarStyle={{
-                        borderWidth: 2,
-                        borderColor: 'white',
-                        borderRadius: 60,
-                        borderStyle: 'solid',
+                        borderRadius: 50,
+                        borderColor: '#EB6833',
+                        borderWidth: 1,
                       }}
                       source={{uri: uploadsUrl + item.filename}}
                     />
-                    <View style={{flexDirection: 'column', marginLeft: '6%'}}>
+                    <View style={{flexDirection: 'column', marginLeft: '5%'}}>
                       <Text style={styles.username}>{item.username}</Text>
                       <Text style={styles.message}>
                         {item.comment.length > 24
@@ -349,6 +414,7 @@ const Chat = ({navigation}) => {
                       </Text>
                     </View>
                   </View>
+                  <Divider style={{marginBottom: 5, marginTop: 5}}></Divider>
                 </ListItem>
               )}
             ></FlatList>
@@ -375,47 +441,55 @@ const Chat = ({navigation}) => {
               </Text>
             </View>
           )}
-        </View>
+        </>
       </SafeAreaView>
-      <StatusBar style="auto"></StatusBar>
-    </>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({
-  title: {
+  menu: {
+    marginLeft: 15,
+    marginTop: 15,
+    marginBottom: 20,
+  },
+  menuBox: {
+    marginTop: 45,
+    marginLeft: 10,
+    borderRadius: 5,
+  },
+  textMenu: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 16,
+  },
+  appName: {
+    fontSize: 40,
+    fontFamily: 'Poppins_700Bold',
     color: '#EB6833',
-    fontSize: 36,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    letterSpacing: 3.6,
-    marginBottom: '6%',
+    letterSpacing: 5,
   },
   subTitle: {
-    color: '#EB6432',
-    fontSize: 28,
-    fontWeight: 'bold',
-    left: 20,
-    marginBottom: '3%',
-  },
-  menu: {
-    position: 'absolute',
-    top: '5%',
-    left: 20,
+    color: '#434242',
+    fontSize: 20,
+    fontFamily: 'Poppins_600SemiBold',
+    marginLeft: 20,
+    marginTop: 15,
+    marginBottom: 5,
   },
   avatar: {
     height: 110,
-    width: 110,
+    width: 100,
   },
   username: {
-    fontSize: 20,
-    fontWeight: '600',
+    color: '#EB6432',
+    fontSize: 18,
+    fontFamily: 'Poppins_600SemiBold',
   },
   message: {
-    marginTop: 20,
-    fontSize: 20,
+    marginTop: 10,
+    fontSize: 18,
+    fontFamily: 'Poppins_500Medium',
     color: '#555151',
-    fontWeight: 'normal',
   },
 });
 
