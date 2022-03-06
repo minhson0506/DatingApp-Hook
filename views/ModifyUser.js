@@ -1,15 +1,17 @@
 import React, {useContext} from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, View, SafeAreaView, Text, StyleSheet} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useUser} from '../hooks/ApiHooks';
-import {Input, Button} from 'react-native-elements';
+import {Input, Divider} from 'react-native-elements';
+import {Button} from 'react-native-paper';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PropTypes} from 'prop-types';
+import GlobalStyles from '../utils/GlobalStyles';
 
 const ModifyUser = ({navigation}) => {
   const {checkUsername, putUser} = useUser();
-  const {user, setUser} = useContext(MainContext);
+  const {user, setUser, setIsLoggedIn, token} = useContext(MainContext);
   const {
     control,
     handleSubmit,
@@ -26,6 +28,15 @@ const ModifyUser = ({navigation}) => {
     mode: 'onBlur',
   });
 
+  const logOut = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (err) {
+      console.error(err);
+    }
+    setIsLoggedIn(false);
+  };
+
   const onSubmit = async (data) => {
     console.log(data);
     try {
@@ -33,8 +44,7 @@ const ModifyUser = ({navigation}) => {
       if (data.password === '') {
         delete data.password;
       }
-      const userToken = await AsyncStorage.getItem('userToken');
-      const userData = await putUser(data, userToken);
+      const userData = await putUser(data, token);
       if (userData) {
         Alert.alert('Success', userData.message);
         delete data.password;
@@ -47,7 +57,30 @@ const ModifyUser = ({navigation}) => {
   };
 
   return (
-    <View>
+    <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Button labelStyle={styles.button} onPress={() => navigation.goBack()}>
+          Cancel
+        </Button>
+        <Text style={styles.appName}>Account</Text>
+        <Button
+          labelStyle={styles.button}
+          onPress={() => {
+            navigation.navigate('Profile');
+          }}
+        >
+          Done
+        </Button>
+      </View>
+      <Divider style={{marginBottom: 5, marginTop: 5}} />
+      <Text style={styles.header}>Username & email</Text>
+      <Divider style={{marginBottom: 5, marginTop: 10}} />
       <Controller
         control={control}
         rules={{
@@ -75,12 +108,44 @@ const ModifyUser = ({navigation}) => {
             onChangeText={onChange}
             value={value}
             autoCapitalize="none"
-            placeholder="Username"
+            placeholder="username"
             errorMessage={errors.username && errors.username.message}
+            containerStyle={{marginLeft: 10, marginTop: 10}}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={{borderBottomWidth: 0}}
           />
         )}
         name="username"
       />
+      <Divider style={{marginBottom: 5}} />
+
+      <Controller
+        control={control}
+        rules={{
+          required: {value: true, message: 'This is required.'},
+          pattern: {
+            value: /\S+@\S+\.\S+$/,
+            message: 'Has to be valid email.',
+          },
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <Input
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            autoCapitalize="none"
+            placeholder="email"
+            errorMessage={errors.email && errors.email.message}
+            containerStyle={{marginLeft: 10, marginTop: 10}}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={{borderBottomWidth: 0}}
+          />
+        )}
+        name="email"
+      />
+      <Divider style={{marginBottom: '15%'}} />
+      <Text style={styles.header}>Change Password</Text>
+      <Divider style={{marginBottom: 5, marginTop: 10}} />
 
       <Controller
         control={control}
@@ -103,12 +168,16 @@ const ModifyUser = ({navigation}) => {
             value={value}
             autoCapitalize="none"
             secureTextEntry={true}
-            placeholder="Password"
+            placeholder="password"
             errorMessage={errors.password && errors.password.message}
+            containerStyle={{marginLeft: 10, marginTop: 10}}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={{borderBottomWidth: 0}}
           />
         )}
         name="password"
       />
+      <Divider style={{marginBottom: 5}} />
 
       <Controller
         control={control}
@@ -129,62 +198,74 @@ const ModifyUser = ({navigation}) => {
             value={value}
             autoCapitalize="none"
             secureTextEntry={true}
-            placeholder="Confirm Password"
+            placeholder="confirm password"
             errorMessage={
               errors.confirmPassword && errors.confirmPassword.message
             }
+            containerStyle={{marginLeft: 10, marginTop: 10}}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={{borderBottomWidth: 0}}
           />
         )}
         name="confirmPassword"
       />
+      <Divider style={{marginBottom: '10%'}} />
 
-      <Controller
-        control={control}
-        rules={{
-          required: {value: true, message: 'This is required.'},
-          pattern: {
-            value: /\S+@\S+\.\S+$/,
-            message: 'Has to be valid email.',
-          },
+      <Button
+        style={styles.ScrollUpButton}
+        labelStyle={{
+          fontSize: 15,
         }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            placeholder="Email"
-            errorMessage={errors.email && errors.email.message}
-          />
-        )}
-        name="email"
-      />
+        onPress={handleSubmit(onSubmit)}
+      >
+        Save
+      </Button>
 
-      <Controller
-        control={control}
-        rules={{
-          minLength: {
-            value: 3,
-            message: 'Full name has to be at least 3 characters.',
-          },
+      <Divider style={{marginBottom: 5, marginTop: '15%'}} />
+      <Button
+        labelStyle={{
+          color: 'black',
+          fontSize: 15,
         }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="words"
-            placeholder="Full name"
-            errorMessage={errors.full_name && errors.full_name.message}
-          />
-        )}
-        name="full_name"
-      />
-
-      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-    </View>
+        onPress={logOut}
+      >
+        Log out
+      </Button>
+      <Divider style={{marginBottom: 5, marginTop: 10}} />
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    textTransform: 'lowercase',
+    fontSize: 16,
+    fontFamily: 'Poppins_500Medium',
+  },
+  appName: {
+    fontSize: 20,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  header: {
+    fontSize: 18,
+    fontFamily: 'Poppins_600SemiBold',
+    marginLeft: 20,
+    marginTop: 20,
+  },
+  inputStyle: {
+    fontFamily: 'Poppins_500Medium',
+    color: '#EB6833',
+  },
+  ScrollUpButton: {
+    alignSelf: 'center',
+    width: 100,
+    height: 40,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#82008F',
+    justifyContent: 'center',
+  },
+});
 
 ModifyUser.propTypes = {
   navigation: PropTypes.object,

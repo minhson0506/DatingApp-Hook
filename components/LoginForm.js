@@ -1,6 +1,7 @@
-import {useContext} from 'react';
+/* eslint-disable camelcase */
+import React, {useContext} from 'react';
 import {Button, Input, Text} from 'react-native-elements';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Alert} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {MainContext} from '../contexts/MainContext';
 import {useLogin} from '../hooks/ApiHooks';
@@ -16,7 +17,7 @@ import UserIcon from '../assets/userIcon.svg';
 import PasswordIcon from '../assets/password.svg';
 
 const LoginForm = () => {
-  const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {setIsLoggedIn, setUser, setToken} = useContext(MainContext);
   const {postLogin} = useLogin();
   const {
     control,
@@ -29,14 +30,39 @@ const LoginForm = () => {
     },
   });
 
+  function isJson(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     try {
       const userData = await postLogin(data);
-      await AsyncStorage.setItem('userToken', userData.token);
-      setUser(userData.user);
-      setIsLoggedIn(true);
+      if (isJson(userData.user.full_name)) {
+        const additionData = JSON.parse(userData.user.full_name);
+        // eslint-disable-next-line no-prototype-builtins
+        if (additionData.hasOwnProperty('deleted_hook')) {
+          if (additionData.deleted_hook === 0) {
+            await AsyncStorage.setItem('userToken', userData.token);
+            setToken(userData.token);
+            setUser(userData.user);
+            setIsLoggedIn(true);
+          } else {
+            Alert.alert('Fail', 'That user doesnot exits in our app');
+          }
+        } else {
+          Alert.alert('Fail', 'That user doesnot exits in our app');
+        }
+      } else {
+        Alert.alert('Fail', 'That user doesnot exits in our app');
+      }
     } catch (error) {
+      Alert.alert('Fail', 'You put wrong information');
       console.error(error);
     }
   };

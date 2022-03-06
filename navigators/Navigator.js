@@ -7,15 +7,19 @@ import Profile from '../views/Profile';
 import Single from '../views/Single';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
-import {Icon, Image} from 'react-native-elements';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Image} from 'react-native-elements';
 import ModifyUser from '../views/ModifyUser';
-// import Upload from '../views/Upload';
 import Chat from '../views/Chat';
 import Like from '../views/Like';
 import Search from '../views/Search';
 import SingleChat from '../views/SingleChat';
+import FirstLand from '../views/FirstLand';
+import Instructions from '../views/Instructions';
+import Preference from '../views/Preference';
+import Interests from '../views/Interests';
+import Upload from '../views/Upload';
+import EditProfile from '../views/EditProfile';
+import Match from '../views/Match';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -26,86 +30,230 @@ const TabScreen = () => {
       screenOptions={({route}) => ({
         tabBarStyle: {
           justifyContent: 'center',
-          height: 90,
+          alignContent: 'center',
+          height: '9%',
           border: 0,
           margin: 0,
           padding: 0,
         },
-        tabBarIcon: ({focused, color, size}) => {
-          let iconName;
-          switch (route.name) {
-            case 'Like':
-              iconName = focused ? 'heart' : 'heart-outline';
-              break;
-            case 'Profile':
-              iconName = focused ? 'person' : 'person-outline';
-              break;
-            // case 'Search':
-            //   iconName = focused ? 'search' : 'search-outline';
-            //   break;
-            case 'Chat':
-              iconName = focused
-                ? 'chatbox-ellipses'
-                : 'chatbox-ellipses-outline';
-              break;
-          }
-
+        tabBarIcon: ({focused}) => {
           if (route.name === 'Home') {
             return focused ? (
               <Image
                 source={require('../assets/hookiconActive.png')}
-                style={{height: 32, width: 32}}
+                style={{height: 25, width: 25}}
               />
             ) : (
               <Image
                 source={require('../assets/hookiconNotActive.png')}
-                style={{height: 32, width: 32}}
+                style={{height: 25, width: 25}}
+              />
+            );
+          }
+
+          if (route.name === 'Like') {
+            return focused ? (
+              <Image
+                source={require('../assets/heartActive.png')}
+                style={{height: 25, width: 25}}
+              />
+            ) : (
+              <Image
+                source={require('../assets/heartNotActive.png')}
+                style={{height: 25, width: 25}}
               />
             );
           }
 
           if (route.name === 'Search') {
-            iconName = focused ? 'account-search' : 'account-search-outline';
-            return (
-              <MaterialCommunityIcons name={iconName} size={42} color={color} />
+            return focused ? (
+              <Image
+                source={require('../assets/searchActive.png')}
+                style={{height: 25, width: 25}}
+              />
+            ) : (
+              <Image
+                source={require('../assets/searchNotActive.png')}
+                style={{height: 25, width: 25}}
+              />
             );
           }
 
-          return <Ionicons name={iconName} size={42} color={color} />;
+          if (route.name === 'Chat') {
+            return focused ? (
+              <Image
+                source={require('../assets/chatActive.png')}
+                style={{height: 25, width: 25}}
+              />
+            ) : (
+              <Image
+                source={require('../assets/chatNotActive.png')}
+                style={{height: 25, width: 25}}
+              />
+            );
+          }
+
+          if (route.name === 'Profile') {
+            return focused ? (
+              <Image
+                source={require('../assets/userActive.png')}
+                style={{height: 25, width: 25}}
+              />
+            ) : (
+              <Image
+                source={require('../assets/userNotActive.png')}
+                style={{height: 25, width: 25}}
+              />
+            );
+          }
         },
-        tabBarActiveTintColor: '#EB6833',
-        tabBarInactiveTintColor: '#2F2F2F',
         tabBarShowLabel: false,
       })}
     >
-      <Tab.Screen name="Home" component={Home}></Tab.Screen>
-      <Tab.Screen name="Like" component={Like}></Tab.Screen>
-      <Tab.Screen name="Search" component={Search}></Tab.Screen>
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{headerShown: false}}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="Like"
+        component={Like}
+        options={{headerShown: false}}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="Search"
+        component={Search}
+        options={{headerShown: false}}
+      ></Tab.Screen>
       <Tab.Screen
         name="Chat"
         component={Chat}
         options={{headerShown: false}}
       ></Tab.Screen>
-      <Tab.Screen name="Profile" component={Profile}></Tab.Screen>
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{headerShown: false}}
+      ></Tab.Screen>
     </Tab.Navigator>
   );
 };
 
 const StackScreen = () => {
-  const {isLoggedIn} = useContext(MainContext);
+  const {isLoggedIn, instruction} = useContext(MainContext);
+  // console.log('instruction', instruction);
+
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
+        instruction ? (
+          <>
+            <Stack.Screen
+              name="Instructions"
+              component={Instructions}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Main"
+              component={TabScreen}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Single"
+              component={Single}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Preferences"
+              component={Preference}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Upload"
+              component={Upload}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Edit Profile"
+              component={EditProfile}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Modify user"
+              component={ModifyUser}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Interests"
+              component={Interests}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Match"
+              component={Match}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="Main"
+              component={TabScreen}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Single"
+              component={Single}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Preferences"
+              component={Preference}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Upload"
+              component={Upload}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Edit Profile"
+              component={EditProfile}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Modify user"
+              component={ModifyUser}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Instructions"
+              component={Instructions}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Interests"
+              component={Interests}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Match"
+              component={Match}
+              options={{headerShown: false}}
+            ></Stack.Screen>
+          </>
+        )
+      ) : (
         <>
           <Stack.Screen
-            name="Main"
-            component={TabScreen}
+            name="FirstLand"
+            component={FirstLand}
             options={{headerShown: false}}
           ></Stack.Screen>
-          <Stack.Screen name="Single" component={Single}></Stack.Screen>
           <Stack.Screen
-            name="Modify user"
-            component={ModifyUser}
+            name="Login"
+            component={Login}
+            options={{headerShown: false}}
           ></Stack.Screen>
           <Stack.Screen
             name="SingleChat"
@@ -113,12 +261,6 @@ const StackScreen = () => {
             options={{headerShown: false}}
           ></Stack.Screen>
         </>
-      ) : (
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{headerShown: false}}
-        ></Stack.Screen>
       )}
     </Stack.Navigator>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, {useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
@@ -23,21 +24,21 @@ import {
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
 import {LinearGradient} from 'expo-linear-gradient';
-// import UserIcon from '../assets/userIcon.svg';
 
 const Login = ({navigation}) => {
   const [formToggle, setFormToggle] = useState(true);
-  const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {setIsLoggedIn, setUser, setToken} = useContext(MainContext);
   const {getUserByToken} = useUser();
 
   const checkToken = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (!userToken) return;
-      console.log('token', userToken);
+      // console.log('token', userToken);
       const userData = await getUserByToken(userToken);
-      console.log('checkToken', userData);
+      // console.log('checkToken', userData);
       setUser(userData);
+      setToken(userToken);
       setIsLoggedIn(true);
     } catch (err) {
       console.error(err);
@@ -47,6 +48,7 @@ const Login = ({navigation}) => {
   useEffect(() => {
     checkToken();
   }, []);
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
@@ -73,12 +75,12 @@ const Login = ({navigation}) => {
           >
             <ScrollView>
               <Text style={styles.appName}>hook</Text>
-              {/* <UserIcon style={styles.userIcon}></UserIcon> */}
               <View style={styles.form}>
                 <ButtonGroup
+                  innerBorderStyle={{color: '#DA535E'}}
                   onPress={() => setFormToggle(!formToggle)}
                   selectedIndex={formToggle ? 0 : 1}
-                  buttons={['Sign in', 'Register']}
+                  buttons={['Register', 'Sign in']}
                   containerStyle={styles.buttons}
                   buttonContainerStyle={styles.button}
                   buttonStyle={{borderRadius: 50}}
@@ -88,11 +90,11 @@ const Login = ({navigation}) => {
                 />
                 {formToggle ? (
                   <Card containerStyle={{borderRadius: 5, marginTop: 25}}>
-                    <LoginForm />
+                    <RegisterForm />
                   </Card>
                 ) : (
                   <Card style={{borderRadius: 5, marginTop: 25}}>
-                    <RegisterForm setFormToggle={setFormToggle} />
+                    <LoginForm setFormToggle={setFormToggle} />
                   </Card>
                 )}
               </View>
@@ -132,13 +134,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#DA535E',
     borderWidth: 1,
     borderColor: '#DA535E',
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 1.5,
-    elevation: 15,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   button: {
     borderRadius: 50,

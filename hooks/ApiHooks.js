@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
-import {baseUrl} from '../utils/variables';
+import {appId, baseUrl} from '../utils/variables';
 
 const doFetch = async (url, options = {}) => {
   try {
@@ -19,29 +19,33 @@ const doFetch = async (url, options = {}) => {
   }
 };
 
-const useMedia = () => {
+const useMedia = (myFilesOnly, userId = null) => {
   const [mediaArray, setMediaArray] = useState([]);
-  const {update} = useContext(MainContext);
-  const loadMedia = async (start = 0, limit = 10) => {
+  const {update, user} = useContext(MainContext);
+  const [load, setLoad] = useState(false);
+  const loadMedia = async () => {
+    setLoad(true);
     try {
-      const response = await fetch(
-        `${baseUrl}media?start=${start}&limit=${limit}`
-        // baseUrl + 'media' + '?start=' + start + '&limit=' + limit
-      );
-      if (!response.ok) {
-        throw Error(response.statusText);
+      let json = await useTag().getFileByTag(appId);
+      if (myFilesOnly) {
+        json = json.filter((file) => file.user_id === user.user_id);
       }
-      const json = await response.json();
+      if (userId) {
+        json = json.filter((file) => file.user_id === userId);
+      }
       const media = await Promise.all(
         json.map(async (item) => {
           const response = await fetch(baseUrl + 'media/' + item.file_id);
           const mediaData = await response.json();
+          // console.log(mediaData);
           return mediaData;
         })
       );
       setMediaArray(media);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoad(false);
     }
     // console.log(mediaArray);
   };
@@ -49,7 +53,7 @@ const useMedia = () => {
   // Call loadMedia() only once when the component is loaded
   // Or when update state is changed
   useEffect(() => {
-    loadMedia(0, 10);
+    loadMedia();
   }, [update]);
 
   const postMedia = async (formData, token) => {
@@ -63,7 +67,30 @@ const useMedia = () => {
     };
     return await doFetch(baseUrl + 'media', options);
   };
+  const deleteMedia = async (id, token) => {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'x-access-token': token,
+      },
+    };
+    return await doFetch(baseUrl + 'media/' + id, options);
+  };
 
+  // const getMediaByUserId = async () => {
+  //   return await doFetch(baseUrl + 'media/user' + userId);
+  // };
+  const putMedia = async (id, token, data) => {
+    const options = {
+      method: 'PUT',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+    return await doFetch(baseUrl + 'media/' + id, options);
+  };
   const getMediaByUserId = async (userId) => {
     const options = {
       method: 'GET',
@@ -90,6 +117,9 @@ const useMedia = () => {
   return {
     mediaArray,
     postMedia,
+    load,
+    deleteMedia,
+    putMedia,
     getMediaByUserId,
     getAllMediaByCurrentUserId,
     getMediaByFileId,
@@ -125,7 +155,8 @@ const useUser = () => {
       method: 'GET',
       headers: {'x-access-token': token},
     };
-    return await doFetch(`${baseUrl}users/${userId}`, options);
+    const userData = await doFetch(baseUrl + 'users/' + userId, options);
+    return userData;
   };
 
   // const getAllUsers = async (token) => {
@@ -173,7 +204,13 @@ const useUser = () => {
     return result.available;
   };
 
+  const getFilesByUser = async (token) => {
+    const options = {headers: {'x-access-token': token}};
+    return await doFetch(baseUrl + '/media/user', options);
+  };
+
   return {
+    // userArray,
     getUserByToken,
     // getAllUsers,
     postUser,
@@ -181,6 +218,7 @@ const useUser = () => {
     checkUsername,
     deleteUser,
     getUserById,
+    getFilesByUser,
   };
 };
 
@@ -229,6 +267,7 @@ const userComment = () => {
     };
     return await doFetch(baseUrl + 'comments', options);
   };
+
   return {
     userComment,
     postComment,
@@ -238,13 +277,16 @@ const userComment = () => {
 };
 
 const useFavourite = () => {
-  const postFavourite = async (fileId, token) => {
+  const postFavourite = async (data, token) => {
     const options = {
       method: 'POST',
-      headers: {'x-access-token': token},
-      body: JSON.stringify(fileId),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify({file_id: data}),
     };
-    return await doFetch(baseUrl + 'favourites', options);
+    return await doFetch(baseUrl + 'favourites/', options);
   };
 
   const deleteFavourite = async (fileId, token) => {

@@ -1,41 +1,77 @@
-import React, {useContext, useState} from 'react';
+/* eslint-disable camelcase */
+import {
+  ScrollView,
+  Text,
+  StyleSheet,
+  View,
+  SafeAreaView,
+  Alert,
+} from 'react-native';
+import React, {useContext, useState, useCallback, useEffect} from 'react';
+import GlobalStyles from '../utils/GlobalStyles';
 import PropTypes from 'prop-types';
-import {Alert, ScrollView, StyleSheet} from 'react-native';
-import {Controller, useForm} from 'react-hook-form';
-import {Button, Card, Input, Text} from 'react-native-elements';
-import * as ImagePicker from 'expo-image-picker';
-import {useMedia} from '../hooks/ApiHooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Button} from 'react-native-paper';
+import {
+  useFonts,
+  Poppins_700Bold,
+  Poppins_600SemiBold,
+  Poppins_500Medium,
+  Poppins_400Regular,
+} from '@expo-google-fonts/poppins';
+import AppLoading from 'expo-app-loading';
+import {Card, Input, Divider} from 'react-native-elements';
 import {MainContext} from '../contexts/MainContext';
+import {Video} from 'expo-av';
+import * as ImagePicker from 'expo-image-picker';
+import {useMedia, useTag} from '../hooks/ApiHooks';
+import {useForm, Controller} from 'react-hook-form';
+import {useFocusEffect} from '@react-navigation/native';
+import {appId} from '../utils/variables';
+import backIcon from '../assets/back.svg';
+import LottieView from 'lottie-react-native';
 
 const Upload = ({navigation}) => {
-  const [image, setImage] = useState(
-    'https://place-hold.it/300x200&text=ChooseFile'
-  );
-  const [imageSelected, setImageSelected] = useState(false);
-  const [type, setType] = useState('');
-  const {postMedia} = useMedia();
-  const {update, setUpdate} = useContext(MainContext);
+  const animation = React.createRef();
+  const [upload, setUpload] = useState(false);
+  const {loading, setLoading} = useContext(MainContext);
 
+  const [fontsLoaded] = useFonts({
+    Poppins_700Bold,
+    Poppins_600SemiBold,
+    Poppins_500Medium,
+    Poppins_400Regular,
+  });
   const {
     control,
     handleSubmit,
     formState: {errors},
+    setValue,
   } = useForm({
     defaultValues: {
-      title: '',
+      // title1: 'Title',
       description: '',
     },
   });
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
+  const [image, setImage] = useState(
+    'https://www.linkpicture.com/q/iPhone-8-2-1.png'
+  );
+
+  const [imageSelected, setImageSelected] = useState(false);
+
+  const [type, setType] = useState('image');
+
+  const {postMedia, load} = useMedia();
+  const {postTag} = useTag();
+  const {update, setUpdate, token} = useContext(MainContext);
+
+  // pick image function
+  const pickImage = async (id) => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       quality: 0.5,
     });
-    console.log(result);
     if (!result.cancelled) {
       setImage(result.uri);
       setImageSelected(true);
@@ -44,108 +80,193 @@ const Upload = ({navigation}) => {
   };
 
   const onSubmit = async (data) => {
-    if (!imageSelected) {
-      Alert.alert('Please choose a image');
-      return;
-    }
-
     const formData = new FormData();
-    const fileName = image.split('/').pop();
-    let fileExtension = fileName.split('.').pop();
-    //if (fileExtension === 'jpg') fileExtension = 'jpeg';
-    fileExtension = fileExtension === 'jpg' ? 'jpeg' : fileExtension;
-    formData.append('title', data.title);
+    formData.append('title', 'title');
     formData.append('description', data.description);
+    const filename = image.split('/').pop();
+    let fileExtension = filename.split('.').pop();
+    fileExtension = fileExtension === 'jpg' ? 'jpeg' : fileExtension;
     formData.append('file', {
       uri: image,
-      name: fileName,
+      name: filename,
       type: type + '/' + fileExtension,
     });
-    console.log(formData);
-    console.log(image);
-
     try {
-      const token = await AsyncStorage.getItem('userToken');
       const response = await postMedia(formData, token);
-      console.log('upload response', response);
-      Alert.alert('File', 'uploaded', [
-        {
-          text: 'ok',
-          onPress: () => {
-            //TODO: clear the form value after submit
-            setUpdate(update + 1);
-            navigation.navigate('Home');
+      const tagResponse = await postTag(
+        {file_id: response.file_id, tag: appId},
+        token
+      );
+      setUpload(!upload);
+      // TODO: make Alert after loading is done with animation
+      tagResponse &&
+        Alert.alert('Upload', 'Uploaded successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setUpdate(update + 1);
+              // navigation.navigate('Upload');
+              setLoading(!loading);
+            },
           },
-        },
-      ]);
+        ]);
     } catch (error) {
-      // Notify user about the problem
-      console.log('onSubmit upload image has problem');
+      console.error(error);
     }
   };
 
-  return (
-    <ScrollView>
-      <Card>
-        <Card.Image
-          source={{uri: image}}
-          style={styles.image}
-          onPress={pickImage}
-        ></Card.Image>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <Input
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              autoCapitalize="none"
-              placeholder="Title"
-            />
-          )}
-          name="title"
-        />
-        {errors.title && <Text>This is required.</Text>}
+  const reset = () => {
+    setImage('https://www.linkpicture.com/q/iPhone-8-2-1.png');
+    setImageSelected(false);
+    setValue('description', '');
+    setType('image');
+  };
 
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <Input
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              autoCapitalize="none"
-              placeholder="Description"
-            />
-          )}
-          name="description"
-        />
-        {errors.description && <Text>This is required.</Text>}
-        <Button title="Choose image" onPress={pickImage} />
-        <Button title="Upload" onPress={handleSubmit(onSubmit)} />
-      </Card>
-    </ScrollView>
+  useFocusEffect(
+    useCallback(() => {
+      return () => reset();
+    }, [])
   );
+
+  useEffect(() => {
+    animation.current?.play(0, 520);
+  }, [upload]);
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Button
+            labelStyle={styles.button}
+            onPress={() => navigation.navigate('Profile')}
+            icon={backIcon}
+            underlayColor="white"
+          ></Button>
+          <Text style={styles.appName}>Upload</Text>
+          <Button disabled={true}></Button>
+        </View>
+        <Divider style={{marginBottom: 5, marginTop: 5}} />
+
+        <ScrollView>
+          <Text style={styles.header}>Upload your pictures or video</Text>
+          <LottieView
+            style={{width: '80%', alignSelf: 'center'}}
+            ref={animation}
+            source={require('../assets/animation/load2.json')}
+            autoPlay={false}
+            loop={false}
+            speed={2}
+            resizeMode="cover"
+            onAnimationFinish={() => {
+              console.log('animation finished');
+            }}
+          />
+          <View style={styles.box}>
+            <Card containerStyle={styles.card}>
+              {type === 'image' ? (
+                <Card.Image
+                  source={{uri: image}}
+                  style={styles.image}
+                  onPress={pickImage}
+                ></Card.Image>
+              ) : (
+                <Video
+                  source={{uri: image}}
+                  style={styles.image}
+                  useNativeControls={true}
+                  resizeMode="cover"
+                  onError={(err) => {
+                    console.error('video', err);
+                  }}
+                />
+              )}
+
+              <Controller
+                control={control}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <Input
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    autoCapitalize="none"
+                    placeholder="Caption this"
+                    style={{textAlign: 'center'}}
+                    errorMessage={errors.description}
+                  />
+                )}
+                name="description"
+              />
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-evenly'}}
+              >
+                <Button onPress={reset}>Reset</Button>
+
+                <Button
+                  // style={{marginLRight: 20}}
+                  disabled={!imageSelected}
+                  loading={load}
+                  onPress={handleSubmit(onSubmit)}
+                >
+                  Upload
+                </Button>
+              </View>
+            </Card>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 };
+
+const styles = StyleSheet.create({
+  button: {
+    marginLeft: 10,
+    marginTop: 20,
+  },
+  appName: {
+    fontSize: 20,
+    fontFamily: 'Poppins_600SemiBold',
+    marginTop: 10,
+  },
+  header: {
+    fontSize: 18,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#7C7878',
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  box: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  card: {
+    borderRadius: 10,
+    width: '90%',
+  },
+  image: {
+    width: '100%',
+    height: 300,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
+  },
+  title: {
+    fontSize: 16,
+    fontFamily: 'Poppins_600SemiBold',
+    marginLeft: 20,
+    marginTop: '5%',
+  },
+});
 
 Upload.propTypes = {
   navigation: PropTypes.object,
 };
-
-const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: undefined,
-    aspectRatio: 1,
-    marginBottom: 5,
-    resizeMode: 'contain',
-  },
-});
-
 export default Upload;

@@ -1,17 +1,23 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, Input} from 'react-native-elements';
 import {Alert, View, StyleSheet} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
-import {useUser} from '../hooks/ApiHooks';
-import PropTypes from 'prop-types';
+import {useLogin, useUser} from '../hooks/ApiHooks';
 import {LinearGradient} from 'expo-linear-gradient';
 import FullnameIcon from '../assets/fullname.svg';
 import UserIcon from '../assets/userIcon.svg';
 import PasswordIcon from '../assets/password.svg';
+import PropTypes from 'prop-types';
+import {MainContext} from '../contexts/MainContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Fixed full_name for new user register
 const RegisterForm = ({setFormToggle}) => {
   const {postUser, checkUsername} = useUser();
+  const {postLogin} = useLogin();
+  const {setInstruction, setUser, setIsLoggedIn, setToken} =
+    useContext(MainContext);
   const {
     getValues,
     control,
@@ -21,22 +27,76 @@ const RegisterForm = ({setFormToggle}) => {
     defaultValues: {
       username: '',
       password: '',
-      email: '',
       full_name: '',
+      email: '',
     },
     mode: 'onBlur',
   });
 
-  const onSubmit = async (data) => {
+  const onLogin = async (data) => {
     console.log(data);
     try {
+      const userData = await postLogin(data);
+      // console.log('userData after register', userData);
+      await AsyncStorage.setItem('userToken', userData.token);
+      setToken(userData.token);
+      // console.log('token after register', userData.token);
+      setUser(userData.user);
+      setIsLoggedIn(true);
+    } catch (error) {
+      Alert.alert('Fail', 'Username or password maybe wrong');
+      console.error(error);
+    }
+  };
+
+  const onSubmit = async (data) => {
+    // console.log(data);
+    try {
       delete data.password_again;
-      //TODO: randomize email to post user
+      const additionData = {
+        deleted_hook: 0,
+        fullname: data.username,
+        work: 'none',
+        job: 'none',
+        interests: 'none',
+        education_level: 'none',
+        school: 'none',
+        religious_beliefs: 'none',
+        preference_drinking: 'none',
+        gender: 'nonbinary',
+        age: 0,
+        height: 0,
+        location: 'none',
+        nationality: 'none',
+        preference_smoking: 'none',
+        family_plan: 'none',
+        drinking: 'none',
+        smoking: 'none',
+        interested: 'nonbinary',
+        preference_location: 'none',
+        age_range: 'none',
+        preference_distance: 0,
+        preference_nationality: 'none',
+        preference_religion: 'none',
+        preference_height: 'none',
+        pet: 'none',
+        preference_pet: 'none',
+        pets: 'none',
+        dog_friend: 'none',
+        hiking: 'none',
+        books: 'none',
+      };
+      data.full_name = JSON.stringify(additionData);
+      data.email = `${data.username}@a.fi`;
       const userData = await postUser(data);
-      console.log('register onSubmit', userData);
+      setInstruction(true);
+      // console.log('register onSubmit', userData);
       if (userData) {
-        setFormToggle(true);
-        Alert.alert('Success', 'User created successfully! Please login!');
+        Alert.alert('Success', 'User created successfully!');
+        delete data.full_name;
+        delete data.email;
+        // console.log('data for login', data);
+        onLogin(data);
       }
     } catch (error) {
       console.error(error);
@@ -45,28 +105,6 @@ const RegisterForm = ({setFormToggle}) => {
 
   return (
     <View>
-      {/* <Controller
-        control={control}
-        rules={{
-          required: {value: true, message: 'This is required.'},
-          pattern: {
-            value:
-              /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-            message: 'Please enter a valid email!',
-          },
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            placeholder="email"
-            errorMessage={errors.email && errors.email.message}
-          />
-        )}
-        name="email"
-      /> */}
       <Controller
         control={control}
         rules={{
@@ -222,6 +260,7 @@ const styles = StyleSheet.create({
 
 RegisterForm.propTypes = {
   setFormToggle: PropTypes.func,
+  navigation: PropTypes.object,
 };
 
 export default RegisterForm;
