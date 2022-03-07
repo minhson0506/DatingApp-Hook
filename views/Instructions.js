@@ -95,9 +95,7 @@ const Instructions = ({navigation}) => {
             />
             <Divider style={{marginTop: 5, marginBottom: 5}} />
 
-            <Text style={styles.DescribeText}>
-              Chat with your hooks{'\n'}Do quiz
-            </Text>
+            <Text style={styles.DescribeText}>Chat with your hooks</Text>
 
             {/* profile function */}
             <Divider style={{marginTop: 5, marginBottom: 5}} />
@@ -108,45 +106,97 @@ const Instructions = ({navigation}) => {
             <Divider style={{marginTop: 5, marginBottom: 5}} />
 
             <Text style={styles.DescribeText}>
-              View your profile{'\n'}Change your profile info
+              Profile page{'\n'}Change your profile info
               {'\n'}Upload pictures
             </Text>
           </View>
           <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+            style={{
+              flex: 1,
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+            }}
           >
-            <Text style={styles.header}>Main page</Text>
-            <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  marginRight: 20,
-                }}
-              >
-                <Image
-                  source={require('../assets/InstructionsUse/swipeL.png')}
-                  style={{height: 80, width: 80}}
-                ></Image>
-                <Text style={styles.textButton}>Info</Text>
-              </View>
+            <View>
+              <Text style={styles.header}>Home page</Text>
+              <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginRight: 20,
+                  }}
+                >
+                  <Image
+                    source={require('../assets/InstructionsUse/swipeL.png')}
+                    style={{height: 70, width: 70}}
+                  ></Image>
+                  <Image
+                    source={require('../assets/InstructionsUse/fingerClick.png')}
+                    style={{height: 70, width: 70}}
+                  ></Image>
+                  <Text style={styles.textButton}>Info</Text>
+                </View>
 
-              <Image
-                source={require('../assets/InstructionsUse/image.png')}
-                style={{height: 120, width: 120}}
-              ></Image>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  marginLeft: 20,
-                }}
-              >
-                <Image
-                  source={require('../assets/InstructionsUse/swipeR.png')}
-                  style={{height: 80, width: 80}}
-                ></Image>
-                <Text style={styles.textButton}>Like</Text>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    source={require('../assets/InstructionsUse/image.png')}
+                    style={{height: 120, width: 120, alignSelf: 'center'}}
+                  ></Image>
+                  <Text style={styles.textButton}>No press</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginLeft: 20,
+                  }}
+                >
+                  <Image
+                    source={require('../assets/InstructionsUse/swipeR.png')}
+                    style={{height: 70, width: 70}}
+                  ></Image>
+                  <Image
+                    source={require('../assets/InstructionsUse/fingerClick.png')}
+                    style={{height: 70, width: 70}}
+                  ></Image>
+                  <Text style={styles.textButton}>Like</Text>
+                </View>
+              </View>
+            </View>
+            <View>
+              <Text style={styles.header}>Profile page</Text>
+              <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    source={require('../assets/InstructionsUse/image.png')}
+                    style={{
+                      height: 120,
+                      width: 120,
+                      alignSelf: 'center',
+                    }}
+                  ></Image>
+                  <Image
+                    source={require('../assets/InstructionsUse/fingerClick.png')}
+                    style={{
+                      height: 80,
+                      width: 80,
+                    }}
+                  ></Image>
+                  <Text style={styles.textButton}>
+                    Long press: Delete image
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
@@ -335,6 +385,7 @@ const styles = StyleSheet.create({
   textButton: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 22,
+    marginTop: 5,
   },
   textInfo: {
     textAlign: 'center',

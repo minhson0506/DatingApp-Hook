@@ -247,7 +247,7 @@ const Search = ({navigation}) => {
             </MenuItem>
           </Menu>
           <Text style={styles.appName}>hook</Text>
-          <Button disabled={true}></Button>
+          <Text style={{color: 'white'}}>Text</Text>
         </View>
         <Searchbar
           iconColor="#82008F"
@@ -449,6 +449,7 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
     fontFamily: 'Poppins_500Medium',
     fontSize: 16,
+    color: 'black',
   },
 });
 

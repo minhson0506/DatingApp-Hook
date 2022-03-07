@@ -281,9 +281,9 @@ const ListItem = ({
               ></Avatar>
               <View
                 style={{
-                  flex: 1,
+                  width: '100%',
                   flexDirection: 'row',
-                  justifyContent: 'center',
+                  justifyContent: 'space-evenly',
                 }}
               >
                 <AgeIcon height={19} style={styles.icons}></AgeIcon>

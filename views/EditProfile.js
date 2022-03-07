@@ -282,7 +282,7 @@ const EditProfile = ({navigation}) => {
         <ScrollView>
           <Text style={styles.header}>My Vital</Text>
           <Divider style={{marginBottom: 5, marginTop: 5}} />
-          <Text style={styles.title}>Name</Text>
+          <Text style={styles.title}>Full Name</Text>
           <Input
             value={name}
             autoCapitalize="none"

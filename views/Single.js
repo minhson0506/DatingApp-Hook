@@ -210,8 +210,9 @@ const Single = ({route, navigation}) => {
                 <Card style={styles.card}>
                   <View
                     style={{
+                      width: '100%',
                       flexDirection: 'row',
-                      justifyContent: 'space-around',
+                      justifyContent: 'space-evenly',
                     }}
                   >
                     <AgeIcon height={19} style={styles.icons}></AgeIcon>
@@ -232,8 +233,9 @@ const Single = ({route, navigation}) => {
                   </View>
                   <View
                     style={{
+                      width: '100%',
                       flexDirection: 'row',
-                      justifyContent: 'space-around',
+                      justifyContent: 'space-evenly',
                     }}
                   >
                     <DrinkIcon style={styles.icons}></DrinkIcon>
@@ -254,6 +256,7 @@ const Single = ({route, navigation}) => {
 
                   <View
                     style={{
+                      width: '100%',
                       flexDirection: 'row',
                       justifyContent: 'center',
                     }}
@@ -285,6 +288,7 @@ const Single = ({route, navigation}) => {
                   </View>
                   <View
                     style={{
+                      width: '100%',
                       flexDirection: 'row',
                       justifyContent: 'center',
                     }}
@@ -312,6 +316,7 @@ const Single = ({route, navigation}) => {
                   </View>
                   <View
                     style={{
+                      width: '100%',
                       flexDirection: 'row',
                       justifyContent: 'center',
                     }}

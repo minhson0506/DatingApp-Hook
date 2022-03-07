@@ -236,8 +236,9 @@ const Profile = ({navigation}) => {
               <Card style={styles.card}>
                 <View
                   style={{
+                    width: '100%',
                     flexDirection: 'row',
-                    justifyContent: 'space-around',
+                    justifyContent: 'space-evenly',
                   }}
                 >
                   <AgeIcon height={19} style={styles.icons}></AgeIcon>
@@ -257,8 +258,9 @@ const Profile = ({navigation}) => {
                 </View>
                 <View
                   style={{
+                    width: '100%',
                     flexDirection: 'row',
-                    justifyContent: 'space-around',
+                    justifyContent: 'space-evenly',
                   }}
                 >
                   <DrinkIcon style={styles.icons}></DrinkIcon>
@@ -278,6 +280,7 @@ const Profile = ({navigation}) => {
                 </View>
                 <View
                   style={{
+                    width: '100%',
                     flexDirection: 'row',
                     justifyContent: 'center',
                   }}
@@ -321,6 +324,7 @@ const Profile = ({navigation}) => {
                     flexDirection: 'row',
                     justifyContent: 'center',
                     alignSelf: 'center',
+                    width: '100%',
                   }}
                 >
                   <InterestIcon style={styles.icons}></InterestIcon>
