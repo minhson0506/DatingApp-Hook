@@ -34,7 +34,7 @@ const Instructions = ({navigation}) => {
   });
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <View />;
   } else {
     return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>

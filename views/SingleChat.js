@@ -128,12 +128,9 @@ const SingleChat = ({route, navigation}) => {
         setSeconds(seconds + 1);
       }
       fetchAllMessage();
-    }, 100);
+    }, 500);
     return () => clearInterval(interval);
   }, [loadMessage]);
-  // useEffect(() => {
-  //   fetchAllMessage();
-  // }, []);
 
   const [fontsLoaded] = useFonts({
     Poppins_600SemiBold,

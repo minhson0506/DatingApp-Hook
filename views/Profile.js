@@ -64,6 +64,7 @@ const Profile = ({navigation}) => {
   let mediaData = mediaArray.filter(
     (obj) => obj.title.toLowerCase() !== 'avatar'
   );
+  mediaData = mediaData.filter((obj) => obj.title.toLowerCase() !== 'deleted');
 
   const loadData = () => {
     mediaData = mediaArray.filter(
