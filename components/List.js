@@ -1,9 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Text, StyleSheet, View} from 'react-native';
 import {useMedia, useUser} from '../hooks/ApiHooks';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
+import SadCat from '../assets/sad.svg';
 
 const List = ({navigation, myFilesOnly = false}) => {
   const [didMount, setDidMount] = useState(true);
@@ -41,7 +42,7 @@ const List = ({navigation, myFilesOnly = false}) => {
 
       // console.log('current user', myAdditionData);
       // filter by gender
-      if (myAdditionData.interested !== 'nonbinary') {
+      if (myAdditionData.interested.toLowerCase() !== 'nonbinary') {
         userData = userData.filter((obj) => {
           // console.log('gender', obj.full_name.gender);
           return obj.full_name.gender === myAdditionData.interested;
@@ -62,7 +63,9 @@ const List = ({navigation, myFilesOnly = false}) => {
       if (userData.length > 5) {
         if (myAdditionData.preference_drinking.toLowerCase() !== 'none')
           userData = userData.filter((obj) => {
-            return obj.full_name.driking === myAdditionData.preference_drinking;
+            return (
+              obj.full_name.drinking === myAdditionData.preference_drinking
+            );
           });
       }
       // console.log('length after filter drinking', userData.length);
@@ -162,20 +165,37 @@ const List = ({navigation, myFilesOnly = false}) => {
   }
 
   return (
-    <FlatList
-      style={{alignSelf: 'center'}}
-      data={media}
-      keyExtractor={(item) => item.file_id.toString()}
-      renderItem={({item}) => (
-        <ListItem
-          navigation={navigation}
-          singleMedia={item}
-          myFilesOnly={myFilesOnly}
-        ></ListItem>
+    <>
+      {media.length === 0 ? (
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <Text style={styles.notFound}>No match found!</Text>
+          <SadCat style={{alignSelf: 'center', marginTop: 20}}></SadCat>
+        </View>
+      ) : (
+        <FlatList
+          style={{alignSelf: 'center'}}
+          data={media}
+          keyExtractor={(item) => item.file_id.toString()}
+          renderItem={({item}) => (
+            <ListItem
+              navigation={navigation}
+              singleMedia={item}
+              myFilesOnly={myFilesOnly}
+            ></ListItem>
+          )}
+        ></FlatList>
       )}
-    ></FlatList>
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  notFound: {
+    alignSelf: 'center',
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 18,
+  },
+});
 
 List.propTypes = {
   navigation: PropTypes.object.isRequired,

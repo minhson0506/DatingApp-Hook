@@ -29,6 +29,11 @@ import ListItem from '../components/ListItem';
 import LikeIcon from '../assets/like.svg';
 import {MainContext} from '../contexts/MainContext';
 import LottieView from 'lottie-react-native';
+import FemaleIcon from '../assets/female.svg';
+import MaleIcon from '../assets/male.svg';
+import LGBT from '../assets/lgbt.svg';
+import Height from '../assets/height.svg';
+import Religion from '../assets/religion.svg';
 
 const Single = ({route, navigation}) => {
   const animation = React.createRef();
@@ -206,7 +211,33 @@ const Single = ({route, navigation}) => {
                     avatarStyle={{borderRadius: 100}}
                   />
                 </View>
-                <Text style={styles.name}>{additionData.fullname}</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text style={styles.name}>{additionData.fullname}</Text>
+                  {additionData.gender === 'Female' ? (
+                    <FemaleIcon
+                      height={22}
+                      style={{marginLeft: 5, marginTop: 10}}
+                    ></FemaleIcon>
+                  ) : additionData.gender === 'Male' ? (
+                    <MaleIcon
+                      height={22}
+                      style={{marginLeft: 5, marginTop: 10}}
+                    ></MaleIcon>
+                  ) : additionData.gender === 'Nonbinary' ? (
+                    <LGBT
+                      height={22}
+                      style={{marginLeft: 5, marginTop: 10}}
+                    ></LGBT>
+                  ) : (
+                    <></>
+                  )}
+                </View>
                 <Card style={styles.card}>
                   <View
                     style={{
@@ -220,16 +251,16 @@ const Single = ({route, navigation}) => {
 
                     <Divider
                       orientation="vertical"
-                      style={{marginTop: 12, marginRight: 5}}
+                      style={{marginTop: 12, marginRight: 10}}
+                    />
+                    <Height height={20} style={styles.icons}></Height>
+                    <Text style={styles.text}>{additionData.height}</Text>
+                    <Divider
+                      orientation="vertical"
+                      style={{marginTop: 12, marginRight: 10}}
                     />
                     <LocationIcon style={styles.icons}></LocationIcon>
                     <Text style={styles.text}>{additionData.location}</Text>
-                    <Divider
-                      orientation="vertical"
-                      style={{marginTop: 12, marginRight: 5}}
-                    />
-                    <PetIcon height={20} style={styles.icons}></PetIcon>
-                    <Text style={styles.text}>{additionData.pet}</Text>
                   </View>
                   <View
                     style={{
@@ -250,10 +281,27 @@ const Single = ({route, navigation}) => {
                       orientation="vertical"
                       style={{marginTop: 12, marginRight: 5}}
                     />
+                    <PetIcon height={20} style={styles.icons}></PetIcon>
+                    <Text style={styles.text}>{additionData.pet}</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                    }}
+                  >
                     <NatIcon style={styles.icons}></NatIcon>
                     <Text style={styles.text}>{additionData.nationality}</Text>
+                    <Divider
+                      orientation="vertical"
+                      style={{marginTop: 12, marginRight: 5}}
+                    />
+                    <Religion height={20} style={styles.icons}></Religion>
+                    <Text style={styles.text}>
+                      {additionData.religious_beliefs}
+                    </Text>
                   </View>
-
                   <View
                     style={{
                       width: '100%',
@@ -416,7 +464,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginTop: 17,
-    marginRight: 30,
+    marginRight: 20,
     fontFamily: 'Poppins_400Regular',
   },
   interests: {

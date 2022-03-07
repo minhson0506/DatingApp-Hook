@@ -22,7 +22,6 @@ import {uploadsUrl} from '../utils/variables';
 import {MainContext} from '../contexts/MainContext';
 import {AutoScrollFlatList} from 'react-native-autoscroll-flatlist';
 import BackIcon from '../assets/back.svg';
-import OptionIcon from '../assets/options.svg';
 import {
   useFonts,
   Poppins_600SemiBold,
@@ -162,7 +161,7 @@ const SingleChat = ({route, navigation}) => {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
+                  justifyContent: 'flex-start',
                   marginTop: 10,
                 }}
               >
@@ -176,7 +175,7 @@ const SingleChat = ({route, navigation}) => {
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    marginRight: '20%',
+                    marginLeft: '8%',
                   }}
                 >
                   <Avatar
@@ -197,7 +196,6 @@ const SingleChat = ({route, navigation}) => {
                     </Text>
                   </View>
                 </View>
-                <OptionIcon style={{marginRight: 15}}></OptionIcon>
               </View>
 
               {/* message content */}
