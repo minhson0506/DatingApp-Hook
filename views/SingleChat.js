@@ -146,13 +146,12 @@ const SingleChat = ({route, navigation}) => {
         <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
           {/* header: avatar, hook username and interest */}
           <TouchableOpacity
-            style={{flex: 1}}
+            style={{flex: 1, justifyContent: 'flex-end'}}
             activeOpacity={1}
             onPress={() => Keyboard.dismiss()}
           >
             <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : ''}
-              enabled
+              behavior={Platform.OS === 'ios' ? 'padding' : null}
               style={styles.container}
               // fix keyboard avoid view
             >

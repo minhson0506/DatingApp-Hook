@@ -146,13 +146,12 @@ const Upload = ({navigation}) => {
     return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
         <TouchableOpacity
-          style={{flex: 1}}
+          style={{flex: 1, justifyContent: 'flex-end'}}
           activeOpacity={1}
           onPress={() => Keyboard.dismiss()}
         >
           <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : ''}
-            enabled
+            behavior={Platform.OS === 'ios' ? 'padding' : null}
             style={styles.container}
             // fix keyboard avoid view
           >
@@ -249,6 +248,9 @@ const Upload = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   button: {
     marginLeft: 10,
     marginTop: 20,
