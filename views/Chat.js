@@ -11,7 +11,6 @@ import {uploadsUrl} from '../utils/variables';
 import {MainContext} from '../contexts/MainContext';
 import {Menu, MenuItem} from 'react-native-material-menu';
 import MenuIcon from '../assets/menu.svg';
-import {Button} from 'react-native-paper';
 import {
   useFonts,
   Poppins_700Bold,
@@ -31,6 +30,7 @@ const Chat = ({navigation}) => {
   const {getFavourites} = useFavourite();
   const [message, setMessage] = useState(0);
   const [hook, setHook] = useState(0);
+  const [seconds, setSeconds] = useState(0);
   const {loadMessage} = useContext(MainContext);
 
   const [fontsLoaded] = useFonts({
@@ -284,6 +284,18 @@ const Chat = ({navigation}) => {
     fetchNewHooks();
     fetchMessage();
   }, [loadMessage]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds === 100) {
+        setSeconds(0);
+      } else {
+        setSeconds(seconds + 1);
+      }
+      fetchMessage();
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
 
   if (!fontsLoaded) {
     return <AppLoading />;

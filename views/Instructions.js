@@ -13,7 +13,6 @@ import {
   Poppins_500Medium,
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
-import AppLoading from 'expo-app-loading';
 import ReloadIcon from '../assets/reload.svg';
 import LikeIcon from '../assets/up-arrow.svg';
 import UploadIcon from '../assets/upload.svg';
