@@ -44,6 +44,15 @@ const Chat = ({navigation}) => {
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
 
+  function isJson(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
   const fetchNewHooks = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
@@ -154,7 +163,8 @@ const Chat = ({navigation}) => {
           hookUserId.push(fileInfo.user_id);
         }
       }
-      // console.log('who message you', hookUserId);
+
+      console.log('who message you', hookUserId);
 
       // what if current user is the one who start first?
       // all files current users like
@@ -172,6 +182,27 @@ const Chat = ({navigation}) => {
       // console.log('hook id before cleaning', hookUserId);
       hookUserId = [...new Set(hookUserId)];
       // console.log('hook Id: ', hookUserId);
+
+      // filter user not belong our app
+      hookUserId = await Promise.all(
+        hookUserId.map(async (obj) => {
+          return await getUserById(obj, token);
+        })
+      );
+
+      hookUserId = hookUserId.filter((obj) => {
+        let filter = false;
+        if (isJson(obj.full_name)) {
+          const additionData = JSON.parse(obj.full_name);
+          // eslint-disable-next-line no-prototype-builtins
+          if (additionData.hasOwnProperty('deleted_hook')) filter = true;
+        }
+        return filter;
+      });
+
+      hookUserId = hookUserId.map((obj) => {
+        return obj.user_id;
+      });
 
       let messageData = [];
       let singleMessageData = [];
@@ -213,7 +244,6 @@ const Chat = ({navigation}) => {
         // console.log('current user message to hook', myCm);
         allCm = allCm.concat(myCm);
         allCm.sort((a, b) => (a.comment_id > b.comment_id ? 1 : -1));
-        console.log(allCm.slice(-1));
 
         const totalData = {
           ...avatarScraping.pop(),
@@ -230,12 +260,19 @@ const Chat = ({navigation}) => {
         messageData = messageData.concat(totalData);
         singleMessageData = singleMessageData.concat(totalSingleMessageData);
       }
+      console.log('hook', hookUserId);
       messageData.sort((a, b) => (a.comment_id > b.comment_id ? -1 : 1));
-      // console.log('message info', messageData);
-      messageData != [] ? setMessage(messageData) : setMessage(0);
+      messageData = messageData.filter((obj) => {
+        return hookUserId.includes(obj.user_id);
+      });
+      console.log('message info', messageData);
+      messageData != [] ? setMessage(messageData) : setMessage(null);
       // console.log('Message History', messageData);
 
       singleMessageData = [...new Set(singleMessageData)];
+      singleMessageData = singleMessageData.filter((obj) => {
+        return hookUserId.includes(obj.user_id);
+      });
       // setSingleMessage(singleMessageData);
       // console.log('data for navigation:', singleMessageData);
     } catch (error) {

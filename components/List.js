@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Text} from 'react-native';
 import {useMedia, useUser} from '../hooks/ApiHooks';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
@@ -19,7 +19,7 @@ const List = ({navigation, myFilesOnly = false}) => {
       let array = mediaArray.filter(
         (obj) => obj.title.toLowerCase() === 'avatar'
       );
-
+      // console.log("array begin", array);
       // filter current user
       array = array.filter((obj) => obj.user_id !== user.user_id);
       // console.log(
@@ -139,8 +139,10 @@ const List = ({navigation, myFilesOnly = false}) => {
       // //Random 5 person for display
       // console.log('length', media.length);
       // shuffle array and display random 5 users
-      array = array.sort(() => 0.5 - Math.random());
-      if (array.length > 5) array = array.slice(0, 5);
+      if (array.length > 5) {
+        array = array.sort(() => 0.5 - Math.random());
+        array = array.slice(0, 5);
+      }
 
       // set data to display
       setMedia(array);

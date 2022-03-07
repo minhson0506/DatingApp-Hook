@@ -29,6 +29,7 @@ const Interests = ({navigation}) => {
   const {user, token, loading, setLoading} = useContext(MainContext);
   let additionData = JSON.parse(user.full_name);
   const [media, setMedia] = useState([]);
+  const [didMount, setDidMount] = useState(true);
   let result = [];
 
   const arrayLoading = async () => {
@@ -81,6 +82,15 @@ const Interests = ({navigation}) => {
   useEffect(() => {
     arrayLoading();
   }, [loading]);
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, []);
+
+  if (!didMount) {
+    return null;
+  }
 
   if (!fontsLoaded) {
     return <View />;
