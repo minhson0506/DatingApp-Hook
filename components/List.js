@@ -7,7 +7,7 @@ import {MainContext} from '../contexts/MainContext';
 import SadCat from '../assets/sad.svg';
 
 const List = ({navigation, myFilesOnly = false}) => {
-  const [didMount, setDidMount] = useState(true);
+  const [didMount, setDidMount] = useState(false);
   const {user, loading, token} = useContext(MainContext);
   const {getUserById} = useUser();
   const {mediaArray} = useMedia(myFilesOnly);

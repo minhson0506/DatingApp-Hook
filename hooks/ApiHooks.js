@@ -249,7 +249,7 @@ const userComment = () => {
       },
       body: JSON.stringify({file_id: fileId, comment: newComment}),
     };
-    console.log('data in api hook', options);
+    // console.log('data in api hook', options);
     return await doFetch(baseUrl + 'comments', options);
   };
 

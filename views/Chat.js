@@ -30,6 +30,7 @@ const Chat = ({navigation}) => {
   const [message, setMessage] = useState(0);
   const [hook, setHook] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [didMount, setDidMount] = useState(false);
   const {loadMessage, token} = useContext(MainContext);
 
   const [fontsLoaded] = useFonts({
@@ -292,6 +293,15 @@ const Chat = ({navigation}) => {
     }, 500);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, []);
+
+  if (!didMount) {
+    return null;
+  }
 
   if (!fontsLoaded) {
     return <AppLoading />;

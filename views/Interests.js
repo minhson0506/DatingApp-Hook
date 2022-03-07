@@ -29,7 +29,7 @@ const Interests = ({navigation}) => {
   const {user, token, loading, setLoading} = useContext(MainContext);
   let additionData = JSON.parse(user.full_name);
   const [media, setMedia] = useState([]);
-  const [didMount, setDidMount] = useState(true);
+  const [didMount, setDidMount] = useState(false);
   let result = [];
 
   const arrayLoading = async () => {
