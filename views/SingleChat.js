@@ -39,7 +39,7 @@ const SingleChat = ({route, navigation}) => {
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
   const {getCommentByFileId, postComment} = userComment();
   // console.log('item', item);
-  const {loadMessage, setLoadMessage, user} = useContext(MainContext);
+  const {loadMessage, setLoadMessage, user, token} = useContext(MainContext);
   const [currentUserId, setCurrentUserId] = useState(user.user_id);
   const [hookUserId] = useState(item.user_id);
   const [seconds, setSeconds] = useState(0);
@@ -48,7 +48,7 @@ const SingleChat = ({route, navigation}) => {
   const fetchAllMessage = async () => {
     try {
       const allData = await JSON.parse(item.full_name);
-      const token = await AsyncStorage.getItem('userToken');
+      // const token = await AsyncStorage.getItem('userToken');
       const myId = (await getUserByToken(token)).user_id;
       setCurrentUserId(myId);
       let messageHistory = [];
@@ -98,7 +98,7 @@ const SingleChat = ({route, navigation}) => {
   const sendMessage = async () => {
     // send message to hook's avatar file
     try {
-      const token = await AsyncStorage.getItem('userToken');
+      // const token = await AsyncStorage.getItem('userToken');
       // console.log('data', item.file_id, newComment, token);
       const hookUserId = item.user_id;
       const hookFile = await getMediaByUserId(hookUserId);

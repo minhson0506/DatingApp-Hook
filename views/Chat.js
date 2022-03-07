@@ -31,7 +31,7 @@ const Chat = ({navigation}) => {
   const [message, setMessage] = useState(0);
   const [hook, setHook] = useState(0);
   const [seconds, setSeconds] = useState(0);
-  const {loadMessage} = useContext(MainContext);
+  const {loadMessage, token} = useContext(MainContext);
 
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
@@ -55,8 +55,6 @@ const Chat = ({navigation}) => {
 
   const fetchNewHooks = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
-
       // user likes
       // get fileId of all files current users liked
       const userLike = await getFavourites(token);
@@ -146,7 +144,6 @@ const Chat = ({navigation}) => {
 
   const fetchMessage = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
       const userFiles = await getAllMediaByCurrentUserId(token);
       const currentUserId = (await getUserByToken(token)).user_id;
       // console.log('my user Id is', currentUserId);
@@ -260,12 +257,12 @@ const Chat = ({navigation}) => {
         messageData = messageData.concat(totalData);
         singleMessageData = singleMessageData.concat(totalSingleMessageData);
       }
-      console.log('hook', hookUserId);
+      // console.log('hook', hookUserId);
       messageData.sort((a, b) => (a.comment_id > b.comment_id ? -1 : 1));
       messageData = messageData.filter((obj) => {
         return hookUserId.includes(obj.user_id);
       });
-      console.log('message info', messageData);
+      // console.log('message info', messageData);
       messageData != [] ? setMessage(messageData) : setMessage(null);
       // console.log('Message History', messageData);
 
