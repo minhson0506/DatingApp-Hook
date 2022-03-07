@@ -37,6 +37,7 @@ import LottieView from 'lottie-react-native';
 const Upload = ({navigation}) => {
   const animation = React.createRef();
   const [upload, setUpload] = useState(false);
+  const [didMount, setDidMount] = useState(false);
   const {loading, setLoading} = useContext(MainContext);
 
   const [fontsLoaded] = useFonts({
@@ -71,15 +72,19 @@ const Upload = ({navigation}) => {
 
   // pick image function
   const pickImage = async (id) => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 0.5,
-    });
-    if (!result.cancelled) {
-      setImage(result.uri);
-      setImageSelected(true);
-      setType(result.type);
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        quality: 0.5,
+      });
+      if (!result.cancelled) {
+        setImage(result.uri);
+        setImageSelected(true);
+        setType(result.type);
+      }
+    } catch (err) {
+      console.log(err.message);
     }
   };
 
@@ -102,8 +107,8 @@ const Upload = ({navigation}) => {
         token
       );
       setUpload(!upload);
-      setLoading(!loading);
       setUpdate(update + 1);
+      setLoading(!loading);
       // TODO: make Alert after loading is done with animation
       setTimeout(() => {
         tagResponse &&
@@ -122,6 +127,15 @@ const Upload = ({navigation}) => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, []);
+
+  if (!didMount) {
+    return null;
+  }
 
   const reset = () => {
     setImage('https://www.linkpicture.com/q/iPhone-8-2-1.png');

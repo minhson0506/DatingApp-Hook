@@ -55,7 +55,7 @@ const RegisterForm = ({setFormToggle}) => {
       delete data.password_again;
       const additionData = {
         deleted_hook: 0,
-        fullname: data.username,
+        fullname: data.full_name,
         work: 'None',
         job: 'None',
         interests: 'None',

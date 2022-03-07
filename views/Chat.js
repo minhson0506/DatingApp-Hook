@@ -290,6 +290,7 @@ const Chat = ({navigation}) => {
         setSeconds(seconds + 1);
       }
       fetchMessage();
+      fetchNewHooks();
     }, 500);
     return () => clearInterval(interval);
   }, []);
