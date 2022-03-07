@@ -48,7 +48,7 @@ const List = ({navigation, myFilesOnly = false}) => {
           return obj.full_name.gender === myAdditionData.interested;
         });
       }
-      // console.log('length after filter gender', userData.length);
+      console.log('length after filter gender', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_location.toLowerCase() !== 'none')
@@ -58,7 +58,7 @@ const List = ({navigation, myFilesOnly = false}) => {
             );
           });
       }
-      // console.log('length after filter location', userData.length);
+      console.log('length after filter location', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_drinking.toLowerCase() !== 'none')
@@ -68,7 +68,7 @@ const List = ({navigation, myFilesOnly = false}) => {
             );
           });
       }
-      // console.log('length after filter drinking', userData.length);
+      console.log('length after filter drinking', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_smoking.toLowerCase() !== 'none')
@@ -76,7 +76,7 @@ const List = ({navigation, myFilesOnly = false}) => {
             return obj.full_name.smoking === myAdditionData.preference_smoking;
           });
       }
-      // console.log('length after filter smoking', userData.length);
+      console.log('length after filter smoking', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_nationality.toLowerCase() !== 'none')
@@ -87,7 +87,7 @@ const List = ({navigation, myFilesOnly = false}) => {
             );
           });
       }
-      // console.log('length after filter nationality', userData.length);
+      console.log('length after filter nationality', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_pet.toLowerCase() !== 'none')
@@ -95,7 +95,7 @@ const List = ({navigation, myFilesOnly = false}) => {
             return obj.full_name.pet === myAdditionData.preference_pet;
           });
       }
-      // console.log('length after filter pet', userData.length);
+      console.log('length after filter pet', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.age_range.toLowerCase() !== 'none') {
@@ -108,7 +108,7 @@ const List = ({navigation, myFilesOnly = false}) => {
           });
         }
       }
-      // console.log('length after filter age', userData.length);
+      console.log('length after filter age', userData.length);
 
       if (userData.length > 5) {
         if (myAdditionData.preference_height.toLowerCase() !== 'none') {
