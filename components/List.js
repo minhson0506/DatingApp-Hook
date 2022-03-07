@@ -1,9 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-<<<<<<< HEAD
-import {FlatList, Text} from 'react-native';
-=======
 import {FlatList, Text, StyleSheet, View} from 'react-native';
->>>>>>> bb887f36617612f70b46650b576c2b13b00cdc44
 import {useMedia, useUser} from '../hooks/ApiHooks';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
