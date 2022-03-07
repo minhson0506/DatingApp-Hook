@@ -35,7 +35,8 @@ const Search = ({navigation}) => {
   const {mediaArray} = useMedia(false);
   const [media, setMedia] = useState([]);
   const [searchArray, setSearchArray] = useState([]);
-  const {user, loading, setLoading, token} = useContext(MainContext);
+  const {user, token} = useContext(MainContext);
+  const [searchLoading, setSearchLoading] = useState(false);
   const {getFavouritesByFileId} = useFavourite();
   const {getUserById} = useUser();
   const [searchState, setSearch] = useState(true);
@@ -189,13 +190,14 @@ const Search = ({navigation}) => {
 
   useEffect(() => {
     fetchData();
-  }, [mediaArray, loading]);
+  }, [mediaArray, searchLoading]);
 
   useFocusEffect(
     useCallback(() => {
       return () => {
         setText('');
-        setLoading(!loading);
+        // setLoading(!loading);
+        setSearchLoading(!searchLoading);
         setSearch(true);
       };
     }, [])
@@ -280,7 +282,8 @@ const Search = ({navigation}) => {
             style={styles.buttons}
             onPress={() => {
               setText('');
-              setLoading(!loading);
+              // setLoading(!loading);
+              setSearchLoading(!searchLoading);
               setSearch(true);
             }}
           >

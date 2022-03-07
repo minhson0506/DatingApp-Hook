@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import {Avatar, ListItem, Divider} from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser, userComment, useMedia, useFavourite} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {MainContext} from '../contexts/MainContext';
@@ -161,7 +160,7 @@ const Chat = ({navigation}) => {
         }
       }
 
-      console.log('who message you', hookUserId);
+      // console.log('who message you', hookUserId);
 
       // what if current user is the one who start first?
       // all files current users like

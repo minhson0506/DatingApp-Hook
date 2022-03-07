@@ -16,7 +16,6 @@ import {PropTypes} from 'prop-types';
 import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import {StatusBar} from 'expo-status-bar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia, userComment, useUser} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {MainContext} from '../contexts/MainContext';
