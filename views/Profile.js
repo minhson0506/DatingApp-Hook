@@ -92,11 +92,6 @@ const Profile = ({navigation}) => {
     if (avatar) setAvatar(uploadsUrl + avatar.filename);
   };
 
-  useEffect(() => {
-    fetchAvatar();
-    loadData();
-  }, [mediaArray, isFocused, loading]);
-
   const additionData = JSON.parse(user.full_name);
   // console.log('addition data full name', additionData.fullname);
   // console.log('number', additionData.age);
@@ -177,6 +172,11 @@ const Profile = ({navigation}) => {
     Poppins_500Medium,
     Poppins_400Regular,
   });
+
+  useEffect(() => {
+    fetchAvatar();
+    loadData();
+  }, [mediaArray, isFocused, loading]);
 
   useEffect(() => {
     setDidMount(true);
