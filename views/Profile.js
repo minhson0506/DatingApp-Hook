@@ -55,6 +55,7 @@ const Profile = ({navigation}) => {
   const [avatar, setAvatar] = useState(
     'https://www.linkpicture.com/q/iPhone-8-2-1.png'
   );
+  const [didMount, setDidMount] = useState(false);
 
   const listRef = useRef(null);
   const {mediaArray} = useMedia(true);
@@ -176,6 +177,15 @@ const Profile = ({navigation}) => {
     Poppins_500Medium,
     Poppins_400Regular,
   });
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, []);
+
+  if (!didMount) {
+    return null;
+  }
 
   if (!fontsLoaded) {
     return <AppLoading />;

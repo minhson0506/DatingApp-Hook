@@ -128,15 +128,6 @@ const Upload = ({navigation}) => {
     }
   };
 
-  useEffect(() => {
-    setDidMount(true);
-    return () => setDidMount(false);
-  }, []);
-
-  if (!didMount) {
-    return null;
-  }
-
   const reset = () => {
     setImage('https://www.linkpicture.com/q/iPhone-8-2-1.png');
     setImageSelected(false);
@@ -153,6 +144,15 @@ const Upload = ({navigation}) => {
   useEffect(() => {
     animation.current?.play(0, 520);
   }, [upload]);
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, []);
+
+  if (!didMount) {
+    return null;
+  }
 
   if (!fontsLoaded) {
     return <AppLoading />;
