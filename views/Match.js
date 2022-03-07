@@ -110,7 +110,7 @@ const Match = ({route, navigation}) => {
           labelStyle={styles.button1Text}
           contentStyle={{height: 50}}
         >
-          Message her
+          Send message
         </Button>
         <Button
           labelStyle={styles.button2Text}

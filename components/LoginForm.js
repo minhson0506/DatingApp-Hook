@@ -53,16 +53,16 @@ const LoginForm = () => {
             setUser(userData.user);
             setIsLoggedIn(true);
           } else {
-            Alert.alert('Fail', 'That user doesnot exits in our app');
+            Alert.alert('Deleted', 'User has already been deleted!');
           }
         } else {
-          Alert.alert('Fail', 'That user doesnot exits in our app');
+          Alert.alert('Fail', 'User does not exit in Hook');
         }
       } else {
-        Alert.alert('Fail', 'That user doesnot exits in our app');
+        Alert.alert('Fail', 'User does not exit in Hook');
       }
     } catch (error) {
-      Alert.alert('Fail', 'You put wrong information');
+      Alert.alert('Fail', 'Wrong username or password!');
       console.error(error);
     }
   };

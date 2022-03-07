@@ -27,6 +27,11 @@ import SmokeIcon from '../assets/smoking.svg';
 import PetIcon from '../assets/pet.svg';
 import WorkIcon from '../assets/job.svg';
 import UploadIcon from '../assets/upload.svg';
+import FemaleIcon from '../assets/female.svg';
+import MaleIcon from '../assets/male.svg';
+import LGBT from '../assets/lgbt.svg';
+import Height from '../assets/height.svg';
+import Religion from '../assets/religion.svg';
 
 import ListItem from '../components/ListItem';
 import * as ImagePicker from 'expo-image-picker';
@@ -233,7 +238,33 @@ const Profile = ({navigation}) => {
                   onPress={changeProfilePicture}
                 />
               </View>
-              <Text style={styles.name}>{additionData.fullname}</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Text style={styles.name}>{additionData.fullname}</Text>
+                {additionData.gender === 'Female' ? (
+                  <FemaleIcon
+                    height={22}
+                    style={{marginLeft: 5, marginTop: 10}}
+                  ></FemaleIcon>
+                ) : additionData.gender === 'Male' ? (
+                  <MaleIcon
+                    height={22}
+                    style={{marginLeft: 5, marginTop: 10}}
+                  ></MaleIcon>
+                ) : additionData.gender === 'Nonbinary' ? (
+                  <LGBT
+                    height={22}
+                    style={{marginLeft: 5, marginTop: 10}}
+                  ></LGBT>
+                ) : (
+                  <></>
+                )}
+              </View>
               <Card style={styles.card}>
                 <View
                   style={{
@@ -244,18 +275,19 @@ const Profile = ({navigation}) => {
                 >
                   <AgeIcon height={19} style={styles.icons}></AgeIcon>
                   <Text style={styles.text}>{additionData.age}</Text>
+
+                  <Divider
+                    orientation="vertical"
+                    style={{marginTop: 12, marginRight: 10}}
+                  />
+                  <Height height={20} style={styles.icons}></Height>
+                  <Text style={styles.text}>{additionData.height}</Text>
                   <Divider
                     orientation="vertical"
                     style={{marginTop: 12, marginRight: 10}}
                   />
                   <LocationIcon style={styles.icons}></LocationIcon>
                   <Text style={styles.text}>{additionData.location}</Text>
-                  <Divider
-                    orientation="vertical"
-                    style={{marginTop: 12, marginRight: 10}}
-                  />
-                  <PetIcon height={20} style={styles.icons}></PetIcon>
-                  <Text style={styles.text}>{additionData.pet}</Text>
                 </View>
                 <View
                   style={{
@@ -276,8 +308,26 @@ const Profile = ({navigation}) => {
                     orientation="vertical"
                     style={{marginTop: 12, marginRight: 5}}
                   />
+                  <PetIcon height={20} style={styles.icons}></PetIcon>
+                  <Text style={styles.text}>{additionData.pet}</Text>
+                </View>
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                  }}
+                >
                   <NatIcon style={styles.icons}></NatIcon>
                   <Text style={styles.text}>{additionData.nationality}</Text>
+                  <Divider
+                    orientation="vertical"
+                    style={{marginTop: 12, marginRight: 5}}
+                  />
+                  <Religion height={20} style={styles.icons}></Religion>
+                  <Text style={styles.text}>
+                    {additionData.religious_beliefs}
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -311,14 +361,31 @@ const Profile = ({navigation}) => {
                 </View>
                 <View
                   style={{
+                    width: '100%',
                     flexDirection: 'row',
                     justifyContent: 'center',
                   }}
                 >
-                  <WorkIcon height={22} style={styles.icons}></WorkIcon>
-                  <Text style={styles.text}>
-                    {additionData.job + ' at ' + additionData.work}
-                  </Text>
+                  {additionData.work === 'none' ||
+                  additionData.work === 'None' ? (
+                    <>
+                      <WorkIcon height={22} style={styles.icons}></WorkIcon>
+                      <Text style={styles.text}>{additionData.job}</Text>
+                    </>
+                  ) : additionData.job === 'none' ||
+                    additionData.job === 'None' ? (
+                    <>
+                      <WorkIcon height={22} style={styles.icons}></WorkIcon>
+                      <Text style={styles.text}>{additionData.work}</Text>
+                    </>
+                  ) : (
+                    <>
+                      <WorkIcon height={22} style={styles.icons}></WorkIcon>
+                      <Text style={styles.text}>
+                        {additionData.job + ' at ' + additionData.work}
+                      </Text>
+                    </>
+                  )}
                 </View>
                 <View
                   style={{
@@ -422,14 +489,13 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 20,
-    alignSelf: 'center',
     marginTop: 10,
     fontFamily: 'Poppins_600SemiBold',
   },
   text: {
     fontSize: 16,
     marginTop: 17,
-    marginRight: 30,
+    marginRight: 20,
     fontFamily: 'Poppins_400Regular',
   },
   interests: {

@@ -83,9 +83,9 @@ const Preference = ({navigation}) => {
 
   // Picker items
   const [genderItem, setGenderItems] = useState([
-    {label: 'Female', value: 'female'},
-    {label: 'Male', value: 'male'},
-    {label: 'Nonbinary', value: 'nonbinary'},
+    {label: 'Female', value: 'Female'},
+    {label: 'Male', value: 'Male'},
+    {label: 'Nonbinary', value: 'Nonbinary'},
   ]);
   const [locationItems, setLocationItems] = useState([]);
   const [nationalityItem, setNationalityItems] = useState([]);
@@ -97,7 +97,7 @@ const Preference = ({navigation}) => {
   ]);
   const [smokingItem, setSmokingItems] = useState([
     {label: 'Yes', value: 'Yes'},
-    {label: 'Thats a nope', value: 'Nope'},
+    {label: 'Thats a nope', value: 'No'},
     {label: 'None', value: 'None'},
   ]);
   const [petItem, setPetItems] = useState([
