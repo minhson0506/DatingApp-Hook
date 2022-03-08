@@ -90,6 +90,7 @@ const Match = ({route, navigation}) => {
               alignItems: 'center',
               marginTop: 50,
               alignSelf: 'center',
+              zIndex: 100,
             }}
           >
             <UpIcon height={25} style={{zIndex: 2}}></UpIcon>
@@ -109,7 +110,7 @@ const Match = ({route, navigation}) => {
           labelStyle={styles.button1Text}
           contentStyle={{height: 50}}
         >
-          Message her
+          Send message
         </Button>
         <Button
           labelStyle={styles.button2Text}
@@ -185,7 +186,6 @@ const styles = StyleSheet.create({
     marginTop: '10%',
     marginRight: -15,
     marginLeft: -15,
-    zIndex: -1,
   },
 });
 

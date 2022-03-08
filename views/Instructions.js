@@ -13,10 +13,9 @@ import {
   Poppins_500Medium,
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
-import AppLoading from 'expo-app-loading';
 import ReloadIcon from '../assets/reload.svg';
 import LikeIcon from '../assets/up-arrow.svg';
-import QuizIcon from '../assets/quiz.svg';
+import UploadIcon from '../assets/upload.svg';
 import FilterIcon from '../assets/filter.svg';
 import MenuIcon from '../assets/menu.svg';
 import EditIcon from '../assets/editProfile.svg';
@@ -34,7 +33,7 @@ const Instructions = ({navigation}) => {
   });
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <View />;
   } else {
     return (
       <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
@@ -95,9 +94,7 @@ const Instructions = ({navigation}) => {
             />
             <Divider style={{marginTop: 5, marginBottom: 5}} />
 
-            <Text style={styles.DescribeText}>
-              Chat with your hooks{'\n'}Do quiz
-            </Text>
+            <Text style={styles.DescribeText}>Chat with your hooks</Text>
 
             {/* profile function */}
             <Divider style={{marginTop: 5, marginBottom: 5}} />
@@ -108,57 +105,97 @@ const Instructions = ({navigation}) => {
             <Divider style={{marginTop: 5, marginBottom: 5}} />
 
             <Text style={styles.DescribeText}>
-              View your profile{'\n'}Change your profile info
+              Profile page{'\n'}Change your profile info
               {'\n'}Upload pictures
             </Text>
           </View>
           <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+            style={{
+              flex: 1,
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+            }}
           >
-            <Text style={styles.header}>Main page</Text>
-            <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  marginRight: 20,
-                }}
-              >
-                <Image
-                  source={require('../assets/InstructionsUse/swipeL.png')}
-                  style={{height: 80, width: 80}}
-                ></Image>
-                <Text style={styles.textButton}>Dislike</Text>
-              </View>
+            <View>
+              <Text style={styles.header}>Home page</Text>
+              <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginRight: 20,
+                  }}
+                >
+                  <Image
+                    source={require('../assets/InstructionsUse/swipeL.png')}
+                    style={{height: 70, width: 70}}
+                  ></Image>
+                  <Image
+                    source={require('../assets/InstructionsUse/fingerClick.png')}
+                    style={{height: 70, width: 70}}
+                  ></Image>
+                  <Text style={styles.textButton}>Info</Text>
+                </View>
 
-              <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <Image
-                  source={require('../assets/InstructionsUse/image.png')}
-                  style={{height: 120, width: 120}}
-                ></Image>
-                <Image
-                  source={require('../assets/InstructionsUse/fingerClick.png')}
-                  style={{height: 80, width: 80}}
-                ></Image>
-                <Text style={styles.textButton}>User details</Text>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    source={require('../assets/InstructionsUse/image.png')}
+                    style={{height: 120, width: 120, alignSelf: 'center'}}
+                  ></Image>
+                  <Text style={styles.textButton}>No press</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginLeft: 20,
+                  }}
+                >
+                  <Image
+                    source={require('../assets/InstructionsUse/swipeR.png')}
+                    style={{height: 70, width: 70}}
+                  ></Image>
+                  <Image
+                    source={require('../assets/InstructionsUse/fingerClick.png')}
+                    style={{height: 70, width: 70}}
+                  ></Image>
+                  <Text style={styles.textButton}>Like</Text>
+                </View>
               </View>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  marginLeft: 20,
-                }}
-              >
-                <Image
-                  source={require('../assets/InstructionsUse/swipeR.png')}
-                  style={{height: 80, width: 80}}
-                ></Image>
-                <Text style={styles.textButton}>Like</Text>
+            </View>
+            <View>
+              <Text style={styles.header}>Profile page</Text>
+              <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    source={require('../assets/InstructionsUse/image.png')}
+                    style={{
+                      height: 120,
+                      width: 120,
+                      alignSelf: 'center',
+                    }}
+                  ></Image>
+                  <Image
+                    source={require('../assets/InstructionsUse/fingerClick.png')}
+                    style={{
+                      height: 80,
+                      width: 80,
+                    }}
+                  ></Image>
+                  <Text style={styles.textButton}>
+                    Long press: Delete image
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
@@ -169,6 +206,22 @@ const Instructions = ({navigation}) => {
             <Text style={styles.header}>Buttons</Text>
 
             <View style={{flexDirection: 'column'}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginBottom: 25,
+                  alignItems: 'center',
+                }}
+              >
+                <View style={styles.Button}>
+                  <LikeIcon
+                    height={30}
+                    width={30}
+                    style={{alignSelf: 'center', top: 12}}
+                  ></LikeIcon>
+                </View>
+                <Text style={styles.DescribeText2}>Like</Text>
+              </View>
               <View
                 style={{
                   flexDirection: 'row',
@@ -194,31 +247,14 @@ const Instructions = ({navigation}) => {
                 }}
               >
                 <View style={styles.Button}>
-                  <LikeIcon
+                  <MenuIcon
                     height={30}
                     width={30}
                     style={{alignSelf: 'center', top: 12}}
-                  ></LikeIcon>
-                </View>
-                <Text style={styles.DescribeText2}>Like</Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginBottom: 25,
-                  alignItems: 'center',
-                }}
-              >
-                <View style={styles.Button}>
-                  <QuizIcon
-                    height={30}
-                    width={30}
-                    style={{alignSelf: 'center', top: 12}}
-                  ></QuizIcon>
+                  ></MenuIcon>
                 </View>
                 <Text style={styles.DescribeText2}>
-                  Quiz with your chat bubby
+                  Menu{'\n'}Edit account info
                 </Text>
               </View>
 
@@ -249,15 +285,13 @@ const Instructions = ({navigation}) => {
                 }}
               >
                 <View style={styles.Button}>
-                  <MenuIcon
+                  <UploadIcon
                     height={30}
                     width={30}
                     style={{alignSelf: 'center', top: 12}}
-                  ></MenuIcon>
+                  ></UploadIcon>
                 </View>
-                <Text style={styles.DescribeText2}>
-                  Menu{'\n'}Edit account info
-                </Text>
+                <Text style={styles.DescribeText2}>Upload your pictures</Text>
               </View>
 
               <View
@@ -274,9 +308,7 @@ const Instructions = ({navigation}) => {
                     style={{alignSelf: 'center', top: 14, left: 4}}
                   ></EditIcon>
                 </View>
-                <Text style={styles.DescribeText2}>
-                  Edit your profile{'\n'}Upload pictures
-                </Text>
+                <Text style={styles.DescribeText2}>Edit your profile</Text>
               </View>
             </View>
           </View>
@@ -352,6 +384,7 @@ const styles = StyleSheet.create({
   textButton: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 22,
+    marginTop: 5,
   },
   textInfo: {
     textAlign: 'center',

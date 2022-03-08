@@ -23,12 +23,17 @@ import {Button, Card, FAB} from 'react-native-paper';
 import NatIcon from '../assets/nationality.svg';
 import SmokeIcon from '../assets/smoking.svg';
 import PetIcon from '../assets/pet.svg';
-import BabyIcon from '../assets/baby2.svg';
+import WorkIcon from '../assets/job.svg';
 import {useMedia} from '../hooks/ApiHooks';
 import ListItem from '../components/ListItem';
 import LikeIcon from '../assets/like.svg';
 import {MainContext} from '../contexts/MainContext';
 import LottieView from 'lottie-react-native';
+import FemaleIcon from '../assets/female.svg';
+import MaleIcon from '../assets/male.svg';
+import LGBT from '../assets/lgbt.svg';
+import Height from '../assets/height.svg';
+import Religion from '../assets/religion.svg';
 
 const Single = ({route, navigation}) => {
   const animation = React.createRef();
@@ -40,7 +45,7 @@ const Single = ({route, navigation}) => {
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
-  const {user, loading, setLoading, token} = useContext(MainContext);
+  const {user, token} = useContext(MainContext);
   const [like, setLike] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [owner, setOwner] = useState();
@@ -48,9 +53,12 @@ const Single = ({route, navigation}) => {
     Poppins_700Bold,
     Poppins_400Regular,
   });
-  const mediaData = mediaArray.filter(
-    (obj) => obj.title.toLowerCase() !== 'avatar'
-  );
+  const mediaData = mediaArray.filter((obj) => {
+    return (
+      obj.title.toLowerCase() !== 'avatar' &&
+      obj.title.toLowerCase() !== 'deleted'
+    );
+  });
   // console.log('file in single', file);
 
   const fetchOwner = async () => {
@@ -187,7 +195,7 @@ const Single = ({route, navigation}) => {
             <Button
               style={styles.back}
               onPress={() => {
-                setLoading(!loading);
+                // setLoading(!loading);
                 navigation.goBack();
               }}
               icon={BackIcon}
@@ -206,33 +214,62 @@ const Single = ({route, navigation}) => {
                     avatarStyle={{borderRadius: 100}}
                   />
                 </View>
-                <Text style={styles.name}>{additionData.fullname}</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text style={styles.name}>{additionData.fullname}</Text>
+                  {additionData.gender === 'Female' ? (
+                    <FemaleIcon
+                      height={22}
+                      style={{marginLeft: 5, marginTop: 10}}
+                    ></FemaleIcon>
+                  ) : additionData.gender === 'Male' ? (
+                    <MaleIcon
+                      height={22}
+                      style={{marginLeft: 5, marginTop: 10}}
+                    ></MaleIcon>
+                  ) : additionData.gender === 'Nonbinary' ? (
+                    <LGBT
+                      height={22}
+                      style={{marginLeft: 5, marginTop: 10}}
+                    ></LGBT>
+                  ) : (
+                    <></>
+                  )}
+                </View>
                 <Card style={styles.card}>
                   <View
                     style={{
+                      width: '100%',
                       flexDirection: 'row',
-                      justifyContent: 'space-around',
+                      justifyContent: 'space-evenly',
                     }}
                   >
                     <AgeIcon height={19} style={styles.icons}></AgeIcon>
                     <Text style={styles.text}>{additionData.age}</Text>
+
                     <Divider
                       orientation="vertical"
-                      style={{marginTop: 12, marginRight: 5}}
+                      style={{marginTop: 12, marginRight: 10}}
+                    />
+                    <Height height={20} style={styles.icons}></Height>
+                    <Text style={styles.text}>{additionData.height}</Text>
+                    <Divider
+                      orientation="vertical"
+                      style={{marginTop: 12, marginRight: 10}}
                     />
                     <LocationIcon style={styles.icons}></LocationIcon>
                     <Text style={styles.text}>{additionData.location}</Text>
-                    <Divider
-                      orientation="vertical"
-                      style={{marginTop: 12, marginRight: 5}}
-                    />
-                    <PetIcon height={20} style={styles.icons}></PetIcon>
-                    <Text style={styles.text}>{additionData.pet}</Text>
                   </View>
                   <View
                     style={{
+                      width: '100%',
                       flexDirection: 'row',
-                      justifyContent: 'space-around',
+                      justifyContent: 'space-evenly',
                     }}
                   >
                     <DrinkIcon style={styles.icons}></DrinkIcon>
@@ -247,26 +284,90 @@ const Single = ({route, navigation}) => {
                       orientation="vertical"
                       style={{marginTop: 12, marginRight: 5}}
                     />
-                    <BabyIcon height={22} style={styles.icons}></BabyIcon>
-                    <Text style={styles.text}>{additionData.family_plan}</Text>
+                    <PetIcon height={20} style={styles.icons}></PetIcon>
+                    <Text style={styles.text}>{additionData.pet}</Text>
                   </View>
                   <View
                     style={{
+                      width: '100%',
                       flexDirection: 'row',
-                      justifyContent: 'space-around',
+                      justifyContent: 'space-evenly',
                     }}
                   >
-                    <SchoolIcon style={styles.icons}></SchoolIcon>
-                    <Text style={styles.text}>{additionData.school}</Text>
+                    <NatIcon style={styles.icons}></NatIcon>
+                    <Text style={styles.text}>{additionData.nationality}</Text>
                     <Divider
                       orientation="vertical"
                       style={{marginTop: 12, marginRight: 5}}
                     />
-                    <NatIcon style={styles.icons}></NatIcon>
-                    <Text style={styles.text}>{additionData.nationality}</Text>
+                    <Religion height={20} style={styles.icons}></Religion>
+                    <Text style={styles.text}>
+                      {additionData.religious_beliefs}
+                    </Text>
                   </View>
                   <View
                     style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {additionData.school === 'none' ||
+                    additionData.school === 'None' ? (
+                      <>
+                        <SchoolIcon style={styles.icons}></SchoolIcon>
+                        <Text style={styles.text}>
+                          {additionData.education_level}
+                        </Text>
+                      </>
+                    ) : additionData.education_level === 'none' ||
+                      additionData.education_level === 'None' ? (
+                      <>
+                        <SchoolIcon style={styles.icons}></SchoolIcon>
+                        <Text style={styles.text}>{additionData.school}</Text>
+                      </>
+                    ) : (
+                      <>
+                        <SchoolIcon style={styles.icons}></SchoolIcon>
+                        <Text style={styles.text}>
+                          {additionData.education_level +
+                            ', ' +
+                            additionData.school}
+                        </Text>
+                      </>
+                    )}
+                  </View>
+                  <View
+                    style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {additionData.work === 'none' ||
+                    additionData.work === 'None' ? (
+                      <>
+                        <WorkIcon height={22} style={styles.icons}></WorkIcon>
+                        <Text style={styles.text}>{additionData.job}</Text>
+                      </>
+                    ) : additionData.job === 'none' ||
+                      additionData.job === 'None' ? (
+                      <>
+                        <WorkIcon height={22} style={styles.icons}></WorkIcon>
+                        <Text style={styles.text}>{additionData.work}</Text>
+                      </>
+                    ) : (
+                      <>
+                        <WorkIcon height={22} style={styles.icons}></WorkIcon>
+                        <Text style={styles.text}>
+                          {additionData.job + ' at ' + additionData.work}
+                        </Text>
+                      </>
+                    )}
+                  </View>
+                  <View
+                    style={{
+                      width: '100%',
                       flexDirection: 'row',
                       justifyContent: 'center',
                     }}
@@ -366,11 +467,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     marginTop: 17,
-    marginRight: 30,
+    marginRight: 20,
     fontFamily: 'Poppins_400Regular',
   },
   interests: {
-    flexShrink: 1,
     flexWrap: 'wrap',
   },
   icons: {

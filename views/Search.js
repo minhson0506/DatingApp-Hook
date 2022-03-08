@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import {View, Text, SafeAreaView, StyleSheet, FlatList} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {PropTypes} from 'prop-types';
 import {useMedia, useFavourite, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
@@ -17,6 +17,7 @@ import MenuIcon from '../assets/menu.svg';
 import GlobalStyles from '../utils/GlobalStyles';
 import {Menu, MenuItem} from 'react-native-material-menu';
 import LottieView from 'lottie-react-native';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Search = ({navigation}) => {
   const animation = React.createRef();
@@ -34,7 +35,8 @@ const Search = ({navigation}) => {
   const {mediaArray} = useMedia(false);
   const [media, setMedia] = useState([]);
   const [searchArray, setSearchArray] = useState([]);
-  const {user, loading, setLoading, token} = useContext(MainContext);
+  const {user, token} = useContext(MainContext);
+  const [searchLoading, setSearchLoading] = useState(false);
   const {getFavouritesByFileId} = useFavourite();
   const {getUserById} = useUser();
   const [searchState, setSearch] = useState(true);
@@ -165,7 +167,7 @@ const Search = ({navigation}) => {
 
     // console.log('input', text);
     userData = userData.filter((obj) => {
-      return obj.username.includes(text.toLowerCase());
+      return obj.username.toLowerCase().includes(text.toLowerCase());
     });
     userData = userData.map((obj) => {
       return obj.user_id;
@@ -188,7 +190,18 @@ const Search = ({navigation}) => {
 
   useEffect(() => {
     fetchData();
-  }, [mediaArray, loading]);
+  }, [mediaArray, searchLoading]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setText('');
+        // setLoading(!loading);
+        setSearchLoading(!searchLoading);
+        setSearch(true);
+      };
+    }, [])
+  );
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -199,7 +212,6 @@ const Search = ({navigation}) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center',
           }}
         >
           <Menu
@@ -237,7 +249,7 @@ const Search = ({navigation}) => {
             </MenuItem>
           </Menu>
           <Text style={styles.appName}>hook</Text>
-          <Button disabled={true}></Button>
+          <Text style={{color: 'white'}}>Text</Text>
         </View>
         <Searchbar
           iconColor="#82008F"
@@ -270,7 +282,8 @@ const Search = ({navigation}) => {
             style={styles.buttons}
             onPress={() => {
               setText('');
-              setLoading(!loading);
+              // setLoading(!loading);
+              setSearchLoading(!searchLoading);
               setSearch(true);
             }}
           >
@@ -439,6 +452,7 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
     fontFamily: 'Poppins_500Medium',
     fontSize: 16,
+    color: 'black',
   },
 });
 

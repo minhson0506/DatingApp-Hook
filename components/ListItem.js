@@ -71,14 +71,14 @@ const ListItem = ({
     // console.log('data', data);
     try {
       const response = await putMedia(singleMedia.file_id, token, data);
-      // console.log('response for delete', response);
+      console.log('response for delete', response);
       if (response) {
         Alert.alert('Delete', 'Deleted successfully', [
           {
             text: 'OK',
             onPress: () => {
               setUpdate(update + 1);
-              navigation.navigate('Profile');
+              // setLoading(!loading);
             },
           },
         ]);
@@ -281,9 +281,9 @@ const ListItem = ({
               ></Avatar>
               <View
                 style={{
-                  flex: 1,
+                  width: '100%',
                   flexDirection: 'row',
-                  justifyContent: 'center',
+                  justifyContent: 'space-evenly',
                 }}
               >
                 <AgeIcon height={19} style={styles.icons}></AgeIcon>
