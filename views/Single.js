@@ -45,7 +45,7 @@ const Single = ({route, navigation}) => {
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [interests, setInterests] = useState('none');
-  const {user, loading, setLoading, token} = useContext(MainContext);
+  const {user, token} = useContext(MainContext);
   const [like, setLike] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [owner, setOwner] = useState();
@@ -53,9 +53,12 @@ const Single = ({route, navigation}) => {
     Poppins_700Bold,
     Poppins_400Regular,
   });
-  const mediaData = mediaArray.filter(
-    (obj) => obj.title.toLowerCase() !== 'avatar'
-  );
+  const mediaData = mediaArray.filter((obj) => {
+    return (
+      obj.title.toLowerCase() !== 'avatar' &&
+      obj.title.toLowerCase() !== 'deleted'
+    );
+  });
   // console.log('file in single', file);
 
   const fetchOwner = async () => {

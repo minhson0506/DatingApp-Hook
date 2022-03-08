@@ -56,6 +56,7 @@ const Profile = ({navigation}) => {
     'https://www.linkpicture.com/q/iPhone-8-2-1.png'
   );
   const [didMount, setDidMount] = useState(false);
+  const [type, setType] = useState('image');
 
   const listRef = useRef(null);
   const {mediaArray} = useMedia(true);
@@ -132,6 +133,7 @@ const Profile = ({navigation}) => {
     });
     if (!result.cancelled) {
       setAvatar(result.uri);
+      setType(result.type);
     }
     const formData = new FormData();
     formData.append('title', 'avatar');
@@ -142,8 +144,9 @@ const Profile = ({navigation}) => {
     formData.append('file', {
       uri: result.uri,
       name: filename,
-      type: 'image' + '/' + fileExtension,
+      type: type + '/' + fileExtension,
     });
+    if (type === 'video') return;
     removeOldAvatar();
     try {
       const response = await postMedia(formData, token);

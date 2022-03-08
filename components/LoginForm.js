@@ -17,7 +17,8 @@ import UserIcon from '../assets/userIcon.svg';
 import PasswordIcon from '../assets/password.svg';
 
 const LoginForm = () => {
-  const {setIsLoggedIn, setUser, setToken} = useContext(MainContext);
+  const {setIsLoggedIn, setUser, setToken, setInstruction} =
+    useContext(MainContext);
   const {postLogin} = useLogin();
   const {
     control,
@@ -49,6 +50,7 @@ const LoginForm = () => {
         if (additionData.hasOwnProperty('deleted_hook')) {
           if (additionData.deleted_hook === 0) {
             await AsyncStorage.setItem('userToken', userData.token);
+            setInstruction(false);
             setToken(userData.token);
             setUser(userData.user);
             setIsLoggedIn(true);

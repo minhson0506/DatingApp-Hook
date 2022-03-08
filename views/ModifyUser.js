@@ -33,6 +33,7 @@ const ModifyUser = ({navigation}) => {
   } = useForm({
     defaultValues: {
       username: user.username,
+      user_id: user.user_id,
       password: '',
       confirmPassword: '',
       email: user.email,

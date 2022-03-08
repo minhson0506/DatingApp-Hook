@@ -42,7 +42,8 @@ const ListItem = ({
   // const [owner, setOwner] = useState({username: 'fetching...'});
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const {putMedia} = useMedia();
-  const {setUpdate, update, token, user} = useContext(MainContext);
+  const {setUpdate, update, token, user, loading, setLoading} =
+    useContext(MainContext);
   const [owner, setOwner] = useState();
 
   const fetchOwner = async () => {
@@ -78,6 +79,7 @@ const ListItem = ({
             text: 'OK',
             onPress: () => {
               setUpdate(update + 1);
+              setLoading(!loading);
               navigation.navigate('Profile');
             },
           },

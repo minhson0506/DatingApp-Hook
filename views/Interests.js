@@ -68,7 +68,6 @@ const Interests = ({navigation}) => {
     additionData.interests = interests;
     user.full_name = JSON.stringify(additionData);
     // console.log('user data new', user);
-    delete user.user_id;
     try {
       await putUser(user, token);
       console.log('modify ok');
