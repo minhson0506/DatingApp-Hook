@@ -42,8 +42,7 @@ const ListItem = ({
   // const [owner, setOwner] = useState({username: 'fetching...'});
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const {putMedia} = useMedia();
-  const {setUpdate, update, token, user, loading, setLoading} =
-    useContext(MainContext);
+  const {setUpdate, update, token, user} = useContext(MainContext);
   const [owner, setOwner] = useState();
 
   const fetchOwner = async () => {
@@ -72,15 +71,14 @@ const ListItem = ({
     // console.log('data', data);
     try {
       const response = await putMedia(singleMedia.file_id, token, data);
-      // console.log('response for delete', response);
+      console.log('response for delete', response);
       if (response) {
         Alert.alert('Delete', 'Deleted successfully', [
           {
             text: 'OK',
             onPress: () => {
               setUpdate(update + 1);
-              setLoading(!loading);
-              navigation.navigate('Profile');
+              // setLoading(!loading);
             },
           },
         ]);

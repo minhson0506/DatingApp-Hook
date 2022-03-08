@@ -32,6 +32,7 @@ const Like = ({navigation}) => {
   const {getMediaByUserId, getAllMediaByCurrentUserId} = useMedia();
   const {getFavouritesByFileId} = useFavourite();
   const {loading, token} = useContext(MainContext);
+  const [seconds, setSeconds] = useState(0);
 
   const fetchNewLikes = async () => {
     try {
@@ -93,6 +94,18 @@ const Like = ({navigation}) => {
   useEffect(() => {
     fetchNewLikes();
   }, [loading]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds === 100) {
+        setSeconds(0);
+      } else {
+        setSeconds(seconds + 1);
+      }
+      fetchNewLikes();
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   if (!fontsLoaded) {
     return <AppLoading />;

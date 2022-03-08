@@ -38,8 +38,6 @@ const Upload = ({navigation}) => {
   const animation = React.createRef();
   const [upload, setUpload] = useState(false);
   const [didMount, setDidMount] = useState(false);
-  const {loading, setLoading} = useContext(MainContext);
-
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
@@ -108,7 +106,7 @@ const Upload = ({navigation}) => {
       );
       setUpload(!upload);
       setUpdate(update + 1);
-      setLoading(!loading);
+      // setLoading(!loading);
       // TODO: make Alert after loading is done with animation
       setTimeout(() => {
         tagResponse &&
