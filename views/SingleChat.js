@@ -5,8 +5,6 @@ import {
   StyleSheet,
   Alert,
   KeyboardAvoidingView,
-  TouchableOpacity,
-  Keyboard,
   Platform,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
@@ -143,132 +141,133 @@ const SingleChat = ({route, navigation}) => {
       <>
         <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
           {/* header: avatar, hook username and interest */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{flex: 1, justifyContent: 'flex-end'}}
             activeOpacity={1}
             onPress={() => Keyboard.dismiss()}
+          > */}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : null}
+            style={styles.container}
+            enabled
+            // fix keyboard avoid view
           >
-            <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : null}
-              style={styles.container}
-              // fix keyboard avoid view
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                marginTop: 10,
+              }}
             >
+              <BackIcon
+                style={styles.back}
+                onPress={() => {
+                  navigation.navigate('Chat');
+                }}
+              ></BackIcon>
               <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  marginTop: 10,
+                  marginLeft: '8%',
                 }}
               >
-                <BackIcon
-                  style={styles.back}
-                  onPress={() => {
-                    navigation.navigate('Chat');
+                <Avatar
+                  style={styles.avatar}
+                  avatarStyle={{
+                    borderRadius: 60,
                   }}
-                ></BackIcon>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginLeft: '8%',
-                  }}
-                >
-                  <Avatar
-                    style={styles.avatar}
-                    avatarStyle={{
-                      borderRadius: 60,
-                    }}
-                    source={{uri: uploadsUrl + item.filename}}
-                  />
-                  <View style={{flexDirection: 'column', marginLeft: 10}}>
-                    <Text style={styles.username}>{item.username}</Text>
-                    <Text style={styles.interests}>
-                      {typeof additionData.interests !== 'undefined'
-                        ? additionData.interests.split(',')[0] +
-                          ', ' +
-                          additionData.interests.split(',')[1]
-                        : ''}
-                    </Text>
-                  </View>
+                  source={{uri: uploadsUrl + item.filename}}
+                />
+                <View style={{flexDirection: 'column', marginLeft: 10}}>
+                  <Text style={styles.username}>{item.username}</Text>
+                  <Text style={styles.interests}>
+                    {typeof additionData.interests !== 'undefined'
+                      ? additionData.interests.split(',')[0] +
+                        ', ' +
+                        additionData.interests.split(',')[1]
+                      : ''}
+                  </Text>
                 </View>
               </View>
+            </View>
 
-              {/* message content */}
-              <AutoScrollFlatList
-                style={{marginBottom: 20, marginTop: 20}}
-                data={allMessage}
-                keyExtractor={(item) => item.comment_id.toString()}
-                renderItem={({item}) => (
-                  <ListItem
-                    containerStyle={{
-                      padding: 5,
-                      marginLeft: 5,
-                      marginRight: 5,
-                    }}
+            {/* message content */}
+            <AutoScrollFlatList
+              style={{marginBottom: 20, marginTop: 20}}
+              data={allMessage}
+              keyExtractor={(item) => item.comment_id.toString()}
+              renderItem={({item}) => (
+                <ListItem
+                  containerStyle={{
+                    padding: 5,
+                    marginLeft: 5,
+                    marginRight: 5,
+                  }}
+                  style={
+                    item.user_id === currentUserId
+                      ? styles.currentList
+                      : styles.none
+                  }
+                >
+                  <View
                     style={
                       item.user_id === currentUserId
-                        ? styles.currentList
-                        : styles.none
+                        ? styles.current
+                        : styles.hook
                     }
                   >
-                    <View
+                    <Text
                       style={
                         item.user_id === currentUserId
-                          ? styles.current
-                          : styles.hook
+                          ? styles.currentUser
+                          : styles.hookUser
                       }
                     >
-                      <Text
-                        style={
-                          item.user_id === currentUserId
-                            ? styles.currentUser
-                            : styles.hookUser
-                        }
-                      >
-                        {item.comment}
-                      </Text>
-                    </View>
-                  </ListItem>
-                )}
-              />
+                      {item.comment}
+                    </Text>
+                  </View>
+                </ListItem>
+              )}
+            />
 
-              {/* input */}
-              <View
-                style={{
-                  marginBottom: 20,
-                  flexDirection: 'row',
-                  alignItems: 'center',
+            {/* input */}
+            <View
+              style={{
+                marginBottom: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <Input
+                containerStyle={{
+                  width: '80%',
+                  height: 50,
+                  borderColor: '#EDE0DA',
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  marginLeft: 15,
                 }}
-              >
-                <Input
-                  containerStyle={{
-                    width: '80%',
-                    height: 50,
-                    borderColor: '#EDE0DA',
-                    borderWidth: 1,
-                    borderRadius: 10,
-                    marginLeft: 15,
-                  }}
-                  inputStyle={styles.inputStyle}
-                  inputContainerStyle={{
-                    borderBottomWidth: 0,
-                  }}
-                  value={newComment}
-                  autoCapitalize="none"
-                  placeholder="Type your message..."
-                  onChangeText={(value) => setNewComment(value)}
-                />
-                <Button
-                  icon={SendIcon}
-                  onPress={() => {
-                    sendMessage();
-                    setNewComment('');
-                  }}
-                ></Button>
-              </View>
-            </KeyboardAvoidingView>
-          </TouchableOpacity>
+                inputStyle={styles.inputStyle}
+                inputContainerStyle={{
+                  borderBottomWidth: 0,
+                }}
+                value={newComment}
+                autoCapitalize="none"
+                placeholder="Type your message..."
+                onChangeText={(value) => setNewComment(value)}
+              />
+              <Button
+                icon={SendIcon}
+                onPress={() => {
+                  sendMessage();
+                  setNewComment('');
+                }}
+              ></Button>
+            </View>
+          </KeyboardAvoidingView>
+          {/* </TouchableOpacity> */}
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
       </>
