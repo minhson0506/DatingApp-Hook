@@ -26,6 +26,7 @@ import AppLoading from 'expo-app-loading';
 import {Video} from 'expo-av';
 import {MainContext} from '../contexts/MainContext';
 import {Button} from 'react-native-paper';
+import {TapGestureHandler, State} from 'react-native-gesture-handler';
 
 const ListItem = ({
   navigation,
@@ -248,18 +249,17 @@ const ListItem = ({
             </View>
           </RNEListItem>
         ) : (
-          <RNEListItem.Swipeable
-            rightContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
-            leftContent={
-              <Button
-                icon={InfoIcon}
-                onPress={() => {
-                  navigation.navigate('Single', {file: singleMedia});
-                }}
-              ></Button>
-            }
-            leftStyle={{justifyContent: 'center'}}
-            rightStyle={{justifyContent: 'center'}}
+          <RNEListItem
+            onPress={() => {
+              navigation.navigate('Single', {file: singleMedia});
+            }}
+            // rightContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
+            // // // leftContent={<Button icon={InfoIcon}></Button>}
+            // // // leftStyle={{justifyContent: 'center'}}
+            // rightStyle={{justifyContent: 'center'}}
+            // // leftContent={null}
+            // // leftWidth={0}
+            // // leftStyle={{display: 'none'}}
           >
             <Card style={styles.card}>
               <View
@@ -290,13 +290,21 @@ const ListItem = ({
                 <Text style={styles.text}>{additionData.age}</Text>
                 <Divider
                   orientation="vertical"
-                  style={{marginTop: 12, marginRight: '2%', marginBottom: 5}}
+                  style={{
+                    marginTop: 12,
+                    marginRight: '2%',
+                    marginBottom: 5,
+                  }}
                 />
                 <LocationIcon style={styles.icons}></LocationIcon>
                 <Text style={styles.text}>{additionData.location}</Text>
                 <Divider
                   orientation="vertical"
-                  style={{marginTop: 12, marginRight: '2%', marginBottom: 5}}
+                  style={{
+                    marginTop: 12,
+                    marginRight: '2%',
+                    marginBottom: 5,
+                  }}
                 />
                 <InterestIcon style={styles.icons}></InterestIcon>
                 <Text style={styles.text}>
@@ -306,7 +314,7 @@ const ListItem = ({
                 </Text>
               </View>
             </Card>
-          </RNEListItem.Swipeable>
+          </RNEListItem>
         )}
       </ScrollView>
     );

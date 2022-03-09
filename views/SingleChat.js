@@ -183,10 +183,12 @@ const SingleChat = ({route, navigation}) => {
                 <View style={{flexDirection: 'column', marginLeft: 10}}>
                   <Text style={styles.username}>{item.username}</Text>
                   <Text style={styles.interests}>
-                    {typeof additionData.interests !== 'undefined'
-                      ? additionData.interests.split(',')[0] +
-                        ', ' +
-                        additionData.interests.split(',')[1]
+                    {additionData.interests !== 'none'
+                      ? additionData.interests.split(',').length < 2
+                        ? additionData.interests.split(',')[0]
+                        : additionData.interests.split(',')[0] +
+                          ', ' +
+                          additionData.interests.split(',')[1]
                       : ''}
                   </Text>
                 </View>

@@ -255,7 +255,7 @@ const Search = ({navigation}) => {
           iconColor="#82008F"
           style={styles.searchBar}
           inputStyle={{color: '#EB6432'}}
-          placeholder="Looking for someone?"
+          placeholder="Search by username.."
           onChangeText={(text) => setText(text)}
           value={text}
         />
