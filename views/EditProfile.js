@@ -36,6 +36,7 @@ const EditProfile = ({navigation}) => {
 
   const {putUser} = useUser();
 
+  // get string data of user (in full_name field)
   const additionData = JSON.parse(user.full_name);
 
   // input values
@@ -105,7 +106,6 @@ const EditProfile = ({navigation}) => {
       label: label,
       value: label,
     }));
-
     setLocationItems(resultLocation);
 
     const resultNationality = countryArray.map((label) => ({
@@ -120,6 +120,7 @@ const EditProfile = ({navigation}) => {
         value: label,
       }))
     );
+
     setEducationItems(
       educationArray.map((label) => ({
         label: label,
@@ -128,12 +129,8 @@ const EditProfile = ({navigation}) => {
     );
   };
 
-  useEffect(() => {
-    makeArrays();
-  }, []);
-
   // modify user's preferences
-  const modifyPreferences = async () => {
+  const modifyUser = async () => {
     if (gender) additionData.gender = gender;
     else additionData.gender = 'none';
 
@@ -249,6 +246,10 @@ const EditProfile = ({navigation}) => {
   const enableScroll = () => ({scrollEnabled: true});
   const disableScroll = () => ({scrollEnabled: false});
 
+  useEffect(() => {
+    makeArrays();
+  }, []);
+
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
@@ -273,7 +274,7 @@ const EditProfile = ({navigation}) => {
           <Button
             labelStyle={styles.button}
             onPress={() => {
-              modifyPreferences();
+              modifyUser();
               navigation.navigate('Interests');
             }}
           >

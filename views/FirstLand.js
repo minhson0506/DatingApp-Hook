@@ -41,9 +41,7 @@ const FirstLand = ({navigation}) => {
             navigation.navigate('Login');
           }}
           icon={<Arrow />}
-          // title={'Create account'}
-          buttonStyle={styles.button1}
-          // titleStyle={styles.buttonTitle}
+          buttonStyle={styles.button}
         ></Button>
       </LinearGradient>
     );
@@ -75,7 +73,7 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: '50%',
   },
-  button1: {
+  button: {
     width: 60,
     height: 60,
     backgroundColor: 'white',
@@ -87,10 +85,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
   },
-  // buttonTitle: {
-  //   fontFamily: 'Poppins_500Medium',
-  //   color: 'black',
-  // },
 });
 
 FirstLand.propTypes = {

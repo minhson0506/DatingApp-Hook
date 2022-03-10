@@ -52,7 +52,7 @@ const Instructions = ({navigation}) => {
             >
               Skip
             </Button>
-            <Text style={styles.header}>Navigation bar</Text>
+            <Text style={styles.header}>Instructions</Text>
             {/* home function */}
             <Divider style={{marginBottom: 5}} />
             <Image
@@ -72,7 +72,9 @@ const Instructions = ({navigation}) => {
             />
             <Divider style={{marginTop: 5, marginBottom: 5}} />
 
-            <Text style={styles.DescribeText}>See who already liked you</Text>
+            <Text style={styles.DescribeText}>
+              Like page{'\n'}See who already liked you
+            </Text>
 
             {/* search function */}
             <Divider style={{marginTop: 5, marginBottom: 5}} />
@@ -83,7 +85,7 @@ const Instructions = ({navigation}) => {
             <Divider style={{marginTop: 5, marginBottom: 5}} />
 
             <Text style={styles.DescribeText}>
-              Search for users{'\n'}See top pick users
+              Search page{'\n'}Search & See top picks
             </Text>
 
             {/* chat function */}
@@ -236,7 +238,7 @@ const Instructions = ({navigation}) => {
                     style={{alignSelf: 'center', top: 12}}
                   ></ReloadIcon>
                 </View>
-                <Text style={styles.DescribeText2}>Reload 10 new users</Text>
+                <Text style={styles.DescribeText2}>Reload 5 new users</Text>
               </View>
 
               <View
@@ -320,8 +322,8 @@ const Instructions = ({navigation}) => {
             }}
           >
             <Text style={styles.textInfo}>
-              Remember to add your information and profile picture so that
-              others can find you!
+              Now update your information and profile picture so that others can
+              find you!
             </Text>
             <Button
               uppercase={false}

@@ -59,6 +59,7 @@ const Single = ({route, navigation}) => {
   const [isLiked, setIsLiked] = useState(false);
   const [owner, setOwner] = useState();
 
+  // filter out avatar file and deleted files
   const mediaData = mediaArray.filter((obj) => {
     return (
       obj.title.toLowerCase() !== 'avatar' &&
@@ -66,6 +67,7 @@ const Single = ({route, navigation}) => {
     );
   });
 
+  // fetch user data from file media
   const fetchOwner = async () => {
     try {
       const userData = await getUserById(file.user_id, token);
@@ -86,6 +88,7 @@ const Single = ({route, navigation}) => {
     }
   };
 
+  // check if this single user already liked login user
   const checkLike = async () => {
     try {
       // get all favourite of this single user's file
@@ -109,6 +112,7 @@ const Single = ({route, navigation}) => {
     }
   };
 
+  // function like
   const likeUser = async () => {
     let alreadyLiked = false;
 
@@ -122,7 +126,7 @@ const Single = ({route, navigation}) => {
     });
 
     if (alreadyLiked) {
-      Alert.alert('Fail', `You have already liked ${owner}!`);
+      Alert.alert('Oops!', `You have already liked ${owner}!`);
       return;
     } else {
       try {
@@ -147,7 +151,7 @@ const Single = ({route, navigation}) => {
           }
         }
       } catch (error) {
-        Alert.alert('Fail', `You have already liked ${owner}!`);
+        Alert.alert('Oops!', `You have already liked ${owner}!`);
         console.error(error);
       }
     }

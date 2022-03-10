@@ -249,17 +249,19 @@ const ListItem = ({
             </View>
           </RNEListItem>
         ) : (
-          <RNEListItem
+          <RNEListItem.Swipeable
             onPress={() => {
               navigation.navigate('Single', {file: singleMedia});
             }}
-            // rightContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
+            key={singleMedia.file_id}
+            rightContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
             // // // leftContent={<Button icon={InfoIcon}></Button>}
             // // // leftStyle={{justifyContent: 'center'}}
             // rightStyle={{justifyContent: 'center'}}
             // // leftContent={null}
             // // leftWidth={0}
             // // leftStyle={{display: 'none'}}
+            disabled={true}
           >
             <Card style={styles.card}>
               <View
@@ -314,7 +316,7 @@ const ListItem = ({
                 </Text>
               </View>
             </Card>
-          </RNEListItem>
+          </RNEListItem.Swipeable>
         )}
       </ScrollView>
     );

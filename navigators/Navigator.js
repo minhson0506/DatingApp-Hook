@@ -141,7 +141,6 @@ const TabScreen = () => {
 
 const StackScreen = () => {
   const {isLoggedIn, instruction} = useContext(MainContext);
-  // console.log('instruction', instruction);
 
   return (
     <Stack.Navigator>

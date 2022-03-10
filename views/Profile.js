@@ -49,6 +49,18 @@ import {Menu, MenuItem} from 'react-native-material-menu';
 import {Button} from 'react-native-paper';
 
 const Profile = ({navigation}) => {
+  const [fontsLoaded] = useFonts({
+    Poppins_700Bold,
+    Poppins_600SemiBold,
+    Poppins_500Medium,
+    Poppins_400Regular,
+  });
+
+  // menu state & functions
+  const [visible, setVisible] = useState(false);
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
+
   const {user, update, setUpdate, loading, token} = useContext(MainContext);
 
   const isFocused = useIsFocused();
@@ -61,18 +73,18 @@ const Profile = ({navigation}) => {
   const [avatar, setAvatar] = useState(
     'https://www.linkpicture.com/q/iPhone-8-2-1.png'
   );
-  const [didMount, setDidMount] = useState(false);
   const [type, setType] = useState('image');
-  const [visible, setVisible] = useState(false);
+  const [didMount, setDidMount] = useState(false);
 
-  const hideMenu = () => setVisible(false);
-  const showMenu = () => setVisible(true);
-
+  // filter out avatar file (not display avatar in the list)
   let mediaData = mediaArray.filter(
     (obj) => obj.title.toLowerCase() !== 'avatar'
   );
+
+  // filter out deleted files
   mediaData = mediaData.filter((obj) => obj.title.toLowerCase() !== 'deleted');
 
+  // function to reload in useEffect
   const loadData = () => {
     mediaData = mediaArray.filter(
       (obj) => obj.title.toLowerCase() !== 'avatar'
@@ -89,8 +101,10 @@ const Profile = ({navigation}) => {
     if (avatar) setAvatar(uploadsUrl + avatar.filename);
   };
 
+  // get string data of user (in full_name field)
   const additionData = JSON.parse(user.full_name);
 
+  // get interests
   const interest = () => {
     let string = '';
     additionData.interests.split(',').forEach((hobby) => {
@@ -163,13 +177,6 @@ const Profile = ({navigation}) => {
       console.error(error);
     }
   };
-
-  const [fontsLoaded] = useFonts({
-    Poppins_700Bold,
-    Poppins_600SemiBold,
-    Poppins_500Medium,
-    Poppins_400Regular,
-  });
 
   useEffect(() => {
     fetchAvatar();

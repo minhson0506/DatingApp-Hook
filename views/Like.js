@@ -23,21 +23,23 @@ const Like = ({navigation}) => {
     Poppins_500Medium,
   });
 
+  // menu state & functions
+  const [visible, setVisible] = useState(false);
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
+
   const {loading, token} = useContext(MainContext);
 
   const {getUserById} = useUser();
   const {getMediaByUserId, getAllMediaByCurrentUserId} = useMedia();
   const {getFavouritesByFileId} = useFavourite();
 
-  const [visible, setVisible] = useState(false);
   const [hook, setHook] = useState([]);
   const [seconds, setSeconds] = useState(0);
 
-  const hideMenu = () => setVisible(false);
-  const showMenu = () => setVisible(true);
-
   const fetchNewLikes = async () => {
     try {
+      // get all media of login user
       const userFiles = await getAllMediaByCurrentUserId(token);
       const userFilesId = [];
       for (const file of userFiles) {
@@ -51,21 +53,22 @@ const Like = ({navigation}) => {
         const likeScraping = await getFavouritesByFileId(id);
         likeData = likeData.concat(likeScraping);
       }
+
       // sort the data in order by favouriteId, most recent -> least recent
       likeData.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
 
-      // with filtering
+      // filter duplicate
       likeData = likeData.filter((el) => {
         const duplicate = seen.has(el.user_id);
         seen.add(el.user_id);
         return !duplicate;
       });
-
       likeData = likeData.slice(0, 10);
 
       // map file id to user id
       const likedUserId = likeData.map((id) => id.user_id);
 
+      // fetch data (avatar and user data) of hooks
       let newHooksData = [];
       for (const id of likedUserId) {
         let avatarScraping = await getMediaByUserId(id);
@@ -90,6 +93,7 @@ const Like = ({navigation}) => {
     fetchNewLikes();
   }, [loading]);
 
+  // force reload every 1s to update like constantly
   useEffect(() => {
     const interval = setInterval(() => {
       if (seconds === 100) {

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import {Avatar, ListItem, Divider} from 'react-native-elements';
-import {useUser, userComment, useMedia, useFavourite} from '../hooks/ApiHooks';
+import {useUser, useComment, useMedia, useFavourite} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {MainContext} from '../contexts/MainContext';
 import {Menu, MenuItem} from 'react-native-material-menu';
@@ -27,10 +27,15 @@ const Chat = ({navigation}) => {
     Poppins_400Regular,
   });
 
+  // menu state & functions
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
+  const [visible, setVisible] = useState(false);
+
   const {loadMessage, token} = useContext(MainContext);
 
   const {getUserById, getUserByToken} = useUser();
-  const {getCommentByFileId, getComments} = userComment();
+  const {getCommentByFileId, getComments} = useComment();
   const {getMediaByUserId, getAllMediaByCurrentUserId, getMediaByFileId} =
     useMedia();
   const {getFavouritesByFileId, getFavourites} = useFavourite();
@@ -39,11 +44,8 @@ const Chat = ({navigation}) => {
   const [hook, setHook] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [didMount, setDidMount] = useState(false);
-  const [visible, setVisible] = useState(false);
 
-  const hideMenu = () => setVisible(false);
-  const showMenu = () => setVisible(true);
-
+  // function to set string to JSON
   function isJson(str) {
     if (str === null) return false;
     try {
@@ -243,6 +245,7 @@ const Chat = ({navigation}) => {
     fetchMessage();
   }, [loadMessage]);
 
+  // force reloading every 0.5s
   useEffect(() => {
     const interval = setInterval(() => {
       if (seconds === 100) {

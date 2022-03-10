@@ -11,7 +11,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {PropTypes} from 'prop-types';
 import GlobalStyles from '../utils/GlobalStyles';
 import {Button} from 'react-native-paper';
-import {dataSource} from '../utils/data';
+import {hobbiesArray} from '../utils/data';
 import {MainContext} from '../contexts/MainContext';
 import {useUser} from '../hooks/ApiHooks';
 import {
@@ -34,15 +34,18 @@ const Interests = ({navigation}) => {
   const [didMount, setDidMount] = useState(false);
 
   let result = [];
+
+  // get string data of user (in full_name field)
   let additionData = JSON.parse(user.full_name);
 
+  // fetch user data everytime user choose new hobby
   const arrayLoading = async () => {
     const user = await getUserByToken(token);
     additionData = JSON.parse(user.full_name);
     let arrayInterest = additionData.interests.split(' ').join('').split(',');
     arrayInterest = arrayInterest.map((obj) => obj.toLowerCase());
     let number = 0;
-    result = dataSource.map((value) => {
+    result = hobbiesArray.map((value) => {
       const obj = {
         id: number++,
         name: value,
@@ -53,6 +56,7 @@ const Interests = ({navigation}) => {
     setMedia(result);
   };
 
+  // put user right away everytime user choose new hobby
   const onPressHandler = async (id) => {
     const array = media;
     array[id].selected = !array[id].selected;

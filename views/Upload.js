@@ -107,7 +107,7 @@ const Upload = ({navigation}) => {
       setUpdate(update + 1);
       setTimeout(() => {
         tagResponse &&
-          Alert.alert('Upload', 'Uploaded successfully', [
+          Alert.alert('Success', 'Uploaded successfully', [
             {
               text: 'OK',
             },
@@ -185,9 +185,6 @@ const Upload = ({navigation}) => {
                 autoPlay={false}
                 loop={false}
                 resizeMode="cover"
-                // onAnimationFinish={() => {
-                //   console.log('animation finished');
-                // }}
               />
               <View style={styles.box}>
                 <Card containerStyle={styles.card}>
@@ -233,7 +230,6 @@ const Upload = ({navigation}) => {
                     <Button onPress={reset}>Reset</Button>
 
                     <Button
-                      // style={{marginLRight: 20}}
                       disabled={!imageSelected}
                       loading={load}
                       onPress={handleSubmit(onSubmit)}

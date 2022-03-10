@@ -376,7 +376,7 @@ const educationArray = [
   'Postgraduate',
   'Prefer not to say',
 ];
-const dataSource = [
+const hobbiesArray = [
   'Music',
   'Pets',
   'Photography',
@@ -415,4 +415,10 @@ const dataSource = [
   'Drinking',
 ];
 
-export {locationArray, countryArray, religionArray, educationArray, dataSource};
+export {
+  locationArray,
+  countryArray,
+  religionArray,
+  educationArray,
+  hobbiesArray,
+};

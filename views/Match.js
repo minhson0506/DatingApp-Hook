@@ -40,6 +40,7 @@ const Match = ({route, navigation}) => {
     'http://placekitten.com/190'
   );
 
+  // fetch 2 users passed from like
   const fetchOwner = async () => {
     try {
       const userData = await getUserById(file.user_id, token);

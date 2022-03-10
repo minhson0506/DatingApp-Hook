@@ -114,7 +114,6 @@ const Preference = ({navigation}) => {
       label: label,
       value: label,
     }));
-
     setLocationItems(resultLocation);
 
     const resultNationality = countryArray.map((label) => ({

@@ -26,6 +26,11 @@ import AppLoading from 'expo-app-loading';
 import {LinearGradient} from 'expo-linear-gradient';
 
 const Login = ({navigation}) => {
+  const [fontsLoaded] = useFonts({
+    Poppins_700Bold,
+    Poppins_600SemiBold,
+  });
+
   const {setIsLoggedIn, setUser, setToken} = useContext(MainContext);
 
   const {getUserByToken} = useUser();
@@ -49,11 +54,6 @@ const Login = ({navigation}) => {
     checkToken();
   }, []);
 
-  const [fontsLoaded] = useFonts({
-    Poppins_700Bold,
-    Poppins_600SemiBold,
-  });
-
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
@@ -71,7 +71,6 @@ const Login = ({navigation}) => {
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : ''}
             style={styles.container}
-            // fix keyboard avoid view
           >
             <ScrollView>
               <Text style={styles.appName}>hook</Text>

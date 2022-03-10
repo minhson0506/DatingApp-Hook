@@ -14,7 +14,7 @@ import {PropTypes} from 'prop-types';
 import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import {StatusBar} from 'expo-status-bar';
-import {useMedia, userComment, useUser} from '../hooks/ApiHooks';
+import {useMedia, useComment, useUser} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
 import {MainContext} from '../contexts/MainContext';
 import {AutoScrollFlatList} from 'react-native-autoscroll-flatlist';
@@ -40,7 +40,7 @@ const SingleChat = ({route, navigation}) => {
   const {loadMessage, setLoadMessage, user, token} = useContext(MainContext);
 
   const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
-  const {getCommentByFileId, postComment} = userComment();
+  const {getCommentByFileId, postComment} = useComment();
   const {getUserByToken} = useUser();
 
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
@@ -52,12 +52,13 @@ const SingleChat = ({route, navigation}) => {
 
   const fetchAllMessage = async () => {
     try {
+      // get string data of user (in full_name field)
       const allData = await JSON.parse(item.full_name);
       const myId = (await getUserByToken(token)).user_id;
       setCurrentUserId(myId);
       let messageHistory = [];
 
-      // get messages from hook to current user
+      // get messages from hook to current user in all files
       const userFiles = await getAllMediaByCurrentUserId(token);
       const userFilesId = userFiles.map((file) => file.file_id);
       for (const fileId of userFilesId) {
@@ -68,7 +69,7 @@ const SingleChat = ({route, navigation}) => {
         messageHistory = messageHistory.concat(messageScraping);
       }
 
-      // get messages from current user to hook
+      // get messages from current user to hook in all files
       const hookFile = await getMediaByUserId(hookUserId);
       const hookFileId = hookFile.map((file) => file.file_id);
 
@@ -80,6 +81,7 @@ const SingleChat = ({route, navigation}) => {
         messageHistory = messageHistory.concat(messageScraping);
       }
 
+      // sort messages by time
       messageHistory.sort((a, b) => (a.comment_id > b.comment_id ? 1 : -1));
       setAllMessage(messageHistory);
       setAdditionData(allData);
@@ -101,7 +103,7 @@ const SingleChat = ({route, navigation}) => {
           await postComment(hookAvatarFile.pop().file_id, newComment, token);
           setLoadMessage(!loadMessage);
         } else {
-          Alert.alert('Fail', 'Write something!');
+          Alert.alert('Cannot send empty message.', 'Write something!');
         }
       }
     } catch (error) {
@@ -109,6 +111,7 @@ const SingleChat = ({route, navigation}) => {
     }
   };
 
+  // force reload in 0.5s
   useEffect(() => {
     const interval = setInterval(() => {
       if (seconds === 100) {

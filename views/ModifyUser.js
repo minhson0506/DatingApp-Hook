@@ -23,6 +23,11 @@ import {
 } from '@expo-google-fonts/poppins';
 
 const ModifyUser = ({navigation}) => {
+  const [fontsLoaded] = useFonts({
+    Poppins_600SemiBold,
+    Poppins_500Medium,
+  });
+
   const {user, setUser, setIsLoggedIn, token} = useContext(MainContext);
 
   const {checkUsername, putUser} = useUser();
@@ -70,11 +75,6 @@ const ModifyUser = ({navigation}) => {
       console.error(error);
     }
   };
-
-  const [fontsLoaded] = useFonts({
-    Poppins_600SemiBold,
-    Poppins_500Medium,
-  });
 
   if (!fontsLoaded) {
     return <View />;

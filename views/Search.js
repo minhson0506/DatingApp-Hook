@@ -20,12 +20,17 @@ import LottieView from 'lottie-react-native';
 import {useFocusEffect} from '@react-navigation/native';
 
 const Search = ({navigation}) => {
+  const animation = React.createRef();
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_400Regular,
   });
 
-  const animation = React.createRef();
+  // menu state & functions
+  const [visible, setVisible] = useState(false);
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
 
   const {user, token} = useContext(MainContext);
 
@@ -38,17 +43,13 @@ const Search = ({navigation}) => {
   const [searchArray, setSearchArray] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchState, setSearch] = useState(true);
-  const [visible, setVisible] = useState(false);
-
-  const hideMenu = () => setVisible(false);
-  const showMenu = () => setVisible(true);
 
   const fetchData = async () => {
     // filter avatar and current user
     if (mediaArray.length > 0) {
       let array = mediaArray.filter((obj) => obj.user_id !== user.user_id);
 
-      // filter most favourite person
+      // filter most favourite users
       const arrayListFavourite = await Promise.all(
         array.map(async (obj) => {
           const listFavouriteByFile = await getFavouritesByFileId(obj.file_id);
@@ -121,7 +122,7 @@ const Search = ({navigation}) => {
         }
       });
 
-      // filter for display 4 person
+      // filter for display 4 most favorite users
       array = mediaArray.filter((obj) => obj.title.toLowerCase() === 'avatar');
       array = array.filter((obj) => {
         return (
@@ -186,6 +187,7 @@ const Search = ({navigation}) => {
     fetchData();
   }, [mediaArray, searchLoading]);
 
+  // reset search input everytime user navigate away
   useFocusEffect(
     useCallback(() => {
       return () => {

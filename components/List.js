@@ -8,25 +8,25 @@ import SadCat from '../assets/sad.svg';
 
 const List = ({navigation, myFilesOnly = false}) => {
   const {user, loading, token} = useContext(MainContext);
-
   const {getUserById} = useUser();
+
   const {mediaArray} = useMedia(myFilesOnly);
+  const [media, setMedia] = useState([]);
 
   const [didMount, setDidMount] = useState(false);
-  const [media, setMedia] = useState([]);
 
   const myAdditionData = JSON.parse(user.full_name);
 
   const filterData = async () => {
     if (!myFilesOnly) {
-      // filter avatar media
+      // filter avatar to display
       let array = mediaArray.filter(
         (obj) => obj.title.toLowerCase() === 'avatar'
       );
-      // filter current user
+      // filter current user out (so that login user cannot see himself in Home)
       array = array.filter((obj) => obj.user_id !== user.user_id);
 
-      // switch to user
+      // fetch users data from media
       let userData = await Promise.all(
         array.map(async (obj) => {
           const userByFile = await getUserById(obj.user_id, token);
@@ -36,14 +36,14 @@ const List = ({navigation, myFilesOnly = false}) => {
         })
       );
 
-      // filter by gender
+      // filter function by gender
       if (myAdditionData.interested.toLowerCase() !== 'nonbinary') {
         userData = userData.filter((obj) => {
           return obj.full_name.gender === myAdditionData.interested;
         });
       }
 
-      // filter by location
+      // filter function by location
       if (userData.length > 5) {
         if (myAdditionData.preference_location.toLowerCase() !== 'none')
           userData = userData.filter((obj) => {
@@ -53,7 +53,7 @@ const List = ({navigation, myFilesOnly = false}) => {
           });
       }
 
-      // filter by drinking
+      // filter function by drinking
       if (userData.length > 5) {
         if (myAdditionData.preference_drinking.toLowerCase() !== 'none')
           userData = userData.filter((obj) => {
@@ -63,7 +63,7 @@ const List = ({navigation, myFilesOnly = false}) => {
           });
       }
 
-      // filter by smoking
+      // filter function by smoking
       if (userData.length > 5) {
         if (myAdditionData.preference_smoking.toLowerCase() !== 'none')
           userData = userData.filter((obj) => {
@@ -71,7 +71,7 @@ const List = ({navigation, myFilesOnly = false}) => {
           });
       }
 
-      // filter by nationality
+      // filter function by nationality
       if (userData.length > 5) {
         if (myAdditionData.preference_nationality.toLowerCase() !== 'none')
           userData = userData.filter((obj) => {
@@ -82,7 +82,7 @@ const List = ({navigation, myFilesOnly = false}) => {
           });
       }
 
-      // filter by pet
+      // filter function by pet
       if (userData.length > 5) {
         if (myAdditionData.preference_pet.toLowerCase() !== 'none')
           userData = userData.filter((obj) => {
@@ -90,7 +90,7 @@ const List = ({navigation, myFilesOnly = false}) => {
           });
       }
 
-      // filter by age
+      // filter function by age
       if (userData.length > 5) {
         if (myAdditionData.age_range.toLowerCase() !== 'none') {
           const age = myAdditionData.age_range.split('-');
@@ -103,7 +103,7 @@ const List = ({navigation, myFilesOnly = false}) => {
         }
       }
 
-      // filter by height
+      // filter function by height
       if (userData.length > 5) {
         if (myAdditionData.preference_height.toLowerCase() !== 'none') {
           const height = myAdditionData.preference_height.split('-');
@@ -116,7 +116,7 @@ const List = ({navigation, myFilesOnly = false}) => {
         }
       }
 
-      // switch user back to file
+      // map user back to file media
       userData = userData.map((obj) => {
         return obj.user_id;
       });
