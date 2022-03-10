@@ -23,14 +23,14 @@ import {Pages} from 'react-native-pages';
 import {MainContext} from '../contexts/MainContext';
 
 const Instructions = ({navigation}) => {
-  const {instruction} = useContext(MainContext);
-
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
     Poppins_500Medium,
     Poppins_400Regular,
   });
+
+  const {instruction} = useContext(MainContext);
 
   if (!fontsLoaded) {
     return <View />;

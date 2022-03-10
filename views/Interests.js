@@ -25,19 +25,22 @@ const Interests = ({navigation}) => {
     Poppins_600SemiBold,
     Poppins_400Regular,
   });
-  const {putUser, getUserByToken} = useUser();
+
   const {user, token, loading, setLoading} = useContext(MainContext);
-  let additionData = JSON.parse(user.full_name);
+
+  const {putUser, getUserByToken} = useUser();
+
   const [media, setMedia] = useState([]);
   const [didMount, setDidMount] = useState(false);
+
   let result = [];
+  let additionData = JSON.parse(user.full_name);
 
   const arrayLoading = async () => {
     const user = await getUserByToken(token);
     additionData = JSON.parse(user.full_name);
     let arrayInterest = additionData.interests.split(' ').join('').split(',');
     arrayInterest = arrayInterest.map((obj) => obj.toLowerCase());
-    // console.log('array interests', arrayInterest);
     let number = 0;
     result = dataSource.map((value) => {
       const obj = {
@@ -45,18 +48,14 @@ const Interests = ({navigation}) => {
         name: value,
         selected: arrayInterest.includes(value.toLowerCase()) ? true : false,
       };
-      // console.log('check true false', arrayInterest.includes(value));
       return obj;
     });
     setMedia(result);
-    // console.log('datasouce', result);
   };
 
   const onPressHandler = async (id) => {
-    // console.log('id', id);
     const array = media;
     array[id].selected = !array[id].selected;
-    // console.log('array of data', array);
     let interests = media.filter((obj) => {
       return obj.selected;
     });
@@ -67,10 +66,8 @@ const Interests = ({navigation}) => {
       .toString();
     additionData.interests = interests;
     user.full_name = JSON.stringify(additionData);
-    // console.log('user data new', user);
     try {
       await putUser(user, token);
-      console.log('modify ok');
       setMedia(array);
       setLoading(!loading);
     } catch (error) {

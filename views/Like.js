@@ -22,27 +22,27 @@ const Like = ({navigation}) => {
     Poppins_700Bold,
     Poppins_500Medium,
   });
-  // menu state & functions
-  const [visible, setVisible] = useState(false);
-  const hideMenu = () => setVisible(false);
-  const showMenu = () => setVisible(true);
 
-  const [hook, setHook] = useState([]);
+  const {loading, token} = useContext(MainContext);
+
   const {getUserById} = useUser();
   const {getMediaByUserId, getAllMediaByCurrentUserId} = useMedia();
   const {getFavouritesByFileId} = useFavourite();
-  const {loading, token} = useContext(MainContext);
+
+  const [visible, setVisible] = useState(false);
+  const [hook, setHook] = useState([]);
   const [seconds, setSeconds] = useState(0);
+
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
 
   const fetchNewLikes = async () => {
     try {
-      // cannot get Media Array ...
       const userFiles = await getAllMediaByCurrentUserId(token);
       const userFilesId = [];
       for (const file of userFiles) {
         userFilesId.push(file.file_id);
       }
-      // console.log('all fileId from current user: ', userFilesId);
 
       // get likes from every file
       let likeData = [];
@@ -54,9 +54,6 @@ const Like = ({navigation}) => {
       // sort the data in order by favouriteId, most recent -> least recent
       likeData.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
 
-      // without filtering
-      // console.log('like data: ', likeData);
-
       // with filtering
       likeData = likeData.filter((el) => {
         const duplicate = seen.has(el.user_id);
@@ -65,11 +62,9 @@ const Like = ({navigation}) => {
       });
 
       likeData = likeData.slice(0, 10);
-      // console.log('like data after data cleaning: ', likeData);
 
       // map file id to user id
       const likedUserId = likeData.map((id) => id.user_id);
-      // console.log('who like you', likedUserId);
 
       let newHooksData = [];
       for (const id of likedUserId) {
@@ -111,7 +106,6 @@ const Like = ({navigation}) => {
     return <AppLoading />;
   } else {
     return (
-      // <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <LinearGradient
           start={{x: 0, y: 0}}
@@ -204,7 +198,6 @@ const Like = ({navigation}) => {
           )}
         ></FlatList>
       </View>
-      // </SafeAreaView>
     );
   }
 };

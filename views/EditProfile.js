@@ -32,8 +32,10 @@ const EditProfile = ({navigation}) => {
     Poppins_400Regular,
   });
 
-  const {putUser} = useUser();
   const {user, setLoading, loading, token} = useContext(MainContext);
+
+  const {putUser} = useUser();
+
   const additionData = JSON.parse(user.full_name);
 
   // input values

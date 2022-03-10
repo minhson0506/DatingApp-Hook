@@ -50,21 +50,21 @@ import {Button} from 'react-native-paper';
 
 const Profile = ({navigation}) => {
   const {user, update, setUpdate, loading, token} = useContext(MainContext);
-  console.log('user in profile', user);
+
   const isFocused = useIsFocused();
+  const listRef = useRef(null);
+
+  const {mediaArray} = useMedia(true);
+  const {postMedia, putMedia} = useMedia();
+  const {postTag} = useTag();
+
   const [avatar, setAvatar] = useState(
     'https://www.linkpicture.com/q/iPhone-8-2-1.png'
   );
   const [didMount, setDidMount] = useState(false);
   const [type, setType] = useState('image');
-
-  const listRef = useRef(null);
-  const {mediaArray} = useMedia(true);
-  const {postMedia, putMedia} = useMedia();
-  const {postTag} = useTag();
-
-  // menu state & functions
   const [visible, setVisible] = useState(false);
+
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
 
@@ -80,22 +80,16 @@ const Profile = ({navigation}) => {
     mediaData = mediaData.filter(
       (obj) => obj.title.toLowerCase() !== 'deleted'
     );
-    // console.log('mediaData', mediaData);
   };
-  // filter for file except avatar
 
   const fetchAvatar = () => {
-    // console.log('myfileonly in profile', myFilesOnly);
     const avatar = mediaArray.find(
       (obj) => obj.title.toLowerCase() === 'avatar'
     );
-    console.log('avatar', avatar);
     if (avatar) setAvatar(uploadsUrl + avatar.filename);
   };
 
   const additionData = JSON.parse(user.full_name);
-  // console.log('addition data full name', additionData.fullname);
-  // console.log('number', additionData.age);
 
   const interest = () => {
     let string = '';
@@ -111,7 +105,6 @@ const Profile = ({navigation}) => {
     const avatar = mediaArray.find(
       (obj) => obj.title.toLowerCase() === 'avatar'
     );
-    console.log('avatar in formdata', avatar);
     if (avatar) {
       const data = {
         title: 'title',
@@ -146,7 +139,9 @@ const Profile = ({navigation}) => {
       name: filename,
       type: type + '/' + fileExtension,
     });
+    // cannot change avatar to video type
     if (type === 'video') return;
+
     removeOldAvatar();
     try {
       const response = await postMedia(formData, token);

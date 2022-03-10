@@ -30,36 +30,36 @@ import SendIcon from '../assets/send.svg';
 
 const SingleChat = ({route, navigation}) => {
   const {item} = route.params;
+
+  const [fontsLoaded] = useFonts({
+    Poppins_600SemiBold,
+    Poppins_500Medium,
+    Poppins_400Regular,
+  });
+
+  const {loadMessage, setLoadMessage, user, token} = useContext(MainContext);
+
+  const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
+  const {getCommentByFileId, postComment} = userComment();
+  const {getUserByToken} = useUser();
+
   const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
   const [allMessage, setAllMessage] = useState(0);
   const [newComment, setNewComment] = useState('');
-  const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
-  const {getCommentByFileId, postComment} = userComment();
-  // console.log('item', item);
-  const {loadMessage, setLoadMessage, user, token} = useContext(MainContext);
   const [currentUserId, setCurrentUserId] = useState(user.user_id);
   const [hookUserId] = useState(item.user_id);
   const [seconds, setSeconds] = useState(0);
-  const {getUserByToken} = useUser();
 
   const fetchAllMessage = async () => {
     try {
       const allData = await JSON.parse(item.full_name);
-      // const token = await AsyncStorage.getItem('userToken');
       const myId = (await getUserByToken(token)).user_id;
       setCurrentUserId(myId);
       let messageHistory = [];
-      // setHookUserId(item.user_id);
-      // const response = (await getUserByToken(token)).user_id;
-      // setCurrentUserId(response);
-      // console.log('my hook user id', hookUserId);
-      // console.log('my user id:', currentUserId);
 
       // get messages from hook to current user
       const userFiles = await getAllMediaByCurrentUserId(token);
-      // console.log('file from current user', userFiles);
       const userFilesId = userFiles.map((file) => file.file_id);
-      // console.log('file id from current user', userFilesId);
       for (const fileId of userFilesId) {
         let messageScraping = await getCommentByFileId(fileId);
         messageScraping = messageScraping.filter(
@@ -67,13 +67,10 @@ const SingleChat = ({route, navigation}) => {
         );
         messageHistory = messageHistory.concat(messageScraping);
       }
-      // console.log('message so far', messageHistory);
 
       // get messages from current user to hook
       const hookFile = await getMediaByUserId(hookUserId);
-      // console.log('hook files', hookFile);
       const hookFileId = hookFile.map((file) => file.file_id);
-      // console.log('hook file id', hookFileId);
 
       for (const fileId of hookFileId) {
         let messageScraping = await getCommentByFileId(fileId);
@@ -85,7 +82,6 @@ const SingleChat = ({route, navigation}) => {
 
       messageHistory.sort((a, b) => (a.comment_id > b.comment_id ? 1 : -1));
       setAllMessage(messageHistory);
-      // console.log('message history', messageHistory);
       setAdditionData(allData);
     } catch (error) {
       console.log('Fetch all messages error', error);
@@ -95,8 +91,6 @@ const SingleChat = ({route, navigation}) => {
   const sendMessage = async () => {
     // send message to hook's avatar file
     try {
-      // const token = await AsyncStorage.getItem('userToken');
-      // console.log('data', item.file_id, newComment, token);
       const hookUserId = item.user_id;
       const hookFile = await getMediaByUserId(hookUserId);
       const hookAvatarFile = hookFile.filter(
@@ -106,7 +100,6 @@ const SingleChat = ({route, navigation}) => {
         if (newComment !== '') {
           await postComment(hookAvatarFile.pop().file_id, newComment, token);
           setLoadMessage(!loadMessage);
-          // console.log('Response for post comment', response);
         } else {
           Alert.alert('Fail', 'Write something!');
         }
@@ -128,29 +121,16 @@ const SingleChat = ({route, navigation}) => {
     return () => clearInterval(interval);
   }, [loadMessage]);
 
-  const [fontsLoaded] = useFonts({
-    Poppins_600SemiBold,
-    Poppins_500Medium,
-    Poppins_400Regular,
-  });
-
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
     return (
       <>
         <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
-          {/* header: avatar, hook username and interest */}
-          {/* <TouchableOpacity
-            style={{flex: 1, justifyContent: 'flex-end'}}
-            activeOpacity={1}
-            onPress={() => Keyboard.dismiss()}
-          > */}
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : null}
             style={styles.container}
             enabled
-            // fix keyboard avoid view
           >
             <View
               style={{
@@ -183,12 +163,14 @@ const SingleChat = ({route, navigation}) => {
                 <View style={{flexDirection: 'column', marginLeft: 10}}>
                   <Text style={styles.username}>{item.username}</Text>
                   <Text style={styles.interests}>
-                    {additionData.interests !== 'none'
-                      ? additionData.interests.split(',').length < 2
-                        ? additionData.interests.split(',')[0]
-                        : additionData.interests.split(',')[0] +
-                          ', ' +
-                          additionData.interests.split(',')[1]
+                    {typeof additionData.interests !== 'undefined'
+                      ? additionData.interests !== 'none'
+                        ? additionData.interests.split(',').length < 2
+                          ? additionData.interests.split(',')[0]
+                          : additionData.interests.split(',')[0] +
+                            ', ' +
+                            additionData.interests.split(',')[1]
+                        : ''
                       : ''}
                   </Text>
                 </View>
@@ -269,7 +251,6 @@ const SingleChat = ({route, navigation}) => {
               ></Button>
             </View>
           </KeyboardAvoidingView>
-          {/* </TouchableOpacity> */}
         </SafeAreaView>
         <StatusBar style="auto"></StatusBar>
       </>

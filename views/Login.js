@@ -26,17 +26,17 @@ import AppLoading from 'expo-app-loading';
 import {LinearGradient} from 'expo-linear-gradient';
 
 const Login = ({navigation}) => {
-  const [formToggle, setFormToggle] = useState(true);
   const {setIsLoggedIn, setUser, setToken} = useContext(MainContext);
+
   const {getUserByToken} = useUser();
+
+  const [formToggle, setFormToggle] = useState(true);
 
   const checkToken = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (!userToken) return;
-      // console.log('token', userToken);
       const userData = await getUserByToken(userToken);
-      // console.log('checkToken', userData);
       setUser(userData);
       setToken(userToken);
       setIsLoggedIn(true);

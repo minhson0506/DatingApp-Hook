@@ -36,41 +36,41 @@ import Height from '../assets/height.svg';
 import Religion from '../assets/religion.svg';
 
 const Single = ({route, navigation}) => {
+  const {file} = route.params;
+
   const animation = React.createRef();
   const listRef = useRef(null);
-  const {file} = route.params;
-  const {postFavourite, getFavouritesByFileId, getFavourites} = useFavourite();
-  const {mediaArray} = useMedia(false, file.user_id);
-  const {getUserById} = useUser();
-  const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
-  const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
-  const [interests, setInterests] = useState('none');
-  const {user, token} = useContext(MainContext);
-  const [like, setLike] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [owner, setOwner] = useState();
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_400Regular,
   });
+
+  const {user, token} = useContext(MainContext);
+
+  const {postFavourite, getFavouritesByFileId, getFavourites} = useFavourite();
+  const {mediaArray} = useMedia(false, file.user_id);
+  const {getUserById} = useUser();
+  const {getAllMediaByCurrentUserId, getMediaByUserId} = useMedia();
+
+  const [additionData, setAdditionData] = useState({fullname: 'fetching...'});
+  const [interests, setInterests] = useState('none');
+  const [like, setLike] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [owner, setOwner] = useState();
+
   const mediaData = mediaArray.filter((obj) => {
     return (
       obj.title.toLowerCase() !== 'avatar' &&
       obj.title.toLowerCase() !== 'deleted'
     );
   });
-  // console.log('file in single', file);
 
   const fetchOwner = async () => {
     try {
-      // console.log('token in single', token);
-      // console.log('singlemedia', singleMedia);
-      // console.log('user_id', singleMedia.description);
       const userData = await getUserById(file.user_id, token);
       setOwner(userData.username);
-      // console.log('user data', userData);
       const allData = await JSON.parse(userData.full_name);
-      // console.log('addition data in listitem.js', allData);
       setAdditionData(allData);
       let string = '';
       allData.interests.split(',').forEach((hobby) => {
@@ -89,21 +89,16 @@ const Single = ({route, navigation}) => {
   const checkLike = async () => {
     try {
       // get all favourite of this single user's file
-      // const allLikes = await getFavouritesByFileId(file.file_id);
       const allMediaOfSingleUser = await getMediaByUserId(file.user_id);
-      // console.log('all media of this single user', allMediaOfSingleUser);
       const userFilesId = allMediaOfSingleUser.map((file) => file.file_id);
-      // console.log('all file id', userFilesId);
       let allLikesofSingleUser = [];
       for (const id of userFilesId) {
         const response = await getFavouritesByFileId(id);
         allLikesofSingleUser = allLikesofSingleUser.concat(response);
       }
-      // console.log('all likes that single user receive', allLikesofSingleUser);
       for (let i = 0; i < allLikesofSingleUser.length; i++) {
         if (allLikesofSingleUser[i].user_id === user.user_id) {
           if (like === true) {
-            console.log('you liked this user');
             navigation.navigate('Match', {file});
             return;
           }
@@ -115,37 +110,28 @@ const Single = ({route, navigation}) => {
   };
 
   const likeUser = async () => {
-    // console.log('file id', file.file_id);
-    // console.log('file', file);
-
     let alreadyLiked = false;
 
     let files = await getMediaByUserId(file.user_id);
     files = files.map((obj) => {
       return obj.file_id;
     });
-    // console.log('files', files);
     const likes = await getFavourites(token);
     likes.forEach((obj) => {
       if (files.includes(obj.file_id)) alreadyLiked = true;
     });
-    // console.log('already likes', alreadyLiked);
 
     if (alreadyLiked) {
       Alert.alert('Fail', `You have already liked ${owner}!`);
       return;
     } else {
       try {
-        // console.log('file id', file.file_id);
         const response = await postFavourite(file.file_id, token);
         if (response) {
           const userFiles = await getAllMediaByCurrentUserId(token);
-          // console.log('All file from current user: ', userFiles);
           setIsLiked(!isLiked);
           Alert.alert(`You liked ${owner} !`);
-
           const userFilesId = userFiles.map((file) => file.file_id);
-          // console.log('all fileId from current user: ', userFilesId);
 
           // check who likes any photo from current login user
           // and then get their userId
@@ -154,17 +140,11 @@ const Single = ({route, navigation}) => {
             const response = await getFavouritesByFileId(id);
             allLikesofCurrentUsers = allLikesofCurrentUsers.concat(response);
           }
-          // console.log(
-          //   'all likes that current user receive',
-          //   allLikesofCurrentUsers
-          // );
           for (let i = 0; i < allLikesofCurrentUsers.length; i++) {
             if (allLikesofCurrentUsers[i].user_id === file.user_id) {
               setLike(true);
-              // console.log('this user liked you');
             }
           }
-          // console.log('users liked', response);
         }
       } catch (error) {
         Alert.alert('Fail', `You have already liked ${owner}!`);
@@ -195,7 +175,6 @@ const Single = ({route, navigation}) => {
             <Button
               style={styles.back}
               onPress={() => {
-                // setLoading(!loading);
                 navigation.goBack();
               }}
               icon={BackIcon}
@@ -385,9 +364,9 @@ const Single = ({route, navigation}) => {
                   source={require('../assets/animation/heart.json')}
                   autoPlay={false}
                   loop={false}
-                  onAnimationFinish={() => {
-                    console.log('animation finished');
-                  }}
+                  // onAnimationFinish={() => {
+                  //   console.log('animation finished');
+                  // }}
                 />
               </>
             }

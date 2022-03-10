@@ -19,7 +19,9 @@ import PasswordIcon from '../assets/password.svg';
 const LoginForm = () => {
   const {setIsLoggedIn, setUser, setToken, setInstruction} =
     useContext(MainContext);
+
   const {postLogin} = useLogin();
+
   const {
     control,
     handleSubmit,
@@ -32,6 +34,7 @@ const LoginForm = () => {
   });
 
   function isJson(str) {
+    if (str === null) return false;
     try {
       JSON.parse(str);
     } catch (e) {
@@ -41,7 +44,6 @@ const LoginForm = () => {
   }
 
   const onSubmit = async (data) => {
-    // console.log(data);
     try {
       const userData = await postLogin(data);
       if (isJson(userData.user.full_name)) {

@@ -14,10 +14,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Fixed full_name for new user register
 const RegisterForm = ({setFormToggle}) => {
-  const {postUser, checkUsername} = useUser();
-  const {postLogin} = useLogin();
   const {setInstruction, setUser, setIsLoggedIn, setToken} =
     useContext(MainContext);
+
+  const {postUser, checkUsername} = useUser();
+  const {postLogin} = useLogin();
+
   const {
     getValues,
     control,
@@ -37,10 +39,8 @@ const RegisterForm = ({setFormToggle}) => {
     console.log(data);
     try {
       const userData = await postLogin(data);
-      // console.log('userData after register', userData);
       await AsyncStorage.setItem('userToken', userData.token);
       setToken(userData.token);
-      // console.log('token after register', userData.token);
       setUser(userData.user);
       setIsLoggedIn(true);
     } catch (error) {
@@ -50,7 +50,6 @@ const RegisterForm = ({setFormToggle}) => {
   };
 
   const onSubmit = async (data) => {
-    // console.log(data);
     try {
       delete data.password_again;
       const additionData = {
@@ -90,12 +89,10 @@ const RegisterForm = ({setFormToggle}) => {
       data.email = `${data.username}@a.fi`;
       const userData = await postUser(data);
       setInstruction(true);
-      // console.log('register onSubmit', userData);
       if (userData) {
         Alert.alert('Success', 'User created successfully!');
         delete data.full_name;
         delete data.email;
-        // console.log('data for login', data);
         onLogin(data);
       }
     } catch (error) {

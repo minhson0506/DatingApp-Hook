@@ -19,9 +19,19 @@ import {MainContext} from '../contexts/MainContext';
 
 const Match = ({route, navigation}) => {
   const {file} = route.params;
+
+  const [fontsLoaded] = useFonts({
+    Poppins_700Bold,
+    Poppins_600SemiBold,
+    Poppins_500Medium,
+  });
+
   const {loading, setLoading, token} = useContext(MainContext);
+
   const {getUserById} = useUser();
   const {getMediaByUserId} = useMedia();
+  const {mediaArray} = useMedia(true);
+
   const [name, setName] = useState();
   const [avatarSingleUser, setAvatarSingleUser] = useState(
     'http://placekitten.com/180'
@@ -29,13 +39,6 @@ const Match = ({route, navigation}) => {
   const [avatarCurrentUser, setAvatarCurrentUser] = useState(
     'http://placekitten.com/190'
   );
-  const {mediaArray} = useMedia(true);
-
-  const [fontsLoaded] = useFonts({
-    Poppins_700Bold,
-    Poppins_600SemiBold,
-    Poppins_500Medium,
-  });
 
   const fetchOwner = async () => {
     try {
