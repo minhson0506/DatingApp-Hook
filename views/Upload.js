@@ -22,7 +22,6 @@ import {
   Poppins_500Medium,
   Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
-import AppLoading from 'expo-app-loading';
 import {Card, Input, Divider} from 'react-native-elements';
 import {MainContext} from '../contexts/MainContext';
 import {Video} from 'expo-av';
@@ -36,14 +35,27 @@ import LottieView from 'lottie-react-native';
 
 const Upload = ({navigation}) => {
   const animation = React.createRef();
-  const [upload, setUpload] = useState(false);
-  const [didMount, setDidMount] = useState(false);
+
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
     Poppins_500Medium,
     Poppins_400Regular,
   });
+
+  const {update, setUpdate, token} = useContext(MainContext);
+
+  const {postMedia, load} = useMedia();
+  const {postTag} = useTag();
+
+  const [image, setImage] = useState(
+    'https://www.linkpicture.com/q/iPhone-8-2-1.png'
+  );
+  const [imageSelected, setImageSelected] = useState(false);
+  const [type, setType] = useState('image');
+  const [upload, setUpload] = useState(false);
+  const [didMount, setDidMount] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -51,22 +63,9 @@ const Upload = ({navigation}) => {
     setValue,
   } = useForm({
     defaultValues: {
-      // title1: 'Title',
       description: '',
     },
   });
-
-  const [image, setImage] = useState(
-    'https://www.linkpicture.com/q/iPhone-8-2-1.png'
-  );
-
-  const [imageSelected, setImageSelected] = useState(false);
-
-  const [type, setType] = useState('image');
-
-  const {postMedia, load} = useMedia();
-  const {postTag} = useTag();
-  const {update, setUpdate, token} = useContext(MainContext);
 
   // pick image function
   const pickImage = async (id) => {
@@ -106,18 +105,11 @@ const Upload = ({navigation}) => {
       );
       setUpload(!upload);
       setUpdate(update + 1);
-      // setLoading(!loading);
-      // TODO: make Alert after loading is done with animation
       setTimeout(() => {
         tagResponse &&
-          Alert.alert('Upload', 'Uploaded successfully', [
+          Alert.alert('Success', 'Uploaded successfully', [
             {
               text: 'OK',
-              // onPress: () => {
-              //   setUpdate(update + 1);
-              //   // navigation.navigate('Upload');
-              //   // setLoading(!loading);
-              // },
             },
           ]);
       }, 5000);
@@ -193,9 +185,6 @@ const Upload = ({navigation}) => {
                 autoPlay={false}
                 loop={false}
                 resizeMode="cover"
-                onAnimationFinish={() => {
-                  console.log('animation finished');
-                }}
               />
               <View style={styles.box}>
                 <Card containerStyle={styles.card}>
@@ -241,7 +230,6 @@ const Upload = ({navigation}) => {
                     <Button onPress={reset}>Reset</Button>
 
                     <Button
-                      // style={{marginLRight: 20}}
                       disabled={!imageSelected}
                       loading={load}
                       onPress={handleSubmit(onSubmit)}

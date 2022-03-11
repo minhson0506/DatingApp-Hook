@@ -49,30 +49,42 @@ import {Menu, MenuItem} from 'react-native-material-menu';
 import {Button} from 'react-native-paper';
 
 const Profile = ({navigation}) => {
-  const {user, update, setUpdate, loading, token} = useContext(MainContext);
-  console.log('user in profile', user);
-  const isFocused = useIsFocused();
-  const [avatar, setAvatar] = useState(
-    'https://www.linkpicture.com/q/iPhone-8-2-1.png'
-  );
-  const [didMount, setDidMount] = useState(false);
-  const [type, setType] = useState('image');
-
-  const listRef = useRef(null);
-  const {mediaArray} = useMedia(true);
-  const {postMedia, putMedia} = useMedia();
-  const {postTag} = useTag();
+  const [fontsLoaded] = useFonts({
+    Poppins_700Bold,
+    Poppins_600SemiBold,
+    Poppins_500Medium,
+    Poppins_400Regular,
+  });
 
   // menu state & functions
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
 
+  const {user, update, setUpdate, loading, token} = useContext(MainContext);
+
+  const isFocused = useIsFocused();
+  const listRef = useRef(null);
+
+  const {mediaArray} = useMedia(true);
+  const {postMedia, putMedia} = useMedia();
+  const {postTag} = useTag();
+
+  const [avatar, setAvatar] = useState(
+    'https://www.linkpicture.com/q/iPhone-8-2-1.png'
+  );
+  const [type, setType] = useState('image');
+  const [didMount, setDidMount] = useState(false);
+
+  // filter out avatar file (not display avatar in the list)
   let mediaData = mediaArray.filter(
     (obj) => obj.title.toLowerCase() !== 'avatar'
   );
+
+  // filter out deleted files
   mediaData = mediaData.filter((obj) => obj.title.toLowerCase() !== 'deleted');
 
+  // function to reload in useEffect
   const loadData = () => {
     mediaData = mediaArray.filter(
       (obj) => obj.title.toLowerCase() !== 'avatar'
@@ -80,23 +92,19 @@ const Profile = ({navigation}) => {
     mediaData = mediaData.filter(
       (obj) => obj.title.toLowerCase() !== 'deleted'
     );
-    // console.log('mediaData', mediaData);
   };
-  // filter for file except avatar
 
   const fetchAvatar = () => {
-    // console.log('myfileonly in profile', myFilesOnly);
     const avatar = mediaArray.find(
       (obj) => obj.title.toLowerCase() === 'avatar'
     );
-    console.log('avatar', avatar);
     if (avatar) setAvatar(uploadsUrl + avatar.filename);
   };
 
+  // get string data of user (in full_name field)
   const additionData = JSON.parse(user.full_name);
-  // console.log('addition data full name', additionData.fullname);
-  // console.log('number', additionData.age);
 
+  // get interests
   const interest = () => {
     let string = '';
     additionData.interests.split(',').forEach((hobby) => {
@@ -111,7 +119,6 @@ const Profile = ({navigation}) => {
     const avatar = mediaArray.find(
       (obj) => obj.title.toLowerCase() === 'avatar'
     );
-    console.log('avatar in formdata', avatar);
     if (avatar) {
       const data = {
         title: 'title',
@@ -146,7 +153,9 @@ const Profile = ({navigation}) => {
       name: filename,
       type: type + '/' + fileExtension,
     });
+    // cannot change avatar to video type
     if (type === 'video') return;
+
     removeOldAvatar();
     try {
       const response = await postMedia(formData, token);
@@ -168,13 +177,6 @@ const Profile = ({navigation}) => {
       console.error(error);
     }
   };
-
-  const [fontsLoaded] = useFonts({
-    Poppins_700Bold,
-    Poppins_600SemiBold,
-    Poppins_500Medium,
-    Poppins_400Regular,
-  });
 
   useEffect(() => {
     fetchAvatar();

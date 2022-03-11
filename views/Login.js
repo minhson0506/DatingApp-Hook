@@ -26,17 +26,22 @@ import AppLoading from 'expo-app-loading';
 import {LinearGradient} from 'expo-linear-gradient';
 
 const Login = ({navigation}) => {
-  const [formToggle, setFormToggle] = useState(true);
+  const [fontsLoaded] = useFonts({
+    Poppins_700Bold,
+    Poppins_600SemiBold,
+  });
+
   const {setIsLoggedIn, setUser, setToken} = useContext(MainContext);
+
   const {getUserByToken} = useUser();
+
+  const [formToggle, setFormToggle] = useState(true);
 
   const checkToken = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (!userToken) return;
-      // console.log('token', userToken);
       const userData = await getUserByToken(userToken);
-      // console.log('checkToken', userData);
       setUser(userData);
       setToken(userToken);
       setIsLoggedIn(true);
@@ -48,11 +53,6 @@ const Login = ({navigation}) => {
   useEffect(() => {
     checkToken();
   }, []);
-
-  const [fontsLoaded] = useFonts({
-    Poppins_700Bold,
-    Poppins_600SemiBold,
-  });
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -71,7 +71,6 @@ const Login = ({navigation}) => {
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : ''}
             style={styles.container}
-            // fix keyboard avoid view
           >
             <ScrollView>
               <Text style={styles.appName}>hook</Text>

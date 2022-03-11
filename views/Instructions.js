@@ -23,14 +23,14 @@ import {Pages} from 'react-native-pages';
 import {MainContext} from '../contexts/MainContext';
 
 const Instructions = ({navigation}) => {
-  const {instruction} = useContext(MainContext);
-
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
     Poppins_500Medium,
     Poppins_400Regular,
   });
+
+  const {instruction} = useContext(MainContext);
 
   if (!fontsLoaded) {
     return <View />;
@@ -52,7 +52,7 @@ const Instructions = ({navigation}) => {
             >
               Skip
             </Button>
-            <Text style={styles.header}>Navigation bar</Text>
+            <Text style={styles.header}>Instructions</Text>
             {/* home function */}
             <Divider style={{marginBottom: 5}} />
             <Image
@@ -72,7 +72,9 @@ const Instructions = ({navigation}) => {
             />
             <Divider style={{marginTop: 5, marginBottom: 5}} />
 
-            <Text style={styles.DescribeText}>See who already liked you</Text>
+            <Text style={styles.DescribeText}>
+              Like page{'\n'}See who already liked you
+            </Text>
 
             {/* search function */}
             <Divider style={{marginTop: 5, marginBottom: 5}} />
@@ -83,7 +85,7 @@ const Instructions = ({navigation}) => {
             <Divider style={{marginTop: 5, marginBottom: 5}} />
 
             <Text style={styles.DescribeText}>
-              Search for users{'\n'}See top pick users
+              Search page{'\n'}Search & See top picks
             </Text>
 
             {/* chat function */}
@@ -134,7 +136,7 @@ const Instructions = ({navigation}) => {
                     source={require('../assets/InstructionsUse/fingerClick.png')}
                     style={{height: 70, width: 70}}
                   ></Image>
-                  <Text style={styles.textButton}>Info</Text>
+                  <Text style={styles.textButton}>Like</Text>
                 </View>
 
                 <View
@@ -147,24 +149,20 @@ const Instructions = ({navigation}) => {
                     source={require('../assets/InstructionsUse/image.png')}
                     style={{height: 120, width: 120, alignSelf: 'center'}}
                   ></Image>
-                  <Text style={styles.textButton}>No press</Text>
                 </View>
                 <View
                   style={{
                     flexDirection: 'column',
                     alignItems: 'center',
                     marginLeft: 20,
+                    justifyContent: 'center',
                   }}
                 >
-                  <Image
-                    source={require('../assets/InstructionsUse/swipeR.png')}
-                    style={{height: 70, width: 70}}
-                  ></Image>
                   <Image
                     source={require('../assets/InstructionsUse/fingerClick.png')}
                     style={{height: 70, width: 70}}
                   ></Image>
-                  <Text style={styles.textButton}>Like</Text>
+                  <Text style={styles.textButton}>Info</Text>
                 </View>
               </View>
             </View>
@@ -236,7 +234,7 @@ const Instructions = ({navigation}) => {
                     style={{alignSelf: 'center', top: 12}}
                   ></ReloadIcon>
                 </View>
-                <Text style={styles.DescribeText2}>Reload 10 new users</Text>
+                <Text style={styles.DescribeText2}>Reload 5 new users</Text>
               </View>
 
               <View
@@ -320,8 +318,8 @@ const Instructions = ({navigation}) => {
             }}
           >
             <Text style={styles.textInfo}>
-              Remember to add your information and profile picture so that
-              others can find you!
+              Now update your information and profile picture so that others can
+              find you!
             </Text>
             <Button
               uppercase={false}

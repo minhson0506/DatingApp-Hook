@@ -19,7 +19,9 @@ import PasswordIcon from '../assets/password.svg';
 const LoginForm = () => {
   const {setIsLoggedIn, setUser, setToken, setInstruction} =
     useContext(MainContext);
+
   const {postLogin} = useLogin();
+
   const {
     control,
     handleSubmit,
@@ -31,7 +33,9 @@ const LoginForm = () => {
     },
   });
 
+  // function to set string to JSON
   function isJson(str) {
+    if (str === null) return false;
     try {
       JSON.parse(str);
     } catch (e) {
@@ -41,7 +45,6 @@ const LoginForm = () => {
   }
 
   const onSubmit = async (data) => {
-    // console.log(data);
     try {
       const userData = await postLogin(data);
       if (isJson(userData.user.full_name)) {
@@ -58,13 +61,13 @@ const LoginForm = () => {
             Alert.alert('Deleted', 'User has already been deleted!');
           }
         } else {
-          Alert.alert('Fail', 'User does not exit in Hook');
+          Alert.alert('Login failed!', 'User does not exit in Hook');
         }
       } else {
-        Alert.alert('Fail', 'User does not exit in Hook');
+        Alert.alert('Login failed!', 'User does not exit in Hook');
       }
     } catch (error) {
-      Alert.alert('Fail', 'Wrong username or password!');
+      Alert.alert('Login failed!', 'Wrong username or password!');
       console.error(error);
     }
   };

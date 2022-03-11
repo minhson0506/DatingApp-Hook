@@ -23,8 +23,15 @@ import {
 } from '@expo-google-fonts/poppins';
 
 const ModifyUser = ({navigation}) => {
-  const {checkUsername, putUser} = useUser();
+  const [fontsLoaded] = useFonts({
+    Poppins_600SemiBold,
+    Poppins_500Medium,
+  });
+
   const {user, setUser, setIsLoggedIn, token} = useContext(MainContext);
+
+  const {checkUsername, putUser} = useUser();
+
   const {
     control,
     handleSubmit,
@@ -52,7 +59,6 @@ const ModifyUser = ({navigation}) => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       delete data.confirmPassword;
       if (data.password === '') {
@@ -69,11 +75,6 @@ const ModifyUser = ({navigation}) => {
       console.error(error);
     }
   };
-
-  const [fontsLoaded] = useFonts({
-    Poppins_600SemiBold,
-    Poppins_500Medium,
-  });
 
   if (!fontsLoaded) {
     return <View />;
@@ -180,12 +181,6 @@ const ModifyUser = ({navigation}) => {
                 value: 5,
                 message: 'Password has to be at least 5 characters.',
               },
-              /*
-          pattern: {
-            value: /(?=.*[\p{Lu}])(?=.*[0-9]).{8,}/u,
-            message: 'Min 8, Uppercase, Number',
-          },
-          */
             }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input

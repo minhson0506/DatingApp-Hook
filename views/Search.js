@@ -26,28 +26,30 @@ const Search = ({navigation}) => {
     Poppins_700Bold,
     Poppins_400Regular,
   });
+
   // menu state & functions
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
 
+  const {user, token} = useContext(MainContext);
+
+  const {getFavouritesByFileId} = useFavourite();
+  const {getUserById} = useUser();
+
   const [text, setText] = useState();
   const {mediaArray} = useMedia(false);
   const [media, setMedia] = useState([]);
   const [searchArray, setSearchArray] = useState([]);
-  const {user, token} = useContext(MainContext);
   const [searchLoading, setSearchLoading] = useState(false);
-  const {getFavouritesByFileId} = useFavourite();
-  const {getUserById} = useUser();
   const [searchState, setSearch] = useState(true);
 
   const fetchData = async () => {
     // filter avatar and current user
     if (mediaArray.length > 0) {
       let array = mediaArray.filter((obj) => obj.user_id !== user.user_id);
-      // console.log('file in search', array);
 
-      // filter most favourite person
+      // filter most favourite users
       const arrayListFavourite = await Promise.all(
         array.map(async (obj) => {
           const listFavouriteByFile = await getFavouritesByFileId(obj.file_id);
@@ -58,7 +60,6 @@ const Search = ({navigation}) => {
           return result;
         })
       );
-      // console.log('list favorite', arrayListFavourite);
 
       // create array of user and remove duplicate
       let arrayUser = arrayListFavourite.map((obj) => {
@@ -75,7 +76,6 @@ const Search = ({navigation}) => {
         const result = {user_id: obj, numberOfLiked: numberOfLike};
         return result;
       });
-      // console.log('array user like', arrayUser);
 
       const max = [
         {user_id: 0, max: 0},
@@ -83,6 +83,7 @@ const Search = ({navigation}) => {
         {user_id: 0, max: 0},
         {user_id: 0, max: 0},
       ];
+
       // set the first max
       arrayUser.forEach((obj) => {
         if (obj.numberOfLiked > max[0].max) {
@@ -120,9 +121,8 @@ const Search = ({navigation}) => {
           max[3].max = obj.numberOfLiked;
         }
       });
-      // console.log('max person', max);
 
-      // filter for display 4 person
+      // filter for display 4 most favorite users
       array = mediaArray.filter((obj) => obj.title.toLowerCase() === 'avatar');
       array = array.filter((obj) => {
         return (
@@ -132,7 +132,6 @@ const Search = ({navigation}) => {
           obj.user_id === max[3].user_id
         );
       });
-      // console.log('file in search after filter', array);
 
       array = await Promise.all(
         array.map(async (obj) => {
@@ -142,11 +141,9 @@ const Search = ({navigation}) => {
           return obj;
         })
       );
-      // console.log('new array', array);
 
       // set data for display
       setMedia(array);
-      // console.log('media', media);
     }
   };
 
@@ -165,7 +162,6 @@ const Search = ({navigation}) => {
       })
     );
 
-    // console.log('input', text);
     userData = userData.filter((obj) => {
       return obj.username.toLowerCase().includes(text.toLowerCase());
     });
@@ -185,18 +181,17 @@ const Search = ({navigation}) => {
       })
     );
     setSearchArray(array);
-    // console.log('search array', searchArray);
   };
 
   useEffect(() => {
     fetchData();
   }, [mediaArray, searchLoading]);
 
+  // reset search input everytime user navigate away
   useFocusEffect(
     useCallback(() => {
       return () => {
         setText('');
-        // setLoading(!loading);
         setSearchLoading(!searchLoading);
         setSearch(true);
       };
@@ -255,7 +250,7 @@ const Search = ({navigation}) => {
           iconColor="#82008F"
           style={styles.searchBar}
           inputStyle={{color: '#EB6432'}}
-          placeholder="Looking for someone?"
+          placeholder="Search by username.."
           onChangeText={(text) => setText(text)}
           value={text}
         />
@@ -282,7 +277,6 @@ const Search = ({navigation}) => {
             style={styles.buttons}
             onPress={() => {
               setText('');
-              // setLoading(!loading);
               setSearchLoading(!searchLoading);
               setSearch(true);
             }}
@@ -343,9 +337,9 @@ const Search = ({navigation}) => {
                   autoPlay
                   loop={true}
                   resizeMode="cover"
-                  onAnimationFinish={() => {
-                    console.log('animation finished');
-                  }}
+                  // onAnimationFinish={() => {
+                  //   console.log('animation finished');
+                  // }}
                 />
               </>
             ) : (

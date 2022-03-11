@@ -34,8 +34,10 @@ const Preference = ({navigation}) => {
     Poppins_400Regular,
   });
 
-  const {putUser} = useUser();
   const {user, token, loading, setLoading} = useContext(MainContext);
+
+  const {putUser} = useUser();
+
   const additionData = JSON.parse(user.full_name);
 
   // slider values
@@ -112,7 +114,6 @@ const Preference = ({navigation}) => {
       label: label,
       value: label,
     }));
-
     setLocationItems(resultLocation);
 
     const resultNationality = countryArray.map((label) => ({

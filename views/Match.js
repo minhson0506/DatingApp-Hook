@@ -19,17 +19,6 @@ import {MainContext} from '../contexts/MainContext';
 
 const Match = ({route, navigation}) => {
   const {file} = route.params;
-  const {loading, setLoading, token} = useContext(MainContext);
-  const {getUserById} = useUser();
-  const {getMediaByUserId} = useMedia();
-  const [name, setName] = useState();
-  const [avatarSingleUser, setAvatarSingleUser] = useState(
-    'http://placekitten.com/180'
-  );
-  const [avatarCurrentUser, setAvatarCurrentUser] = useState(
-    'http://placekitten.com/190'
-  );
-  const {mediaArray} = useMedia(true);
 
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
@@ -37,6 +26,21 @@ const Match = ({route, navigation}) => {
     Poppins_500Medium,
   });
 
+  const {loading, setLoading, token} = useContext(MainContext);
+
+  const {getUserById} = useUser();
+  const {getMediaByUserId} = useMedia();
+  const {mediaArray} = useMedia(true);
+
+  const [name, setName] = useState();
+  const [avatarSingleUser, setAvatarSingleUser] = useState(
+    'http://placekitten.com/180'
+  );
+  const [avatarCurrentUser, setAvatarCurrentUser] = useState(
+    'http://placekitten.com/190'
+  );
+
+  // fetch 2 users passed from like
   const fetchOwner = async () => {
     try {
       const userData = await getUserById(file.user_id, token);

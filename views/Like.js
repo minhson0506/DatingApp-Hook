@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import {View, Text, FlatList, StyleSheet} from 'react-native';
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState, useContext, useRef} from 'react';
 import {Avatar, ListItem, Image} from 'react-native-elements';
 import {uploadsUrl} from '../utils/variables';
 import PropTypes from 'prop-types';
@@ -22,27 +22,31 @@ const Like = ({navigation}) => {
     Poppins_700Bold,
     Poppins_500Medium,
   });
+
   // menu state & functions
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
 
-  const [hook, setHook] = useState([]);
+  const listRef = useRef(null);
+
+  const {loading, token} = useContext(MainContext);
+
   const {getUserById} = useUser();
   const {getMediaByUserId, getAllMediaByCurrentUserId} = useMedia();
   const {getFavouritesByFileId} = useFavourite();
-  const {loading, token} = useContext(MainContext);
+
+  const [hook, setHook] = useState([]);
   const [seconds, setSeconds] = useState(0);
 
   const fetchNewLikes = async () => {
     try {
-      // cannot get Media Array ...
+      // get all media of login user
       const userFiles = await getAllMediaByCurrentUserId(token);
       const userFilesId = [];
       for (const file of userFiles) {
         userFilesId.push(file.file_id);
       }
-      // console.log('all fileId from current user: ', userFilesId);
 
       // get likes from every file
       let likeData = [];
@@ -51,26 +55,22 @@ const Like = ({navigation}) => {
         const likeScraping = await getFavouritesByFileId(id);
         likeData = likeData.concat(likeScraping);
       }
+
       // sort the data in order by favouriteId, most recent -> least recent
       likeData.sort((a, b) => (a.favourite_id > b.favourite_id ? -1 : 1));
 
-      // without filtering
-      // console.log('like data: ', likeData);
-
-      // with filtering
+      // filter duplicate
       likeData = likeData.filter((el) => {
         const duplicate = seen.has(el.user_id);
         seen.add(el.user_id);
         return !duplicate;
       });
-
       likeData = likeData.slice(0, 10);
-      // console.log('like data after data cleaning: ', likeData);
 
       // map file id to user id
       const likedUserId = likeData.map((id) => id.user_id);
-      // console.log('who like you', likedUserId);
 
+      // fetch data (avatar and user data) of hooks
       let newHooksData = [];
       for (const id of likedUserId) {
         let avatarScraping = await getMediaByUserId(id);
@@ -95,6 +95,7 @@ const Like = ({navigation}) => {
     fetchNewLikes();
   }, [loading]);
 
+  // force reload every 1s to update like constantly
   useEffect(() => {
     const interval = setInterval(() => {
       if (seconds === 100) {
@@ -111,7 +112,6 @@ const Like = ({navigation}) => {
     return <AppLoading />;
   } else {
     return (
-      // <SafeAreaView style={GlobalStyles.AndroidSafeArea}>
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <LinearGradient
           start={{x: 0, y: 0}}
@@ -167,6 +167,28 @@ const Like = ({navigation}) => {
           </Text>
         </LinearGradient>
         <FlatList
+          ref={listRef}
+          ListFooterComponent={
+            hook.length >= 4 ? (
+              <Button
+                onPress={() => {
+                  listRef.current.scrollToOffset({offset: 0, animated: true});
+                }}
+                style={{
+                  width: '95%',
+                  alignSelf: 'center',
+                  marginBottom: 20,
+                  borderWidth: 1,
+                  borderColor: '#82008F',
+                  borderRadius: 5,
+                }}
+              >
+                Back to top
+              </Button>
+            ) : (
+              <></>
+            )
+          }
           columnWrapperStyle={{flex: 1, justifyContent: 'space-around'}}
           numColumns={2}
           showsHorizontalScrollIndicator={false}
@@ -204,7 +226,6 @@ const Like = ({navigation}) => {
           )}
         ></FlatList>
       </View>
-      // </SafeAreaView>
     );
   }
 };
