@@ -136,7 +136,7 @@ const Instructions = ({navigation}) => {
                     source={require('../assets/InstructionsUse/fingerClick.png')}
                     style={{height: 70, width: 70}}
                   ></Image>
-                  <Text style={styles.textButton}>Info</Text>
+                  <Text style={styles.textButton}>Like</Text>
                 </View>
 
                 <View
@@ -149,24 +149,20 @@ const Instructions = ({navigation}) => {
                     source={require('../assets/InstructionsUse/image.png')}
                     style={{height: 120, width: 120, alignSelf: 'center'}}
                   ></Image>
-                  <Text style={styles.textButton}>No press</Text>
                 </View>
                 <View
                   style={{
                     flexDirection: 'column',
                     alignItems: 'center',
                     marginLeft: 20,
+                    justifyContent: 'center',
                   }}
                 >
-                  <Image
-                    source={require('../assets/InstructionsUse/swipeR.png')}
-                    style={{height: 70, width: 70}}
-                  ></Image>
                   <Image
                     source={require('../assets/InstructionsUse/fingerClick.png')}
                     style={{height: 70, width: 70}}
                   ></Image>
-                  <Text style={styles.textButton}>Like</Text>
+                  <Text style={styles.textButton}>Info</Text>
                 </View>
               </View>
             </View>

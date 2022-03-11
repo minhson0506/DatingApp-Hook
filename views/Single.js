@@ -478,8 +478,8 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    right: 15,
-    bottom: 20,
+    right: 20,
+    bottom: '75%',
     backgroundColor: 'white',
   },
 });
