@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import {View, Text, FlatList, StyleSheet} from 'react-native';
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState, useContext, useRef} from 'react';
 import {Avatar, ListItem, Image} from 'react-native-elements';
 import {uploadsUrl} from '../utils/variables';
 import PropTypes from 'prop-types';
@@ -27,6 +27,8 @@ const Like = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
+
+  const listRef = useRef(null);
 
   const {loading, token} = useContext(MainContext);
 
@@ -165,6 +167,28 @@ const Like = ({navigation}) => {
           </Text>
         </LinearGradient>
         <FlatList
+          ref={listRef}
+          ListFooterComponent={
+            hook.length >= 4 ? (
+              <Button
+                onPress={() => {
+                  listRef.current.scrollToOffset({offset: 0, animated: true});
+                }}
+                style={{
+                  width: '95%',
+                  alignSelf: 'center',
+                  marginBottom: 20,
+                  borderWidth: 1,
+                  borderColor: '#82008F',
+                  borderRadius: 5,
+                }}
+              >
+                Back to top
+              </Button>
+            ) : (
+              <></>
+            )
+          }
           columnWrapperStyle={{flex: 1, justifyContent: 'space-around'}}
           numColumns={2}
           showsHorizontalScrollIndicator={false}
