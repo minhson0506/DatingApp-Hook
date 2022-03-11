@@ -26,7 +26,11 @@ import AppLoading from 'expo-app-loading';
 import {Video} from 'expo-av';
 import {MainContext} from '../contexts/MainContext';
 import {Button} from 'react-native-paper';
-import {TapGestureHandler, State} from 'react-native-gesture-handler';
+import {
+  TapGestureHandler,
+  State,
+  Swipeable,
+} from 'react-native-gesture-handler';
 
 const ListItem = ({
   navigation,
@@ -195,6 +199,21 @@ const ListItem = ({
     }
   };
 
+  const renderRightActions = (progress, dragX) => {
+    return (
+      <View
+        style={{
+          margin: 0,
+          alignContent: 'center',
+          justifyContent: 'center',
+          width: 70,
+        }}
+      >
+        <Button color="red" title="DELETE"></Button>
+      </View>
+    );
+  };
+
   // console.log('type of', typeof additionData.interests);
   // console.log('type of', additionData.interests[0]);
   useEffect(() => {
@@ -249,72 +268,84 @@ const ListItem = ({
             </View>
           </RNEListItem>
         ) : (
-          <RNEListItem
-            onPress={() => {
-              navigation.navigate('Single', {file: singleMedia});
+          <Swipeable
+            renderRightActions={(progress, dragX) => {
+              console.log('list swipe', singleMedia.file_id);
+              renderRightActions(progress, dragX);
             }}
-            // rightContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
-            // // // leftContent={<Button icon={InfoIcon}></Button>}
-            // // // leftStyle={{justifyContent: 'center'}}
-            // rightStyle={{justifyContent: 'center'}}
-            // // leftContent={null}
-            // // leftWidth={0}
-            // // leftStyle={{display: 'none'}}
+            rightOpenValue={-300}
+            // onSwipeableOpen
           >
-            <Card style={styles.card}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Text style={styles.name}>{additionData.fullname}</Text>
-              </View>
-              <Avatar
-                containerStyle={styles.avatar}
-                avatarStyle={{
-                  borderRadius: 10,
-                  borderWidth: 2,
-                  borderColor: '#F2822F',
-                }}
-                source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
-              ></Avatar>
-              <View
-                style={{
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                }}
-              >
-                <AgeIcon height={19} style={styles.icons}></AgeIcon>
-                <Text style={styles.text}>{additionData.age}</Text>
-                <Divider
-                  orientation="vertical"
+            {/* <RNEListItem
+              onPress={() => {
+                navigation.navigate('Single', {file: singleMedia});
+              }}
+              // rightContent={<Button icon={LikeIcon} onPress={likeUser}></Button>}
+              // // // leftContent={<Button icon={InfoIcon}></Button>}
+              // // // leftStyle={{justifyContent: 'center'}}
+              // rightStyle={{justifyContent: 'center'}}
+              // // leftContent={null}
+              // // leftWidth={0}
+              // // leftStyle={{display: 'none'}}
+            >
+              <Card style={styles.card}>
+                <View
                   style={{
-                    marginTop: 12,
-                    marginRight: '2%',
-                    marginBottom: 5,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}
-                />
-                <LocationIcon style={styles.icons}></LocationIcon>
-                <Text style={styles.text}>{additionData.location}</Text>
-                <Divider
-                  orientation="vertical"
+                >
+                  <Text style={styles.name}>{additionData.fullname}</Text>
+                </View>
+                <Avatar
+                  containerStyle={styles.avatar}
+                  avatarStyle={{
+                    borderRadius: 10,
+                    borderWidth: 2,
+                    borderColor: '#F2822F',
+                  }}
+                  source={{uri: uploadsUrl + singleMedia.thumbnails.w640}}
+                ></Avatar>
+                <View
                   style={{
-                    marginTop: 12,
-                    marginRight: '2%',
-                    marginBottom: 5,
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
                   }}
-                />
-                <InterestIcon style={styles.icons}></InterestIcon>
-                <Text style={styles.text}>
-                  {typeof additionData.interests !== 'undefined'
-                    ? additionData.interests.split(',')[0]
-                    : ''}
-                </Text>
-              </View>
-            </Card>
-          </RNEListItem>
+                >
+                  <AgeIcon height={19} style={styles.icons}></AgeIcon>
+                  <Text style={styles.text}>{additionData.age}</Text>
+                  <Divider
+                    orientation="vertical"
+                    style={{
+                      marginTop: 12,
+                      marginRight: '2%',
+                      marginBottom: 5,
+                    }}
+                  />
+                  <LocationIcon style={styles.icons}></LocationIcon>
+                  <Text style={styles.text}>{additionData.location}</Text>
+                  <Divider
+                    orientation="vertical"
+                    style={{
+                      marginTop: 12,
+                      marginRight: '2%',
+                      marginBottom: 5,
+                    }}
+                  />
+                  <InterestIcon style={styles.icons}></InterestIcon>
+                  <Text style={styles.text}>
+                    {typeof additionData.interests !== 'undefined'
+                      ? additionData.interests.split(',')[0]
+                      : ''}
+                  </Text>
+                </View>
+              </Card>
+            </RNEListItem> */}
+            <View style={{width: 300, backgroundColor: 'green'}}>
+              <Text>{singleMedia.file_id}</Text>
+            </View>
+          </Swipeable>
         )}
       </ScrollView>
     );
