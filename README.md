@@ -2,8 +2,8 @@
 Hook is a mobile dating app built with React Native, works cross-platform in IOS and Android. Our idea is to help users find love, friendship, partner and bridging between digital world and real world. We know it is hard to meet your "match made in heaven" in a social distancing society, Hook will be your right-hand man in your path finding "the one".
 
 ## Target User
-- People who wants to find friends, partner meet new people and find their soulmates online.
-- Estimated age od users is between 18-32 years old.
+- People who wants to find friends, partner, meet new people and find their soulmates online.
+- Estimated age of users is between 18-32 years old.
 
 ## Outstanding features
 <ul>
@@ -61,7 +61,7 @@ wbma-server-node API is owned by Metropolia UAS. [Link to API docs](https://medi
 </ul>
 
 ## Installation
-1. Clone Hook repo to locally:
+1. Clone Hook repo to local:
 ```
 $ git clone https://github.com/minhson0506/DatingApp-Hook.git
 ```
