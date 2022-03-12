@@ -1,4 +1,4 @@
-# Hook - React Native Mobile App
+# Hook <img src="assets/up-arrow.png" width="25">
 Hook is a mobile dating app built with React Native, works cross-platform in IOS and Android. Our idea is to help users find love, friendship, partner and bridging between digital world and real world. We know it is hard to meet your "match made in heaven" in a social distancing society, Hook will be your right-hand man in your path finding "the one".
 
 ## Target User
