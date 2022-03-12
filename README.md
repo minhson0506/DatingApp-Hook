@@ -1,6 +1,21 @@
 # Hook - React Native Mobile App
-Hook is a mobile dating app built with React Native. Our idea is to help users find True Love, friendship, partner and bridging between the digital world and the real world. In the midst of enormous challenges these two years, apart from endless pain, it also affects the social distancing. Since it's hard to meet a match made in heaven, our app helps people to find "the one" with filtering funcationalities (Age, Location, Gender, Nationality, Hobbies, etc.)
+Hook is a mobile dating app built with React Native, works cross-platform in IOS and Android. Our idea is to help users find love, friendship, partner and bridging between digital world and real world. We know it is hard to meet your "match made in heaven" in a social distancing society, Hook will be your right-hand man in your path finding "the one".
 
+## Target User
+- People who wants to find friends, partner meet new people and find their soulmates online.
+- Estimated age od users is between 18-32 years old.
+
+## Outstanding features
+<ul>
+  <li> Home page displays 5 instead of 1 user. Easy comparison and turning back.
+  <li> Swipe right on users' images on Home to "shortcut" Like.
+  <li> Detailed <strong>filtering</strong> functionalities (Age, Location, Gender, Nationality, Height, Religion, Hobbies).
+  <li> See who already liked you in Like page (<strong>live update</strong>).
+  <li> Search for user by username and see hottest users in Search page.
+  <li> <strong>Live update</strong> Chat.
+  <li> Update information and upload pictures easily in Profile page.
+</ul>
+  
 ## A sneak peek of Hook
 <p align="center">
   <img src="https://user-images.githubusercontent.com/70948419/157508663-1d0b4250-9a8c-43bb-84c2-0c94640101d8.PNG" width="250"> 
@@ -26,28 +41,25 @@ Hook is a mobile dating app built with React Native. Our idea is to help users f
 
 ## Video demo: [video](https://drive.google.com/file/d/1B0wMoaYPX6kn6MfuARLsUR7ufDsqduAH/view?usp=sharing)
 
-## Target User
-- Youngsters who are above the age of 18 due to age restriction (from user research).
-- People who wants to find love/friends online, meet new people and find their soulmates.
-- Estimated age od users is between 18-32 years old.
-
 ## Backend and APIs
 wbma-server-node API is owned by Metropolia UAS. [Link to API docs](https://media.mw.metropolia.fi/wbma/docs/#api-Media-GetSpecificUserMediaFiles)
 - Backend is tested with Postman.
 - Hook can be run on real phone or emulator with expo client app.
 
-## UI libraries & dependencies
-- react-native-multi-slider
-- lottie-react-native
-- react-native-autoscroll-flatlist
-- react-native-elements
-- react-native-gesture-handler
-- react-native-material-menu
-- react-native-pages
-- react-native-paper
-- react-native-picker
-- react-native-svg
-    
+## Dependencies
+<ul>
+  <li> react-native-multi-slider
+  <li> lottie-react-native
+  <li> react-native-autoscroll-flatlist
+  <li> react-native-elements
+  <li> react-native-gesture-handler
+  <li> react-native-material-menu
+  <li> react-native-pages
+  <li> react-native-paper
+  <li> react-native-picker
+  <li> react-native-svg
+</ul>
+
 ## Installation
 1. Clone Hook repo to locally:
 ```
